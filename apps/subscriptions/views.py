@@ -1,10 +1,11 @@
 import stripe
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+
 from .models import StripeCustomer
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -12,7 +13,7 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 @login_required
 def subscription_page(request):
     try:
-        # Obtener o crear el cliente de Stripe
+        # Get or create Stripe customer
         stripe_customer = StripeCustomer.objects.get(user=request.user)
         subscription = stripe.Subscription.retrieve(stripe_customer.stripe_subscription_id)
         return render(request, 'subscriptions/subscription.html', {
@@ -27,7 +28,7 @@ def subscription_page(request):
 @login_required
 def create_subscription(request):
     if request.method == 'POST':
-        # Crear o obtener el cliente de Stripe
+        # Create or get Stripe customer
         try:
             stripe_customer = StripeCustomer.objects.get(user=request.user)
             customer = stripe_customer.stripe_customer_id
@@ -41,7 +42,7 @@ def create_subscription(request):
                 stripe_customer_id=customer.id
             )
 
-        # Crear la suscripción
+        # Create subscription
         subscription = stripe.Subscription.create(
             customer=customer,
             items=[{'price': settings.STRIPE_PRICE_ID}],
@@ -80,5 +81,5 @@ def stripe_webhook(request):
         stripe_customer = StripeCustomer.objects.get(stripe_subscription_id=subscription.id)
         stripe_customer.subscription_status = subscription.status
         stripe_customer.save()
-    
-    return HttpResponse(status=200) 
+
+    return HttpResponse(status=200)

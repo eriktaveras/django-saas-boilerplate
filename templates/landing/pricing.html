@@ -1,219 +1,141 @@
-{% extends 'base.html' %}
-{% load static %}
+{% extends "base.html" %}
 
-{% block title %}Pricing - SaaS Platform{% endblock %}
+{% block title %}Pricing | Django SaaS Boilerplate{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<div class="py-20 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h1 class="text-4xl font-medium tracking-tight text-white uppercase">
-                SIMPLE AND TRANSPARENT PRICING
-            </h1>
-            <p class="mt-6 max-w-3xl mx-auto text-xl text-light-gray">
-                Choose the plan that best fits your needs
-            </p>
-        </div>
+<!-- Hero -->
+<div class="py-24 lg:py-32 border-b border-light-gray">
+    <div class="max-w-4xl mx-auto text-center px-4">
+        <p class="text-xs font-medium uppercase tracking-widest text-gray">Pricing</p>
+        <h1 class="mt-4 text-4xl lg:text-5xl font-medium tracking-tight text-black leading-tight">
+            One boilerplate.<br>Plans for every stage.
+        </h1>
+        <p class="mt-6 text-lg text-gray">
+            Start free. No credit card. Upgrade when you need more.
+        </p>
     </div>
 </div>
 
-<!-- Pricing Section -->
-<div class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <!-- Free Plan -->
-            <div class="border border-light-gray">
-                <div class="px-8 py-8">
-                    <div class="text-center">
-                        <span class="inline-flex items-center px-4 py-1 text-sm font-medium tracking-wider uppercase">
-                            <i class="fa-solid fa-seedling mr-2"></i> FREE PLAN
-                        </span>
-                    </div>
-                    <div class="mt-6 flex justify-center text-5xl font-medium text-black">
-                        <span class="mr-2 text-xl text-gray leading-8">$</span>
-                        0
-                        <span class="ml-2 text-xl text-gray leading-8">/mo</span>
-                    </div>
+<!-- Pricing Cards -->
+<div class="py-24">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-px bg-light-gray border border-light-gray">
+            <!-- Free -->
+            <div class="bg-white p-10 flex flex-col">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-widest text-gray">Free</p>
+                    <p class="mt-6"><span class="text-5xl font-medium text-black">$0</span><span class="text-gray text-sm ml-1">/mo</span></p>
+                    <p class="mt-3 text-sm text-gray">For side projects and trying things out.</p>
                 </div>
-                <div class="px-8 pt-6 pb-8 border-t border-light-gray">
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Basic dashboard access</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Email support</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Basic updates</p>
-                        </li>
-                    </ul>
-                    <div class="mt-8">
-                        <a href="{% url 'account_signup' %}" class="w-full flex items-center justify-center px-8 py-3 border border-black text-sm font-medium uppercase tracking-wider hover:bg-light-gray">
-                            <i class="fa-solid fa-rocket mr-2"></i> START FREE
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Premium Plan -->
-            <div class="border-2 border-black">
-                <div class="px-8 py-8">
-                    <div class="text-center">
-                        <span class="inline-flex items-center px-4 py-1 text-sm font-medium tracking-wider uppercase">
-                            <i class="fa-solid fa-star mr-2"></i> PREMIUM PLAN
-                        </span>
-                    </div>
-                    <div class="mt-6 flex justify-center text-5xl font-medium text-black">
-                        <span class="mr-2 text-xl text-gray leading-8">$</span>
-                        9.99
-                        <span class="ml-2 text-xl text-gray leading-8">/mo</span>
-                    </div>
-                </div>
-                <div class="px-8 pt-6 pb-8 border-t border-light-gray">
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Full dashboard access</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Priority support</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Premium features</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Unlimited updates</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">API access</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Daily backups</p>
-                        </li>
-                    </ul>
-                    <div class="mt-8">
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'subscriptions:subscription_page' %}" class="w-full flex items-center justify-center px-8 py-3 bg-black text-white text-sm font-medium uppercase tracking-wider hover:bg-dark-gray">
-                                <i class="fa-solid fa-gear mr-2"></i> MANAGE SUBSCRIPTION
-                            </a>
-                        {% else %}
-                            <a href="{% url 'account_signup' %}" class="w-full flex items-center justify-center px-8 py-3 bg-black text-white text-sm font-medium uppercase tracking-wider hover:bg-dark-gray">
-                                <i class="fa-solid fa-bolt mr-2"></i> START NOW
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-            <!-- Enterprise Plan -->
-            <div class="border border-light-gray">
-                <div class="px-8 py-8">
-                    <div class="text-center">
-                        <span class="inline-flex items-center px-4 py-1 text-sm font-medium tracking-wider uppercase">
-                            <i class="fa-solid fa-building mr-2"></i> ENTERPRISE PLAN
-                        </span>
-                    </div>
-                    <div class="mt-6 flex justify-center text-5xl font-medium text-black">
-                        <span class="mr-2 text-xl text-gray leading-8">$</span>
-                        49.99
-                        <span class="ml-2 text-xl text-gray leading-8">/mo</span>
-                    </div>
-                </div>
-                <div class="px-8 pt-6 pb-8 border-t border-light-gray">
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Everything in Premium</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">24/7 support</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Advanced customization</p>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-check h-6 w-6 text-black flex-shrink-0"></i>
-                            <p class="ml-3 text-base text-gray">Guaranteed SLA</p>
-                        </li>
-                    </ul>
-                    <div class="mt-8">
-                        <a href="#" class="w-full flex items-center justify-center px-8 py-3 border border-black text-sm font-medium uppercase tracking-wider hover:bg-light-gray">
-                            <i class="fa-solid fa-message mr-2"></i> CONTACT SALES
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- FAQ Section -->
-<div class="py-16 border-t border-light-gray">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto">
-            <h2 class="text-3xl font-medium text-black text-center uppercase tracking-tight">
-                <i class="fa-solid fa-circle-question mr-2"></i> FREQUENTLY ASKED QUESTIONS
-            </h2>
-            <dl class="mt-12 space-y-12 divide-y divide-light-gray">
-                <div class="pt-6">
-                    <dt class="text-lg flex items-center">
-                        <i class="fa-solid fa-arrows-rotate mr-2 text-black"></i>
-                        <span class="font-medium text-black">Can I change plans at any time?</span>
-                    </dt>
-                    <dd class="mt-4 text-base text-gray">
-                        Yes, you can upgrade or downgrade your plan at any time. Changes will be applied at your next billing cycle.
-                    </dd>
-                </div>
-
-                <div class="pt-12">
-                    <dt class="text-lg flex items-center">
-                        <i class="fa-regular fa-calendar-check mr-2 text-black"></i>
-                        <span class="font-medium text-black">Do you offer a trial period?</span>
-                    </dt>
-                    <dd class="mt-4 text-base text-gray">
-                        Yes, we offer a 14-day trial for all plans. No credit card required to start.
-                    </dd>
-                </div>
-
-                <div class="pt-12">
-                    <dt class="text-lg flex items-center">
-                        <i class="fa-solid fa-credit-card mr-2 text-black"></i>
-                        <span class="font-medium text-black">What payment methods do you accept?</span>
-                    </dt>
-                    <dd class="mt-4 text-base text-gray">
-                        We accept all major credit cards through Stripe. We also offer invoicing for enterprise plans.
-                    </dd>
-                </div>
-            </dl>
-        </div>
-    </div>
-</div>
-
-<!-- CTA Section -->
-<div class="py-16 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:flex lg:items-center lg:justify-between">
-        <h2 class="text-3xl font-medium tracking-tight text-white uppercase">
-            <span class="block">READY TO GET STARTED?</span>
-            <span class="block text-light-gray">Start building your SaaS today.</span>
-        </h2>
-        <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
-            <div>
-                <a href="{% url 'account_signup' %}" class="inline-flex items-center justify-center px-8 py-3 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider">
-                    <i class="fa-solid fa-rocket mr-2"></i> START FREE
+                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3.5 border border-black text-center text-sm font-medium tracking-wider text-black hover:bg-light-gray transition-colors">
+                    Get started
                 </a>
+                <ul class="mt-10 space-y-3 text-sm text-gray flex-1">
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Dashboard access</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Email authentication</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>1 project</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Community support</li>
+                </ul>
+            </div>
+
+            <!-- Pro -->
+            <div class="bg-white p-10 flex flex-col relative">
+                <div class="absolute top-0 left-0 right-0 h-1 bg-black"></div>
+                <div>
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-medium uppercase tracking-widest text-black">Pro</p>
+                        <span class="text-[10px] font-medium uppercase tracking-widest bg-black text-white px-2.5 py-1">Popular</span>
+                    </div>
+                    <p class="mt-6"><span class="text-5xl font-medium text-black">$9.99</span><span class="text-gray text-sm ml-1">/mo</span></p>
+                    <p class="mt-3 text-sm text-gray">For serious builders and growing teams.</p>
+                </div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'subscriptions:subscription_page' %}" class="mt-8 block w-full py-3.5 bg-black text-center text-sm font-medium tracking-wider text-white hover:bg-dark-gray transition-colors">
+                    Manage subscription
+                </a>
+                {% else %}
+                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3.5 bg-black text-center text-sm font-medium tracking-wider text-white hover:bg-dark-gray transition-colors">
+                    Start 14-day trial
+                </a>
+                {% endif %}
+                <ul class="mt-10 space-y-3 text-sm text-gray flex-1">
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Everything in Free</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Priority support</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>API access</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>10 projects</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Analytics dashboard</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Daily backups</li>
+                </ul>
+            </div>
+
+            <!-- Enterprise -->
+            <div class="bg-white p-10 flex flex-col">
+                <div>
+                    <p class="text-xs font-medium uppercase tracking-widest text-gray">Enterprise</p>
+                    <p class="mt-6"><span class="text-5xl font-medium text-black">$49.99</span><span class="text-gray text-sm ml-1">/mo</span></p>
+                    <p class="mt-3 text-sm text-gray">For teams that need scale and guarantees.</p>
+                </div>
+                <a href="#" class="mt-8 block w-full py-3.5 border border-black text-center text-sm font-medium tracking-wider text-black hover:bg-light-gray transition-colors">
+                    Contact us
+                </a>
+                <ul class="mt-10 space-y-3 text-sm text-gray flex-1">
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Everything in Pro</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Unlimited users</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Custom integrations</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>SLA guarantee</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>24/7 priority support</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Dedicated account manager</li>
+                </ul>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div class="py-24 border-t border-light-gray">
+    <div class="max-w-3xl mx-auto px-4">
+        <p class="text-xs font-medium uppercase tracking-widest text-gray text-center">FAQ</p>
+        <h2 class="mt-4 text-3xl font-medium tracking-tight text-black text-center">
+            Questions? Answers.
+        </h2>
+
+        <dl class="mt-16 divide-y divide-light-gray">
+            <div class="py-8">
+                <dt class="text-sm font-medium text-black">Can I switch plans anytime?</dt>
+                <dd class="mt-2 text-sm text-gray leading-relaxed">Yes. Upgrade or downgrade whenever you want. Changes take effect on your next billing cycle.</dd>
+            </div>
+            <div class="py-8">
+                <dt class="text-sm font-medium text-black">Is there a free trial?</dt>
+                <dd class="mt-2 text-sm text-gray leading-relaxed">Yes. All paid plans come with a 14-day free trial. No credit card required to start.</dd>
+            </div>
+            <div class="py-8">
+                <dt class="text-sm font-medium text-black">What payment methods do you accept?</dt>
+                <dd class="mt-2 text-sm text-gray leading-relaxed">All major credit and debit cards via Stripe. Enterprise plans can be invoiced.</dd>
+            </div>
+            <div class="py-8">
+                <dt class="text-sm font-medium text-black">Can I cancel anytime?</dt>
+                <dd class="mt-2 text-sm text-gray leading-relaxed">Yes. One click from your dashboard. No contracts, no cancellation fees, no questions asked.</dd>
+            </div>
+            <div class="py-8">
+                <dt class="text-sm font-medium text-black">Do you offer refunds?</dt>
+                <dd class="mt-2 text-sm text-gray leading-relaxed">If you're not happy within the first 30 days, reach out and we'll work something out.</dd>
+            </div>
+        </dl>
+    </div>
+</div>
+
+<!-- CTA -->
+<div class="bg-black py-24">
+    <div class="max-w-3xl mx-auto text-center px-4">
+        <h2 class="text-3xl lg:text-4xl font-medium tracking-tight text-white">
+            Ready to get started?
+        </h2>
+        <p class="mt-4 text-gray text-lg">
+            Free forever plan available. No credit card needed.
+        </p>
+        <a href="{% url 'account_signup' %}" class="mt-10 inline-flex px-10 py-4 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider transition-colors">
+            Get started free
+        </a>
     </div>
 </div>
 {% endblock %}

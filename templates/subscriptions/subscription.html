@@ -34,8 +34,8 @@
 
 {% if not subscription %}
 {% block extra_js %}
-<script src="https://js.stripe.com/v3/"></script>
-<script>
+<script nonce="{{ csp_nonce }}" src="https://js.stripe.com/v3/"></script>
+<script nonce="{{ csp_nonce }}">
   const stripe = Stripe('{{ STRIPE_PUBLIC_KEY }}');
   const elements = stripe.elements();
   

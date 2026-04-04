@@ -1,151 +1,239 @@
-# Hyperion : Django + HTMX SaaS Boilerplate
+# Django SaaS Boilerplate
+
+The open-source Django starter kit for building SaaS applications. Auth, payments, dashboard, and deployment — all wired up.
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Django-5.0-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django 5.0"/>
-  <img src="https://img.shields.io/badge/HTMX-Latest-2D79C7?style=for-the-badge&logo=html5&logoColor=white" alt="HTMX"/>
-  <img src="https://img.shields.io/badge/Tailwind-3.x-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
-  <img src="https://img.shields.io/badge/Alpine.js-3.x-77C1D2?style=for-the-badge&logo=alpine.js&logoColor=white" alt="Alpine.js"/>
-  <img src="https://img.shields.io/badge/Stripe-Integration-6772E5?style=for-the-badge&logo=stripe&logoColor=white" alt="Stripe"/>
+  <img src="https://img.shields.io/badge/Django-6.0-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django"/>
+  <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-CDN-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/Stripe-Payments-6772E5?style=for-the-badge&logo=stripe&logoColor=white" alt="Stripe"/>
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT"/>
 </div>
 
-A modern, production-ready Django boilerplate for building SaaS applications with HTMX, Tailwind CSS, and Alpine.js. This template provides everything you need to kickstart your next SaaS project with best practices and modern tooling.
+---
 
+## What's included
 
+- **Custom user model** — email-only login, no username
+- **Authentication** — signup, login, email verification, password reset (django-allauth)
+- **Stripe subscriptions** — Payment Methods API, webhooks, subscription status tracking
+- **User dashboard** — sidebar nav, profile, settings, notification preferences, API keys
+- **Subscription plans** — admin-managed plans with trial support
+- **Background tasks** — Django 6.0 native `@task()` decorator, no Celery needed
+- **Content Security Policy** — Django 6.0 built-in CSP middleware with nonces
+- **Template partials** — Django 6.0 `{% partialdef %}` for reusable components
+- **Security headers** — HSTS, SSL redirect, secure cookies (auto-enabled in production)
+- **PostgreSQL support** — `DATABASE_URL` with SQLite fallback
+- **Static files** — WhiteNoise, no nginx needed
+- **Deployment** — Gunicorn + Procfile, ready for Railway/Heroku/VPS
+- **Linting** — Ruff with Django-specific rules
+- **16 tests** — landing pages, auth, dashboard, models
+- **Seed data** — one command to populate demo data
 
-## 🌟 Features
+## Tech stack
 
-- 🚀 **Django 5.0** with modern best practices and security features
-- 🎨 **Tailwind CSS** for beautiful, responsive designs
-- ⚡ **HTMX** for dynamic interactions without complex JavaScript
-- 🎯 **Alpine.js** for lightweight JavaScript functionality
-- 🔐 **User Authentication** with django-allauth
-- ✉️ **Email Verification** system
-- 📱 **Responsive Landing Page** with modern design
-- 👑 **Django Admin Panel** customization
-- 💳 **Subscription System** with Stripe integration
-- 📊 **User Dashboard** with analytics
-- 🔒 **Role-based Access Control**
-- 🎨 **Modern UI Components**
-- 📈 **SEO Optimization**
-- 🔍 **Search Functionality**
-- 📱 **Mobile-First Approach**
+| Layer | Technology |
+|-------|-----------|
+| Backend | Django 6.0, Python 3.12 |
+| Auth | django-allauth (email-only) |
+| Payments | Stripe (Payment Methods API) |
+| Frontend | Tailwind CSS (CDN), Alpine.js, HTMX |
+| Database | SQLite (dev) / PostgreSQL (prod) |
+| Static files | WhiteNoise |
+| Server | Gunicorn |
+| Tasks | Django 6.0 native `@task()` |
+| Linting | Ruff |
 
-## 🚀 Quick Start
+## Quick start
 
-1. **Clone the repository:**
 ```bash
 git clone https://github.com/eriktaveras/django-saas-boilerplate.git
 cd django-saas-boilerplate
+make install
+cp .env.example .env
+make migrate
+python manage.py seed_data
+make run
 ```
 
-2. **Create and activate a virtual environment:**
+Visit **http://localhost:8000** — admin login: `admin@example.com` / `admin123`
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `make install` | Create virtualenv and install dependencies |
+| `make run` | Start development server |
+| `make migrate` | Run makemigrations + migrate |
+| `make test` | Run 16 tests |
+| `make seed` | Populate demo data (admin + plans) |
+| `make lint` | Lint with ruff |
+| `make format` | Format with ruff |
+| `make superuser` | Create admin user |
+| `make clean` | Remove __pycache__ files |
+
+## Project structure
+
+```
+django-saas-boilerplate/
+├── core/
+│   ├── settings.py           # All config via env vars
+│   ├── urls.py               # Root URL routing
+│   ├── wsgi.py
+│   └── asgi.py
+├── apps/
+│   ├── accounts/             # CustomUser (email-only), admin
+│   │   ├── models.py         # CustomUser + CustomUserManager
+│   │   ├── admin.py
+│   │   └── tests.py          # 6 tests
+│   ├── dashboard/            # Dashboard, profile, settings
+│   │   ├── models.py         # SubscriptionPlan, UserSettings
+│   │   ├── views.py          # dashboard, profile, settings, plans
+│   │   ├── tasks.py          # Background email tasks
+│   │   ├── tests.py          # 6 tests
+│   │   └── management/commands/seed_data.py
+│   ├── subscriptions/        # Stripe integration
+│   │   ├── models.py         # StripeCustomer
+│   │   └── views.py          # checkout, webhooks
+│   └── landing/              # Public pages
+│       ├── views.py          # home, features, pricing, robots.txt
+│       └── tests.py          # 4 tests
+├── templates/
+│   ├── base.html             # Public layout (nav + footer)
+│   ├── account/              # 20 allauth templates (styled)
+│   ├── dashboard/            # Dashboard layout + pages
+│   ├── landing/              # Home, features, pricing
+│   └── subscriptions/        # Stripe checkout
+├── static/css/               # Design system CSS
+├── CLAUDE.md                 # AI editor context
+├── Makefile                  # Dev commands
+├── Procfile                  # Deployment
+├── pyproject.toml            # Ruff config
+├── requirements.txt
+└── .env.example
+```
+
+## Environment variables
+
+Copy `.env.example` to `.env` and configure:
+
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# Required
+DEBUG=True
+SECRET_KEY=your-secret-key
+
+# Database (default: SQLite)
+# DATABASE_URL=postgres://user:password@localhost:5432/dbname
+
+# Stripe (required for payments)
+STRIPE_PUBLIC_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_ID=price_...
+
+# Email (default: console backend)
+# EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+# EMAIL_HOST=smtp.gmail.com
+# EMAIL_PORT=587
+# EMAIL_HOST_USER=your-email@gmail.com
+# EMAIL_HOST_PASSWORD=your-app-password
 ```
 
-3. **Install dependencies:**
+## Django 6.0 features used
+
+This boilerplate uses three major features introduced in Django 6.0:
+
+**Background Tasks** — Send emails asynchronously without Celery:
+```python
+from django.tasks import task
+
+@task
+def send_welcome_email(user_email):
+    send_mail("Welcome!", "...", None, [user_email])
+
+# In your view:
+send_welcome_email.enqueue(user_email=user.email)
+```
+
+**Content Security Policy** — Built-in CSP middleware with nonce support:
+```python
+SECURE_CSP = {
+    "script-src": [CSP.SELF, CSP.NONCE],
+    "style-src": [CSP.SELF, CSP.UNSAFE_INLINE],
+}
+```
+```html
+<script nonce="{{ csp_nonce }}" src="..."></script>
+```
+
+**Template Partials** — Reusable template components without separate files:
+```html
+{% partialdef stat_card inline %}
+<div class="card">{{ card_title }}: {{ card_value }}</div>
+{% endpartialdef %}
+
+{% with card_title="Users" card_value="42" %}
+    {% partial stat_card %}
+{% endwith %}
+```
+
+## Deployment
+
+### Railway
+
+Push to GitHub and connect to Railway. The `Procfile` and `DATABASE_URL` handling are already configured.
+
+### Heroku
+
+```bash
+heroku create your-app-name
+heroku config:set SECRET_KEY=your-secret-key
+heroku config:set DEBUG=False
+git push heroku main
+heroku run python manage.py migrate
+heroku run python manage.py seed_data
+```
+
+### VPS
+
 ```bash
 pip install -r requirements.txt
-```
-
-4. **Run migrations:**
-```bash
 python manage.py migrate
+python manage.py collectstatic
+gunicorn core.wsgi --bind 0.0.0.0:8000
 ```
 
-5. **Create a superuser:**
-```bash
-python manage.py createsuperuser
-```
+## Premium version
 
-6. **Run the development server:**
-```bash
-python manage.py runserver
-```
+Looking for more? **[DjangoBlaze](https://www.djangoblaze.com)** is the premium version with:
 
-Visit http://localhost:8000 to see your application!
+- Teams & multi-tenancy (roles, invitations, team-scoped data)
+- AI chat with OpenAI streaming
+- Blog with markdown, SEO, and sitemaps
+- Google OAuth
+- Onboarding wizard
+- Admin metrics dashboard (MRR, signups chart)
+- 20 slash commands for Claude Code
+- 15 AI-friendly documentation guides
+- 30 ready-to-use prompts
+- 48 passing tests
 
-## 📁 Project Structure
+## Contributing
 
-```
-├── core/                 # Main Django project
-│   ├── settings/        # Django settings
-│   ├── urls.py         # URL configuration
-│   └── wsgi.py         # WSGI configuration
-├── apps/                # Django applications
-│   ├── accounts/       # User authentication
-│   ├── landing/        # Landing page
-│   ├── dashboard/      # User dashboard
-│   └── subscriptions/  # Subscription management
-├── static/             # Static files
-│   ├── css/           # CSS files
-│   ├── js/            # JavaScript files
-│   └── images/        # Image assets
-├── templates/          # HTML templates
-│   ├── base.html      # Base template
-│   ├── components/    # Reusable components
-│   └── pages/         # Page templates
-└── manage.py          # Django management script
-```
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## 🛠️ Technology Stack
+## License
 
-- **Backend:** Django 5.0
-- **Frontend:** HTMX, Alpine.js
-- **Styling:** Tailwind CSS
-- **Database:** PostgreSQL (recommended)
-- **Authentication:** django-allauth
-- **Payments:** Stripe
-- **Email:** SendGrid (recommended)
+MIT License. See [LICENSE](LICENSE) for details.
 
+## Author
 
-## 🤝 Contributing
+**Erik Taveras** — Full Stack Developer
 
-We love your input! We want to make contributing to Django SaaS Boilerplate as easy and transparent as possible. Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+- [eriktaveras.com](https://www.eriktaveras.com)
+- [github.com/eriktaveras](https://github.com/eriktaveras)
+- [hello@eriktaveras.com](mailto:hello@eriktaveras.com)
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Maintainer
-
-<div align="center">
-  <img src="https://github.com/eriktaveras.png" width="100px" style="border-radius: 50%;" alt="Erik Taveras">
-</div>
-
-**Erik Taveras** - Full Stack Solutions Developer
-
-- 🌐 Website: [www.eriktaveras.com](https://www.eriktaveras.com)
-- 📧 Email: [hello@eriktaveras.com](mailto:hello@eriktaveras.com)
-- 💻 GitHub: [@eriktaveras](https://github.com/eriktaveras)
-- 🔗 LinkedIn: [Erik Taveras](https://linkedin.com/in/eriktaveras)
-
-Specialized in Python, Django, and building scalable web applications and API solutions for businesses and startups.
-
-## 🙏 Acknowledgments
-
-- [Django](https://www.djangoproject.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [HTMX](https://htmx.org/)
-- [Alpine.js](https://alpinejs.dev/)
-- [Stripe](https://stripe.com/)
-- [Font Awesome](https://fontawesome.com/)
-- [Space Grotesk Font](https://fonts.google.com/specimen/Space+Grotesk)
-
-## Star History
+---
 
 [![Star History Chart](https://api.star-history.com/svg?repos=eriktaveras/django-saas-boilerplate&type=Date)](https://www.star-history.com/#eriktaveras/django-saas-boilerplate&Date)
-
-## 📫 Contact & Support
-
-If you have any questions or suggestions, please:
-
-- 📝 Open an issue
-- 📧 Reach out at [hello@eriktaveras.com](mailto:hello@eriktaveras.com)
-- 🐦 Follow [@eriktaveras](https://twitter.com/eriktaveras) on Twitter
-
-<div align="center">
-  <p>Built with ❤️ by <a href="https://www.eriktaveras.com">Erik Taveras</a></p>
-</div> 

@@ -1,89 +1,152 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Subscription Plans - SaaS Platform{% endblock %}
+{% block title %}Plans | SaaS Boilerplate{% endblock %}
+{% block page_title %}Plans{% endblock %}
 
 {% block dashboard_content %}
-<div class="max-w-7xl mx-auto">
-    <div class="text-center">
-        <h2 class="text-3xl font-medium text-black uppercase tracking-wide">
-            CHOOSE YOUR PLAN
-        </h2>
-        <p class="mt-6 text-lg text-gray">
-            Select the plan that best fits your needs
-        </p>
+<div>
+    <h2 class="text-xl font-medium text-black">Plans & Billing</h2>
+    <p class="mt-1 text-sm text-gray">Manage your subscription and billing details.</p>
+
+    <!-- Current plan status -->
+    <div class="mt-6 bg-white border border-light-gray rounded">
+        <div class="px-6 py-4 border-b border-light-gray">
+            <h3 class="text-sm font-medium text-black">Current plan</h3>
+        </div>
+        <div class="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-black rounded flex items-center justify-center">
+                    <i class="fa-solid fa-gem text-white"></i>
+                </div>
+                <div>
+                    <p class="text-lg font-medium text-black">{{ current_plan.name|default:"Free" }} Plan</p>
+                    <p class="text-sm text-gray mt-0.5">
+                        {% if is_subscription_active %}
+                            Active &middot; Renews {{ subscription_end_date|date:"M d, Y"|default:"—" }}
+                        {% elif is_trial_active %}
+                            Trial &middot; Ends {{ trial_end_date|date:"M d, Y" }}
+                        {% else %}
+                            {{ subscription_status|default:"No active subscription"|title }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            {% if is_subscription_active %}
+            <form method="POST" action="{% url 'dashboard:cancel_subscription' %}">
+                {% csrf_token %}
+                <button type="submit" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Cancel plan</button>
+            </form>
+            {% elif not is_trial_active %}
+            <form method="POST" action="{% url 'dashboard:start_trial' %}">
+                {% csrf_token %}
+                <button type="submit" class="text-sm px-4 py-2 bg-black text-white rounded hover:bg-dark-gray transition-colors">Start 14-day trial</button>
+            </form>
+            {% endif %}
+        </div>
     </div>
 
     {% if is_trial_active %}
-    <div class="mt-12 border border-light-gray p-8">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                </svg>
+    <div class="mt-4 bg-white border border-light-gray rounded p-4 flex items-start gap-3">
+        <div class="w-8 h-8 bg-[#fafafa] rounded flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-clock text-gray text-xs"></i>
+        </div>
+        <div>
+            <p class="text-sm text-black">Trial period active</p>
+            <p class="text-xs text-gray mt-0.5">Your trial ends on {{ trial_end_date|date:"F j, Y" }}. Choose a plan below to continue after your trial.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Available plans -->
+    <div class="mt-6">
+        <h3 class="text-sm font-medium text-black mb-4">Available plans</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {% for plan in plans %}
+            <div class="bg-white border rounded flex flex-col {% if current_plan == plan %}border-black{% else %}border-light-gray{% endif %}">
+                <!-- Plan header -->
+                <div class="p-5 border-b border-light-gray">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 {% if current_plan == plan %}bg-black{% else %}bg-[#fafafa]{% endif %} rounded flex items-center justify-center">
+                                {% if plan.slug == 'free' %}
+                                    <i class="fa-solid fa-seedling {% if current_plan == plan %}text-white{% else %}text-gray{% endif %} text-xs"></i>
+                                {% elif plan.slug == 'pro' %}
+                                    <i class="fa-solid fa-bolt {% if current_plan == plan %}text-white{% else %}text-gray{% endif %} text-xs"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-building {% if current_plan == plan %}text-white{% else %}text-gray{% endif %} text-xs"></i>
+                                {% endif %}
+                            </div>
+                            <p class="text-sm font-medium text-black">{{ plan.name }}</p>
+                        </div>
+                        {% if current_plan == plan %}
+                        <span class="text-[10px] font-medium uppercase tracking-wider bg-black text-white px-2 py-0.5 rounded">Current</span>
+                        {% endif %}
+                    </div>
+                    <p class="mt-3"><span class="text-3xl font-medium text-black">${{ plan.price }}</span><span class="text-gray text-sm ml-1">/{{ plan.interval }}</span></p>
+                    <p class="mt-1 text-xs text-gray">{{ plan.description }}</p>
+                </div>
+
+                <!-- Features -->
+                <div class="p-5 flex-1">
+                    <p class="text-xs text-gray uppercase tracking-wider mb-3">Includes</p>
+                    <ul class="space-y-2.5">
+                        {% for feature in plan.features %}
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-black text-[10px] mt-1"></i>
+                            <span class="text-sm text-gray">{{ feature }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Action -->
+                <div class="p-5 border-t border-light-gray bg-[#fafafa] rounded-b">
+                    {% if current_plan == plan %}
+                        <div class="w-full text-sm py-2.5 text-center text-gray">Current plan</div>
+                    {% else %}
+                        <form method="POST" action="{% url 'dashboard:subscribe_to_plan' plan.slug %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full text-sm py-2.5 bg-black text-white rounded hover:bg-dark-gray transition-colors">
+                                {% if plan.price == 0 %}Downgrade to Free{% else %}Upgrade to {{ plan.name }}{% endif %}
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
             </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-black uppercase tracking-wider">
-                    TRIAL PERIOD ACTIVE
-                </h3>
-                <div class="mt-2 text-sm text-gray">
-                    <p>
-                        Your trial period ends on {{ trial_end_date|date:"F j, Y" }}. Choose a plan to continue using the service.
-                    </p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Billing info -->
+    <div class="mt-6 bg-white border border-light-gray rounded">
+        <div class="px-6 py-4 border-b border-light-gray">
+            <h3 class="text-sm font-medium text-black">Billing</h3>
+        </div>
+        <div class="divide-y divide-light-gray">
+            <div class="p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                        <i class="fa-solid fa-credit-card text-gray text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-black">Payment method</p>
+                        <p class="text-xs text-gray mt-0.5">No payment method on file.</p>
+                    </div>
+                </div>
+                <button type="button" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Add card</button>
+            </div>
+            <div class="p-5 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                        <i class="fa-solid fa-file-invoice text-gray text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-black">Invoices</p>
+                        <p class="text-xs text-gray mt-0.5">No invoices yet.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    {% endif %}
-
-    <div class="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {% for plan in plans %}
-        <div class="border {% if current_plan == plan %}border-2 border-black{% else %}border-light-gray{% endif %}">
-            <div class="p-8">
-                <h2 class="text-2xl font-medium text-black uppercase tracking-wide">{{ plan.name }}</h2>
-                <p class="mt-4 text-gray">{{ plan.description }}</p>
-                <p class="mt-8">
-                    <span class="text-4xl font-medium text-black">${{ plan.price }}</span>
-                    <span class="text-base text-gray">/{{ plan.interval }}</span>
-                </p>
-                <form method="POST" action="{% url 'dashboard:subscribe_to_plan' plan.slug %}" class="mt-8">
-                    {% csrf_token %}
-                    <button type="submit"
-                        class="w-full px-8 py-3 text-sm font-medium text-white bg-black hover:bg-dark-gray uppercase tracking-wider{% if current_plan == plan %} cursor-default{% endif %}">
-                        {% if current_plan == plan %}
-                        CURRENT PLAN
-                        {% else %}
-                        SUBSCRIBE
-                        {% endif %}
-                    </button>
-                </form>
-            </div>
-            <div class="px-8 pt-6 pb-8 border-t border-light-gray">
-                <h3 class="text-xs font-medium text-black uppercase tracking-wider">WHAT'S INCLUDED</h3>
-                <ul class="mt-6 space-y-4">
-                    {% for feature in plan.features %}
-                    <li class="flex space-x-3">
-                        <svg class="flex-shrink-0 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <span class="text-sm text-gray">{{ feature }}</span>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    {% if not is_subscription_active and not is_trial_active %}
-    <div class="mt-12 text-center">
-        <form method="POST" action="{% url 'dashboard:start_trial' %}" class="inline">
-            {% csrf_token %}
-            <button type="submit"
-                class="px-8 py-3 border border-black text-sm font-medium text-black hover:bg-light-gray uppercase tracking-wider">
-                START 14-DAY FREE TRIAL
-            </button>
-        </form>
-    </div>
-    {% endif %}
 </div>
 {% endblock %}

@@ -1,168 +1,183 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Settings - SaaS Platform{% endblock %}
+{% block title %}Settings | SaaS Boilerplate{% endblock %}
+{% block page_title %}Settings{% endblock %}
 
 {% block dashboard_content %}
-<div class="max-w-7xl mx-auto">
-    <h1 class="text-2xl font-medium text-black uppercase tracking-wide">SETTINGS</h1>
-</div>
-<div class="max-w-7xl mx-auto">
-    <!-- Notification Settings -->
-    <div class="mt-12">
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <div>
-                <h3 class="text-lg font-medium text-black uppercase tracking-wide">NOTIFICATIONS</h3>
-                <p class="mt-2 text-sm text-gray">
-                    Decide which communications you'd like to receive.
-                </p>
+<div>
+    <h2 class="text-xl font-medium text-black">Settings</h2>
+    <p class="mt-1 text-sm text-gray">Notifications, subscription, and developer tools.</p>
+
+    <!-- Notifications -->
+    <form action="{% url 'dashboard:settings' %}" method="POST" class="mt-6">
+        {% csrf_token %}
+        <div class="bg-white border border-light-gray rounded">
+            <div class="px-6 py-4 border-b border-light-gray">
+                <h3 class="text-sm font-medium text-black">Email notifications</h3>
+                <p class="text-xs text-gray mt-0.5">Choose what you want to be notified about.</p>
             </div>
-            <div class="md:col-span-2">
-                <form action="{% url 'dashboard:settings' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="border border-light-gray">
-                        <div class="px-8 py-8 space-y-8">
-                            <fieldset>
-                                <legend class="text-sm font-medium text-black uppercase tracking-wider">BY EMAIL</legend>
-                                <div class="mt-4 space-y-6">
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="comments" name="comments" type="checkbox" 
-                                                class="h-4 w-4 border-light-gray text-black focus:border-black"
-                                                {% if notification_settings.comments %}checked{% endif %}>
-                                        </div>
-                                        <div class="ml-3">
-                                            <label for="comments" class="font-medium text-black text-sm uppercase tracking-wider">COMMENTS</label>
-                                            <p class="text-gray text-sm mt-1">Get notified when someone comments on your posts.</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="updates" name="updates" type="checkbox" 
-                                                class="h-4 w-4 border-light-gray text-black focus:border-black"
-                                                {% if notification_settings.updates %}checked{% endif %}>
-                                        </div>
-                                        <div class="ml-3">
-                                            <label for="updates" class="font-medium text-black text-sm uppercase tracking-wider">UPDATES</label>
-                                            <p class="text-gray text-sm mt-1">Get notified when we release new features and updates.</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start">
-                                        <div class="flex items-center h-5">
-                                            <input id="marketing" name="marketing" type="checkbox" 
-                                                class="h-4 w-4 border-light-gray text-black focus:border-black"
-                                                {% if notification_settings.marketing %}checked{% endif %}>
-                                        </div>
-                                        <div class="ml-3">
-                                            <label for="marketing" class="font-medium text-black text-sm uppercase tracking-wider">MARKETING</label>
-                                            <p class="text-gray text-sm mt-1">Receive marketing communications and special offers.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
+            <div class="divide-y divide-light-gray">
+                <label for="comments" class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#fafafa] transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                            <i class="fa-solid fa-comment text-gray text-xs"></i>
                         </div>
-                        <div class="px-8 py-4 border-t border-light-gray text-right">
-                            <button type="submit" class="px-8 py-3 text-sm font-medium uppercase tracking-wider text-white bg-black hover:bg-dark-gray">
-                                SAVE
-                            </button>
+                        <div>
+                            <p class="text-sm text-black">Comments</p>
+                            <p class="text-xs text-gray mt-0.5">Someone comments on your content.</p>
                         </div>
                     </div>
-                </form>
+                    <input id="comments" name="comments" type="checkbox" class="h-4 w-4 accent-black"
+                           {% if notification_settings.comments %}checked{% endif %}>
+                </label>
+                <label for="updates" class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#fafafa] transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                            <i class="fa-solid fa-bell text-gray text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-black">Product updates</p>
+                            <p class="text-xs text-gray mt-0.5">New features, improvements, and releases.</p>
+                        </div>
+                    </div>
+                    <input id="updates" name="updates" type="checkbox" class="h-4 w-4 accent-black"
+                           {% if notification_settings.updates %}checked{% endif %}>
+                </label>
+                <label for="marketing" class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#fafafa] transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                            <i class="fa-solid fa-bullhorn text-gray text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-black">Marketing</p>
+                            <p class="text-xs text-gray mt-0.5">Promotions, tips, and special offers.</p>
+                        </div>
+                    </div>
+                    <input id="marketing" name="marketing" type="checkbox" class="h-4 w-4 accent-black"
+                           {% if notification_settings.marketing %}checked{% endif %}>
+                </label>
+            </div>
+            <div class="px-6 py-4 border-t border-light-gray flex justify-end bg-[#fafafa] rounded-b">
+                <button type="submit" class="text-sm px-5 py-2 bg-black text-white rounded hover:bg-dark-gray transition-colors">Save preferences</button>
             </div>
         </div>
-    </div>
+    </form>
 
-    <!-- Subscription Settings -->
-    <div class="mt-16">
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <div>
-                <h3 class="text-lg font-medium text-black uppercase tracking-wide">SUBSCRIPTION</h3>
-                <p class="mt-2 text-sm text-gray">
-                    Manage your subscription and billing information.
-                </p>
-            </div>
-            <div class="md:col-span-2">
-                <div class="border border-light-gray">
-                    <div class="px-8 py-8 space-y-8">
-                        <!-- Current Plan -->
-                        <div>
-                            <h4 class="text-sm font-medium text-black uppercase tracking-wider">CURRENT PLAN</h4>
-                            <div class="mt-4 flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-gray">You are currently on the <span class="font-medium text-black">{{ subscription.plan|title }} Plan</span></p>
-                                    <p class="text-sm text-gray">Status: <span class="font-medium text-black">{{ subscription.status|title }}</span></p>
-                                </div>
-                                <a href="{% url 'landing:pricing' %}" class="px-4 py-2 text-sm font-medium uppercase tracking-wider text-white bg-black hover:bg-dark-gray">
-                                    UPGRADE PLAN
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Payment Method -->
-                        <div class="pt-8 border-t border-light-gray">
-                            <h4 class="text-sm font-medium text-black uppercase tracking-wider">PAYMENT METHOD</h4>
-                            <div class="mt-4">
-                                <p class="text-sm text-gray">No payment method added</p>
-                                <button type="button" class="mt-4 px-4 py-2 border border-black text-sm font-medium uppercase tracking-wider text-black hover:bg-light-gray">
-                                    ADD PAYMENT METHOD
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Billing History -->
-                        <div class="pt-8 border-t border-light-gray">
-                            <h4 class="text-sm font-medium text-black uppercase tracking-wider">BILLING HISTORY</h4>
-                            <div class="mt-4">
-                                <p class="text-sm text-gray">No billing history available</p>
-                            </div>
-                        </div>
+    <!-- Subscription -->
+    <div class="mt-6 bg-white border border-light-gray rounded">
+        <div class="px-6 py-4 border-b border-light-gray">
+            <h3 class="text-sm font-medium text-black">Subscription</h3>
+            <p class="text-xs text-gray mt-0.5">Manage your plan and billing.</p>
+        </div>
+        <div class="divide-y divide-light-gray">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-9 h-9 bg-black rounded flex items-center justify-center">
+                        <i class="fa-solid fa-gem text-white text-xs"></i>
                     </div>
+                    <div>
+                        <p class="text-sm text-black">{{ subscription.plan_name|default:"Free" }} plan</p>
+                        <p class="text-xs text-gray mt-0.5">
+                            {% if subscription.is_active %}
+                                Active &middot; Renews {{ subscription.end_date|date:"M d, Y" }}
+                            {% elif subscription.is_trial %}
+                                Trial &middot; Ends {{ subscription.trial_end_date|date:"M d, Y" }}
+                            {% else %}
+                                {{ subscription.status|default:"Inactive"|title }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                <a href="{% url 'dashboard:subscription_plans' %}" class="text-sm px-4 py-1.5 bg-black text-white rounded hover:bg-dark-gray transition-colors">
+                    {% if subscription.is_active %}Manage{% else %}Upgrade{% endif %}
+                </a>
+            </div>
+            <div class="px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                        <i class="fa-solid fa-credit-card text-gray text-xs"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-black">Payment method</p>
+                        <p class="text-xs text-gray mt-0.5">No payment method on file.</p>
+                    </div>
+                </div>
+                <button type="button" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Add card</button>
+            </div>
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                    <i class="fa-solid fa-file-invoice text-gray text-xs"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-black">Billing history</p>
+                    <p class="text-xs text-gray mt-0.5">No invoices yet.</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- API Settings -->
-    <div class="mt-16">
-        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <div>
-                <h3 class="text-lg font-medium text-black uppercase tracking-wide">API ACCESS</h3>
-                <p class="mt-2 text-sm text-gray">
-                    Manage your API keys and access tokens.
-                </p>
-            </div>
-            <div class="md:col-span-2">
-                <div class="border border-light-gray">
-                    <div class="px-8 py-8 space-y-8">
-                        <div>
-                            <h4 class="text-sm font-medium text-black uppercase tracking-wider">API KEYS</h4>
-                            <div class="mt-4">
-                                {% if api.has_key %}
-                                    <p class="text-sm text-gray">API key generated on {{ api.key_created_at|date:"F j, Y" }}</p>
-                                    <button type="button" class="mt-4 px-4 py-2 border border-black text-sm font-medium uppercase tracking-wider text-black hover:bg-light-gray">
-                                        REGENERATE API KEY
-                                    </button>
-                                {% else %}
-                                    <p class="text-sm text-gray">No API key generated</p>
-                                    <form action="{% url 'dashboard:generate_api_key' %}" method="POST" class="mt-4">
-                                        {% csrf_token %}
-                                        <button type="submit" class="px-4 py-2 border border-black text-sm font-medium uppercase tracking-wider text-black hover:bg-light-gray">
-                                            GENERATE API KEY
-                                        </button>
-                                    </form>
-                                {% endif %}
-                            </div>
-                        </div>
+    <!-- API Access -->
+    <div class="mt-6 bg-white border border-light-gray rounded">
+        <div class="px-6 py-4 border-b border-light-gray">
+            <h3 class="text-sm font-medium text-black">API access</h3>
+            <p class="text-xs text-gray mt-0.5">Generate and manage API keys for programmatic access.</p>
+        </div>
 
-                        <div class="pt-8 border-t border-light-gray">
-                            <h4 class="text-sm font-medium text-black uppercase tracking-wider">WEBHOOKS</h4>
-                            <div class="mt-4">
-                                <p class="text-sm text-gray">No webhooks configured</p>
-                                <button type="button" class="mt-4 px-4 py-2 border border-black text-sm font-medium uppercase tracking-wider text-black hover:bg-light-gray">
-                                    ADD WEBHOOK
-                                </button>
-                            </div>
-                        </div>
+        {% if api.new_key %}
+        <!-- Show newly generated key -->
+        <div class="px-6 py-4 bg-[#fafafa] border-b border-light-gray">
+            <div class="flex items-start gap-3">
+                <div class="w-9 h-9 bg-black rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <i class="fa-solid fa-key text-white text-xs"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-medium text-black">Your new API key</p>
+                    <p class="text-xs text-gray mt-0.5 mb-2">Copy this key now. It won't be shown again.</p>
+                    <code class="block bg-white border border-light-gray rounded px-3 py-2 text-sm text-black font-mono break-all select-all">{{ api.new_key }}</code>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="divide-y divide-light-gray">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                        <i class="fa-solid fa-key text-gray text-xs"></i>
                     </div>
+                    <div>
+                        {% if api.has_key %}
+                            <p class="text-sm text-black">API key active</p>
+                            <p class="text-xs text-gray mt-0.5">Generated {{ api.key_created_at|date:"M d, Y \a\t g:i A" }}</p>
+                        {% else %}
+                            <p class="text-sm text-black">No API key</p>
+                            <p class="text-xs text-gray mt-0.5">Generate a key to access the API programmatically.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <form action="{% url 'dashboard:generate_api_key' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">
+                        {% if api.has_key %}Regenerate{% else %}Generate key{% endif %}
+                    </button>
+                </form>
+            </div>
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                    <i class="fa-solid fa-book text-gray text-xs"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-black">API documentation</p>
+                    <p class="text-xs text-gray mt-0.5">Learn how to integrate with our API.</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 flex items-center gap-4">
+                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
+                    <i class="fa-solid fa-plug text-gray text-xs"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-black">Webhooks</p>
+                    <p class="text-xs text-gray mt-0.5">No webhooks configured.</p>
                 </div>
             </div>
         </div>

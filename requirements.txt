@@ -8,3 +8,5 @@ python-dotenv
 whitenoise
 gunicorn
 stripe
+dj-database-url
+ruff

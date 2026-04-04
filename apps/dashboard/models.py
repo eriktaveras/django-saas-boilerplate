@@ -1,6 +1,7 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils import timezone
+
 
 class SubscriptionPlan(models.Model):
     name = models.CharField(max_length=100)
@@ -37,11 +38,11 @@ class UserSettings(models.Model):
     notify_comments = models.BooleanField(default=False)
     notify_updates = models.BooleanField(default=False)
     notify_marketing = models.BooleanField(default=False)
-    
+
     # API settings
-    api_key = models.CharField(max_length=64, blank=True, null=True)
+    api_key = models.CharField(max_length=64, blank=True, default='')
     api_key_created_at = models.DateTimeField(null=True, blank=True)
-    
+
     # Subscription settings
     subscription_plan = models.ForeignKey(
         SubscriptionPlan,
@@ -63,7 +64,7 @@ class UserSettings(models.Model):
     subscription_start_date = models.DateTimeField(null=True, blank=True)
     subscription_end_date = models.DateTimeField(null=True, blank=True)
     trial_end_date = models.DateTimeField(null=True, blank=True)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -88,4 +89,4 @@ class UserSettings(models.Model):
             return False
         if self.trial_end_date and self.trial_end_date < timezone.now():
             return False
-        return True 
+        return True

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Access - Django SaaS{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center py-16 px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-medium tracking-tighter text-black">
+        CONFIRM ACCESS
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray">
+        Please re-enter your password to confirm your identity
+      </p>
+    </div>
+
+    <form class="mt-8 space-y-6" method="POST">
+      {% csrf_token %}
+
+      <div>
+        <label for="id_password" class="block text-xs font-medium tracking-widest uppercase mb-1">Password</label>
+        <input id="id_password" name="password" type="password" autocomplete="current-password" required
+               class="border-b-2 border-t-0 border-x-0 border-black p-3 w-full focus:border-dark-gray focus:outline-none"
+               placeholder="Your password">
+      </div>
+
+      {% if form.errors %}
+      <div class="border border-light-gray p-8">
+        <div class="flex">
+          <i class="fa-solid fa-circle-exclamation text-black self-start mt-1"></i>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium uppercase tracking-widest text-black">Error</h3>
+            <div class="mt-2 text-sm text-gray">
+              <ul class="list-disc pl-5 space-y-1">
+                {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <div>
+        <button type="submit"
+                class="relative w-full flex justify-center py-3 px-6 bg-black text-white hover:bg-dark-gray focus:outline-none transition-all duration-300 text-sm font-medium uppercase tracking-wider">
+          <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            <i class="fa-solid fa-shield-halved"></i>
+          </span>
+          CONFIRM
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

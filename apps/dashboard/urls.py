@@ -1,4 +1,5 @@
 from django.urls import path
+
 from . import views
 
 app_name = 'dashboard'
@@ -12,4 +13,4 @@ urlpatterns = [
     path('subscription/plans/<slug:plan_slug>/subscribe/', views.subscribe_to_plan, name='subscribe_to_plan'),
     path('subscription/cancel/', views.cancel_subscription, name='cancel_subscription'),
     path('subscription/trial/', views.start_trial, name='start_trial'),
-] 
+]

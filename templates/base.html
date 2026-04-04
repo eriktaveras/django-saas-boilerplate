@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    
+    <title>{% block title %}Django SaaS Boilerplate{% endblock %}</title>
+
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+    <script nonce="{{ csp_nonce }}" src="https://cdn.tailwindcss.com"></script>
+    <script nonce="{{ csp_nonce }}">
         tailwind.config = {
             theme: {
                 extend: {
@@ -25,127 +25,94 @@
             }
         }
     </script>
-    
+
     <!-- Space Grotesk Font -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
-    
+    <link nonce="{{ csp_nonce }}" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Alpine.js (minimum needed for interactivity) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+    <link nonce="{{ csp_nonce }}" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script nonce="{{ csp_nonce }}" defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-white font-sans text-black">
+<body class="bg-white font-sans text-black min-h-screen flex flex-col">
+
+    <!-- Mobile menu overlay (CSS :target, no JS) -->
+    <div id="main-menu" class="fixed inset-0 z-50 md:hidden [&:not(:target)]:hidden">
+        <a href="#_" class="fixed inset-0 bg-black/40 cursor-pointer"></a>
+        <div class="fixed inset-y-0 right-0 w-64 bg-white flex flex-col shadow-xl">
+            <div class="h-14 flex items-center justify-between px-5 border-b border-light-gray">
+                <span class="text-sm font-medium">Menu</span>
+                <a href="#_" class="text-gray hover:text-black p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </a>
+            </div>
+            <nav class="flex-1 py-4 px-4 space-y-1 overflow-y-auto">
+                <a href="{% url 'landing:features' %}" class="block py-2.5 text-sm text-gray hover:text-black">Features</a>
+                <a href="{% url 'landing:pricing' %}" class="block py-2.5 text-sm text-gray hover:text-black">Pricing</a>
+                <div class="border-t border-light-gray my-3"></div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard:home' %}" class="block py-2.5 text-sm text-gray hover:text-black">Dashboard</a>
+                    <a href="{% url 'dashboard:profile' %}" class="block py-2.5 text-sm text-gray hover:text-black">Profile</a>
+                    <a href="{% url 'dashboard:settings' %}" class="block py-2.5 text-sm text-gray hover:text-black">Settings</a>
+                    <div class="border-t border-light-gray my-3"></div>
+                    <a href="{% url 'account_logout' %}" class="block py-2.5 text-sm text-gray hover:text-black">Log out</a>
+                {% else %}
+                    <a href="{% url 'account_login' %}" class="block py-2.5 text-sm text-gray hover:text-black">Log in</a>
+                    <a href="{% url 'account_signup' %}" class="block py-2.5 text-sm text-black font-medium">Sign up</a>
+                {% endif %}
+            </nav>
+        </div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="border-b border-light-gray sticky top-0 z-50 bg-white" x-data="{ isOpen: false }">
+    <nav class="border-b border-light-gray sticky top-0 z-40 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
-                        <a href="{% url 'landing:home' %}" class="flex items-center">
-                            <span class="text-xl font-medium uppercase tracking-wide">NAME</span>
-                        </a>
-                    </div>
-                    <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
-                        <a href="{% url 'landing:features' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'features' %}border-black text-black{% else %}border-transparent text-gray hover:border-light-gray hover:text-dark-gray{% endif %} text-sm font-medium uppercase tracking-wider">
-                            Features
-                        </a>
-                        <a href="{% url 'landing:pricing' %}" class="inline-flex items-center px-1 pt-1 border-b-2 {% if request.resolver_match.url_name == 'pricing' %}border-black text-black{% else %}border-transparent text-gray hover:border-light-gray hover:text-dark-gray{% endif %} text-sm font-medium uppercase tracking-wider">
-                            Pricing
-                        </a>
+            <div class="flex justify-between h-14">
+                <!-- Logo + Links -->
+                <div class="flex items-center gap-10">
+                    <a href="{% url 'landing:home' %}" class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-black flex items-center justify-center">
+                            <span class="text-white text-[10px] font-bold">S</span>
+                        </div>
+                        <span class="text-sm font-medium">SaaS Boilerplate</span>
+                    </a>
+                    <div class="hidden md:flex items-center gap-6">
+                        <a href="{% url 'landing:features' %}" class="text-sm {% if request.resolver_match.url_name == 'features' %}text-black{% else %}text-gray hover:text-black{% endif %} transition-colors">Features</a>
+                        <a href="{% url 'landing:pricing' %}" class="text-sm {% if request.resolver_match.url_name == 'pricing' %}text-black{% else %}text-gray hover:text-black{% endif %} transition-colors">Pricing</a>
                     </div>
                 </div>
-                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+
+                <!-- Right side - Desktop -->
+                <div class="hidden md:flex items-center gap-4">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard:home' %}" class="inline-flex items-center px-6 py-2 text-sm font-medium uppercase tracking-wider text-white bg-black hover:bg-dark-gray">
-                            Dashboard
+                        <a href="{% url 'dashboard:home' %}" class="text-sm text-gray hover:text-black transition-colors">Dashboard</a>
+                        <a href="{% url 'dashboard:profile' %}" class="text-sm text-gray hover:text-black transition-colors">Profile</a>
+                        <a href="{% url 'account_logout' %}" class="text-sm text-gray hover:text-black transition-colors">Log out</a>
+                        <a href="{% url 'dashboard:home' %}" class="ml-2 w-7 h-7 bg-black flex items-center justify-center text-white text-xs font-medium rounded">
+                            {{ user.email|first|upper }}
                         </a>
-                        <div class="ml-4 relative" x-data="{ open: false }">
-                            <div>
-                                <button @click="open = !open" class="flex text-sm">
-                                    <div class="h-8 w-8 border border-black flex items-center justify-center text-black font-medium">
-                                        {{ user.username|first|upper }}
-                                    </div>
-                                </button>
-                            </div>
-                            <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 mt-2 w-48 bg-white border border-light-gray" role="menu">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray hover:bg-light-gray" role="menuitem">Profile</a>
-                                <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-sm text-gray hover:bg-light-gray" role="menuitem">Log out</a>
-                            </div>
-                        </div>
                     {% else %}
-                        <a href="{% url 'account_login' %}" class="inline-flex items-center px-6 py-2 text-sm font-medium uppercase tracking-wider text-black border border-black hover:bg-light-gray">
-                            Log in
-                        </a>
-                        <a href="{% url 'account_signup' %}" class="ml-4 inline-flex items-center px-6 py-2 text-sm font-medium uppercase tracking-wider text-white bg-black hover:bg-dark-gray">
-                            Sign up
-                        </a>
+                        <a href="{% url 'account_login' %}" class="text-sm text-gray hover:text-black transition-colors">Log in</a>
+                        <a href="{% url 'account_signup' %}" class="text-sm px-4 py-1.5 bg-black text-white hover:bg-dark-gray transition-colors">Sign up</a>
                     {% endif %}
                 </div>
-                <div class="flex items-center sm:hidden">
-                    <button @click="isOpen = !isOpen" class="inline-flex items-center justify-center p-2 text-gray hover:text-black">
-                        <i class="fa-solid fa-bars h-6 w-6" x-show="!isOpen"></i>
-                        <i class="fa-solid fa-xmark h-6 w-6" x-show="isOpen"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Mobile menu -->
-        <div x-show="isOpen" class="sm:hidden border-t border-light-gray">
-            <div class="pt-2 pb-3 space-y-1">
-                <a href="{% url 'landing:features' %}" class="block pl-3 pr-4 py-2 border-l-4 {% if request.resolver_match.url_name == 'features' %}border-black text-black{% else %}border-transparent text-gray hover:text-black{% endif %} text-base font-medium uppercase tracking-wider">
-                    Features
+
+                <!-- Mobile hamburger -->
+                <a href="#main-menu" class="flex items-center md:hidden text-gray hover:text-black">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </a>
-                <a href="{% url 'landing:pricing' %}" class="block pl-3 pr-4 py-2 border-l-4 {% if request.resolver_match.url_name == 'pricing' %}border-black text-black{% else %}border-transparent text-gray hover:text-black{% endif %} text-base font-medium uppercase tracking-wider">
-                    Pricing
-                </a>
-            </div>
-            <div class="pt-4 pb-3 border-t border-light-gray">
-                {% if user.is_authenticated %}
-                    <div class="flex items-center px-4">
-                        <div class="flex-shrink-0">
-                            <div class="h-10 w-10 border border-black flex items-center justify-center text-black font-medium">
-                                {{ user.username|first|upper }}
-                            </div>
-                        </div>
-                        <div class="ml-3">
-                            <div class="text-base font-medium text-black">{{ user.get_full_name|default:user.username }}</div>
-                            <div class="text-sm font-medium text-gray">{{ user.email }}</div>
-                        </div>
-                    </div>
-                    <div class="mt-3 space-y-1">
-                        <a href="{% url 'dashboard:home' %}" class="block px-4 py-2 text-base font-medium text-gray hover:text-black">
-                            Dashboard
-                        </a>
-                        <a href="#" class="block px-4 py-2 text-base font-medium text-gray hover:text-black">
-                            Profile
-                        </a>
-                        <a href="{% url 'account_logout' %}" class="block px-4 py-2 text-base font-medium text-gray hover:text-black">
-                            Log out
-                        </a>
-                    </div>
-                {% else %}
-                    <div class="mt-3 space-y-1">
-                        <a href="{% url 'account_login' %}" class="block px-4 py-2 text-base font-medium text-gray hover:text-black">
-                            Log in
-                        </a>
-                        <a href="{% url 'account_signup' %}" class="block px-4 py-2 text-base font-medium text-gray hover:text-black">
-                            Sign up
-                        </a>
-                    </div>
-                {% endif %}
             </div>
         </div>
     </nav>
 
     <!-- Messages -->
     {% if messages %}
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             {% for message in messages %}
-                <div class="border border-light-gray p-4 flex mb-4" role="alert">
+                <div class="border border-light-gray p-4 flex mb-3" role="alert">
                     <div class="mr-3">
                         {% if message.tags == 'error' %}
                             <i class="fa-solid fa-circle-exclamation text-black"></i>
@@ -154,86 +121,69 @@
                         {% elif message.tags == 'success' %}
                             <i class="fa-solid fa-check text-black"></i>
                         {% else %}
-                            <i class="fa-solid fa-info-circle text-black"></i>
+                            <i class="fa-solid fa-circle-info text-black"></i>
                         {% endif %}
                     </div>
                     <div class="flex-1">
                         <p class="text-sm">{{ message }}</p>
                     </div>
-                    <div class="ml-auto pl-3">
-                        <div class="-mx-1.5 -my-1.5">
-                            <button class="inline-flex p-1.5 text-gray hover:text-black"
-                                onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">
-                                <i class="fa-solid fa-xmark h-5 w-5"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <button class="ml-auto pl-3 text-gray hover:text-black"
+                        onclick="this.parentElement.remove()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
                 </div>
             {% endfor %}
         </div>
     {% endif %}
 
     <!-- Main content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-1">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-light-gray mt-16">
-        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="col-span-1">
-                    <div class="flex items-center">
-                        <span class="text-xl font-medium uppercase tracking-wide">NAME</span>
-                    </div>
-                    <p class="mt-4 text-gray text-sm">
-                        A brief description of your application or website. Keep it simple and direct.
+    <footer class="border-t border-light-gray">
+        <div class="max-w-7xl mx-auto py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+                <div class="col-span-2">
+                    <a href="{% url 'landing:home' %}" class="flex items-center gap-2">
+                        <div class="w-6 h-6 bg-black flex items-center justify-center">
+                            <span class="text-white text-[10px] font-bold">S</span>
+                        </div>
+                        <span class="text-sm font-medium">SaaS Boilerplate</span>
+                    </a>
+                    <p class="mt-4 text-sm text-gray max-w-sm leading-relaxed">
+                        Open-source Django SaaS boilerplate. Authentication, payments, dashboard, and deployment — all wired up.
                     </p>
-                    <div class="mt-6 flex space-x-6">
-                        <a href="#" class="text-gray hover:text-black">
-                            <i class="fa-brands fa-twitter"></i>
+                    <div class="mt-6 flex space-x-5">
+                        <a href="https://github.com/eriktaveras" class="text-gray hover:text-black transition-colors" target="_blank" rel="noopener">
+                            <i class="fa-brands fa-github text-lg"></i>
                         </a>
-                        <a href="#" class="text-gray hover:text-black">
-                            <i class="fa-brands fa-github"></i>
-                        </a>
-                        <a href="#" class="text-gray hover:text-black">
-                            <i class="fa-brands fa-linkedin"></i>
+                        <a href="https://www.eriktaveras.com" class="text-gray hover:text-black transition-colors" target="_blank" rel="noopener">
+                            <i class="fa-solid fa-globe text-lg"></i>
                         </a>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-sm font-medium uppercase tracking-wider">Links</h3>
-                    <ul class="mt-4 space-y-4">
-                        <li>
-                            <a href="#" class="text-base text-gray hover:text-black">
-                                <i class="fa-solid fa-chevron-right text-xs mr-2"></i>Features
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="text-base text-gray hover:text-black">
-                                <i class="fa-solid fa-chevron-right text-xs mr-2"></i>Pricing
-                            </a>
-                        </li>
+                    <h3 class="text-sm font-medium uppercase tracking-wider">Product</h3>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="{% url 'landing:features' %}" class="text-sm text-gray hover:text-black transition-colors">Features</a></li>
+                        <li><a href="{% url 'landing:pricing' %}" class="text-sm text-gray hover:text-black transition-colors">Pricing</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-sm font-medium uppercase tracking-wider">Legal</h3>
-                    <ul class="mt-4 space-y-4">
-                        <li>
-                            <a href="#" class="text-base text-gray hover:text-black">
-                                <i class="fa-solid fa-chevron-right text-xs mr-2"></i>Terms
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="text-base text-gray hover:text-black">
-                                <i class="fa-solid fa-chevron-right text-xs mr-2"></i>Privacy
-                            </a>
-                        </li>
+                    <ul class="mt-4 space-y-3">
+                        <li><a href="#" class="text-sm text-gray hover:text-black transition-colors">Terms</a></li>
+                        <li><a href="#" class="text-sm text-gray hover:text-black transition-colors">Privacy</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-8 border-t border-light-gray pt-8">
-                <p class="text-base text-gray">&copy; 2024 {{ site_name|default:'Your Company' }}. All rights reserved.</p>
+            <div class="mt-10 sm:mt-12 pt-8 border-t border-light-gray flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray">&copy; 2025 Django SaaS Boilerplate. All rights reserved.</p>
+                <p class="text-sm text-gray">
+                    Built by <a href="https://www.eriktaveras.com" class="text-black hover:underline" target="_blank" rel="noopener">Erik Taveras</a>
+                </p>
             </div>
         </div>
     </footer>

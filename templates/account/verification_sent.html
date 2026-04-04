@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Your Email - Django SaaS{% endblock %}
+
+{% block content %}
+<div class="min-h-[60vh] flex items-center justify-center py-16 px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-medium tracking-tighter text-black">
+        CHECK YOUR EMAIL
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray">
+        We've sent a verification link to your email address
+      </p>
+    </div>
+
+    <div class="mt-8 space-y-6">
+      <div class="border border-light-gray p-8">
+        <div class="flex">
+          <i class="fa-solid fa-paper-plane text-black self-start mt-1"></i>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium uppercase tracking-widest text-black">
+              Verification email sent
+            </h3>
+            <div class="mt-2 text-sm text-gray">
+              <p>
+                Please click the link in the email to verify your account. If you don't see it, check your spam folder.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-sm text-center mt-6">
+        <a href="{% url 'account_login' %}" class="inline-block py-3 px-6 bg-black text-white hover:bg-dark-gray transition-all duration-300 text-sm font-medium uppercase tracking-wider">
+          BACK TO SIGN IN
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,438 +1,160 @@
 {% extends "base.html" %}
 
-{% block title %}Features - SaaS Platform{% endblock %}
+{% block title %}Features | Django SaaS Boilerplate{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<div class="py-20 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h1 class="text-4xl font-medium tracking-tight text-white uppercase">
-                MAIN FEATURES
-            </h1>
-            <p class="mt-6 max-w-3xl mx-auto text-xl text-light-gray">
-                Everything you need to launch your SaaS application, ready to use and customize.
-            </p>
-        </div>
+<!-- Hero -->
+<div class="py-24 lg:py-32 border-b border-light-gray">
+    <div class="max-w-4xl mx-auto text-center px-4">
+        <p class="text-xs font-medium uppercase tracking-widest text-gray">Features</p>
+        <h1 class="mt-4 text-4xl lg:text-5xl font-medium tracking-tight text-black leading-tight">
+            Everything you need.<br>Nothing you don't.
+        </h1>
+        <p class="mt-6 text-lg text-gray max-w-2xl mx-auto leading-relaxed">
+            No half-built features, no "coming soon" placeholders. Every feature listed here works out of the box.
+        </p>
     </div>
 </div>
 
-<!-- Main Features List -->
-<div class="py-20">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-sm font-medium tracking-wider uppercase">ALL IN ONE PLACE</h2>
-            <p class="mt-4 text-3xl font-medium tracking-tight text-black uppercase">
-                A COMPLETE FRAMEWORK FOR YOUR SAAS
-            </p>
-            <p class="mx-auto mt-6 max-w-2xl text-xl text-gray">
-                Built with Django, Tailwind CSS, Alpine.js and HTMX to provide the best development and user experience.
-            </p>
-        </div>
-        
-        <div class="mt-16">
-            <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                <!-- Authentication -->
-                <div class="border border-light-gray p-8">
-                    <div>
-                        <div class="w-12 h-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-key text-black text-xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="mt-8 text-lg font-medium tracking-tight uppercase">Robust Authentication</h3>
-                    <p class="mt-6 text-base text-gray">
-                        Complete authentication system with registration, login, email verification, password recovery, and two-factor authentication.
-                    </p>
-                    <div class="mt-6">
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Registration and login
-                                </p>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Email verification
-                                </p>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        Two-factor authentication (2FA)
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+<!-- Features -->
+<div class="py-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <!-- Payments & Subscriptions -->
-                <div class="border border-light-gray p-8">
-                    <div>
-                        <div class="w-12 h-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-credit-card text-black text-xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="mt-8 text-lg font-medium tracking-tight uppercase">Payments & Subscriptions</h3>
-                    <p class="mt-6 text-base text-gray">
-                        Complete integration with Stripe to manage payments and subscriptions securely and easily.
-                    </p>
-                    <div class="mt-6">
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Stripe integration
-                                </p>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        PayPal integration
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Automatic billing and receipts
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+        <!-- Row 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-24">
 
-                <!-- Responsive Design -->
-                <div class="border border-light-gray p-8">
-                    <div>
-                        <div class="w-12 h-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-mobile-screen text-black text-xl"></i>
-                        </div>
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-black flex items-center justify-center">
+                        <i class="fa-solid fa-shield-halved text-white text-xs"></i>
                     </div>
-                    <h3 class="mt-8 text-lg font-medium tracking-tight uppercase">Responsive Design</h3>
-                    <p class="mt-6 text-base text-gray">
-                        Modern and adaptive interface that works perfectly on mobile devices, tablets, and desktop.
-                    </p>
-                    <div class="mt-6">
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Developed with Tailwind CSS
-                                </p>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Mobile-first approach
-                                </p>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Reusable UI components
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
+                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Authentication</h3>
                 </div>
-
-                <!-- Dashboard -->
-                <div class="border border-light-gray p-8">
-                    <div>
-                        <div class="w-12 h-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-gauge-high text-black text-xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="mt-8 text-lg font-medium tracking-tight uppercase">Intuitive Dashboard</h3>
-                    <p class="mt-6 text-base text-gray">
-                        Easy-to-use control panel with all the important metrics for your users and for you.
-                    </p>
-                    <div class="mt-6">
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    User management area
-                                </p>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        Real-time charts and statistics
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check flex-shrink-0 h-5 w-5 text-black"></i>
-                                <p class="ml-3 text-sm text-gray">
-                                    Subscription management
-                                </p>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Teams -->
-                <div class="border border-light-gray p-8">
-                    <div>
-                        <div class="w-12 h-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-users text-black text-xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="mt-8 text-lg font-medium tracking-tight uppercase">Team Management</h3>
-                    <p class="mt-6 text-base text-gray">
-                        Multi-user functionality to collaborate with your team or clients efficiently.
-                    </p>
-                    <div class="mt-6">
-                        <ul class="space-y-4">
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        Team creation and management
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        Role-based permission control
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        Email invitations
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- API & Integrations -->
-                <div class="border border-light-gray p-8">
-                    <div>
-                        <div class="w-12 h-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-plug text-black text-xl"></i>
-                        </div>
-                    </div>
-                    <h3 class="mt-8 text-lg font-medium tracking-tight uppercase">API & Integrations</h3>
-                    <p class="mt-6 text-base text-gray">
-                        Complete RESTful API and hooks to integrate with other services and platforms.
-                    </p>
-                    <div class="mt-6">
-                        <ul class="space-y-4">
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        RESTful API with Django REST framework
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        API documentation with Swagger/OpenAPI
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock flex-shrink-0 h-5 w-5 text-black"></i>
-                                <div class="ml-3">
-                                    <p class="text-sm text-gray">
-                                        Webhooks for external integrations
-                                    </p>
-                                    <span class="text-xs text-black font-medium mt-1 inline-block">COMING SOON</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <p class="mt-4 text-sm text-gray leading-relaxed">
+                    Custom user model with email-only login. No usernames. Powered by django-allauth with all flows built and styled.
+                </p>
+                <ul class="mt-6 space-y-2.5">
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Custom user model (email as username)</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Signup with email verification</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Password reset and change</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Login code (passwordless)</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>20+ styled auth templates</li>
+                </ul>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Technical Stack -->
-<div class="py-16 border-t border-light-gray">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="lg:text-center">
-            <h2 class="text-sm font-medium uppercase tracking-wider">TECHNICAL STACK</h2>
-            <p class="mt-4 text-3xl font-medium tracking-tight text-black uppercase">
-                BUILT WITH MODERN TECHNOLOGIES
-            </p>
-            <p class="mx-auto mt-6 max-w-2xl text-xl text-gray">
-                We use the best tools and frameworks to provide an exceptional development and user experience.
-            </p>
-        </div>
-
-        <div class="mt-16">
-            <div class="grid grid-cols-1 gap-10 md:grid-cols-2">
-                <div class="border border-light-gray p-8">
-                    <div class="flex items-center">
-                        <div class="h-12 w-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-brands fa-python text-black text-xl"></i>
-                        </div>
-                        <h3 class="ml-4 text-lg font-medium uppercase">Django + Django REST Framework</h3>
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-black flex items-center justify-center">
+                        <i class="fa-solid fa-credit-card text-white text-xs"></i>
                     </div>
-                    <div class="mt-6">
-                        <p class="text-base text-gray">
-                            High-level Python web framework that encourages rapid development and clean, pragmatic design.
-                        </p>
-                        <ul class="mt-6 space-y-3">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">MVT (Model-View-Template) Architecture</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Powerful and flexible ORM</span>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock h-5 w-5 text-black"></i>
-                                <div class="ml-2">
-                                    <span class="text-sm text-gray">Django REST Framework for APIs</span>
-                                    <span class="text-xs text-black font-medium mt-1 block">COMING SOON</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Stripe Payments</h3>
                 </div>
-
-                <div class="border border-light-gray p-8">
-                    <div class="flex items-center">
-                        <div class="h-12 w-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-wind text-black text-xl"></i>
-                        </div>
-                        <h3 class="ml-4 text-lg font-medium uppercase">Tailwind CSS</h3>
-                    </div>
-                    <div class="mt-6">
-                        <p class="text-base text-gray">
-                            Utility-first CSS framework for rapidly building custom designs without leaving your HTML.
-                        </p>
-                        <ul class="mt-6 space-y-3">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Utility classes for rapid development</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Highly customizable and extensible</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Responsive design by default</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="border border-light-gray p-8">
-                    <div class="flex items-center">
-                        <div class="h-12 w-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-brands fa-js text-black text-xl"></i>
-                        </div>
-                        <h3 class="ml-4 text-lg font-medium uppercase">Alpine.js</h3>
-                    </div>
-                    <div class="mt-6">
-                        <p class="text-base text-gray">
-                            Minimal JavaScript framework for adding behavior to your markup with a simple declarative syntax.
-                        </p>
-                        <ul class="mt-6 space-y-3">
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Declarative and reactive syntax</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Lightweight (less than 8kb gzipped)</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Integrates perfectly with Tailwind</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="border border-light-gray p-8">
-                    <div class="flex items-center">
-                        <div class="h-12 w-12 flex items-center justify-center border border-light-gray">
-                            <i class="fa-solid fa-bolt text-black text-xl"></i>
-                        </div>
-                        <h3 class="ml-4 text-lg font-medium uppercase">HTMX</h3>
-                    </div>
-                    <div class="mt-6">
-                        <p class="text-base text-gray">
-                            Library that allows you to access modern browser features directly from HTML, without the need for JavaScript.
-                        </p>
-                        <ul class="mt-6 space-y-3">
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock h-5 w-5 text-black"></i>
-                                <div class="ml-2">
-                                    <span class="text-sm text-gray">AJAX, CSS Transitions, WebSockets and Server Sent Events</span>
-                                    <span class="text-xs text-black font-medium mt-1 block">PARTIAL IMPLEMENTATION</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fa-solid fa-check h-5 w-5 text-black"></i>
-                                <span class="ml-2 text-sm text-gray">Small (~14KB min.gz'd)</span>
-                            </li>
-                            <li class="flex items-start opacity-60">
-                                <i class="fa-solid fa-clock h-5 w-5 text-black"></i>
-                                <div class="ml-2">
-                                    <span class="text-sm text-gray">Interactive experiences without writing JavaScript</span>
-                                    <span class="text-xs text-black font-medium mt-1 block">IN DEVELOPMENT</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <p class="mt-4 text-sm text-gray leading-relaxed">
+                    Subscription billing with Stripe's Payment Methods API. Customer creation, webhooks, and status tracking handled.
+                </p>
+                <ul class="mt-6 space-y-2.5">
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Payment Methods API integration</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Webhook event handling</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Subscription plans (admin-managed)</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>14-day free trial support</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Status tracking (active, cancelled, trial)</li>
+                </ul>
             </div>
+
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-black flex items-center justify-center">
+                        <i class="fa-solid fa-gauge-high text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-base font-medium text-black uppercase tracking-wider">User Dashboard</h3>
+                </div>
+                <p class="mt-4 text-sm text-gray leading-relaxed">
+                    Sidebar layout with profile, settings, and subscription management. Responsive for mobile and desktop.
+                </p>
+                <ul class="mt-6 space-y-2.5">
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Profile editing (name, email)</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Notification preferences</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>API key generation</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Subscription status and plan switching</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Mobile-responsive sidebar</li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-black flex items-center justify-center">
+                        <i class="fa-solid fa-bolt text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Django 6.0 Native</h3>
+                </div>
+                <p class="mt-4 text-sm text-gray leading-relaxed">
+                    Uses the latest Django features. No legacy patterns, no deprecated APIs.
+                </p>
+                <ul class="mt-6 space-y-2.5">
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Background tasks via @task decorator</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Content Security Policy middleware</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Template partials for reusable UI</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>CSP nonces on all scripts and styles</li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-black flex items-center justify-center">
+                        <i class="fa-solid fa-palette text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Frontend Stack</h3>
+                </div>
+                <p class="mt-4 text-sm text-gray leading-relaxed">
+                    No build step required. Tailwind via CDN, Alpine.js for interactivity, HTMX for dynamic pages.
+                </p>
+                <ul class="mt-6 space-y-2.5">
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Tailwind CSS (CDN, zero build)</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Alpine.js for UI behavior</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>HTMX for partial page updates</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Space Grotesk typography</li>
+                </ul>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-black flex items-center justify-center">
+                        <i class="fa-solid fa-rocket text-white text-xs"></i>
+                    </div>
+                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Production Ready</h3>
+                </div>
+                <p class="mt-4 text-sm text-gray leading-relaxed">
+                    Security headers, database flexibility, static files, and deploy configs included.
+                </p>
+                <ul class="mt-6 space-y-2.5">
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>HSTS, SSL redirect, secure cookies</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>PostgreSQL via DATABASE_URL</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>WhiteNoise for static files</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Gunicorn + Procfile</li>
+                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Ruff linting and formatting</li>
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>
 
-
-
-<!-- CTA Section -->
-<div class="py-16 bg-black">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:flex lg:items-center lg:justify-between">
-        <h2 class="text-3xl font-medium tracking-tight text-white uppercase">
-            <span class="block">READY TO GET STARTED?</span>
-            <span class="block text-light-gray">Begin your free trial today.</span>
+<!-- CTA -->
+<div class="bg-black py-24">
+    <div class="max-w-3xl mx-auto text-center px-4">
+        <h2 class="text-3xl lg:text-4xl font-medium tracking-tight text-white">
+            Ready to build?
         </h2>
-        <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0 gap-4">
-            <div>
-                <a href="{% url 'account_signup' %}" class="px-8 py-3 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider flex items-center">
-                    <i class="fa-solid fa-rocket mr-2"></i> START FREE
-                </a>
-            </div>
-            <div>
-                <a href="{% url 'landing:pricing' %}" class="px-8 py-3 border border-white text-white hover:bg-dark-gray text-sm font-medium uppercase tracking-wider flex items-center">
-                    <i class="fa-solid fa-tag mr-2"></i> SEE PRICING
-                </a>
-            </div>
+        <p class="mt-4 text-gray text-lg">
+            Clone the repo. Run <code class="text-light-gray">make install</code>. Start shipping.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{% url 'account_signup' %}" class="px-10 py-4 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider transition-colors">
+                Get started free
+            </a>
+            <a href="{% url 'landing:pricing' %}" class="px-10 py-4 border border-white text-white hover:bg-dark-gray text-sm font-medium uppercase tracking-wider transition-colors">
+                See pricing
+            </a>
         </div>
     </div>
 </div>

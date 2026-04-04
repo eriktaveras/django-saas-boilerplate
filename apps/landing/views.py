@@ -1,53 +1,64 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
+
+
+@require_http_methods(['GET'])
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "",
+        "Sitemap: https://yourdomain.com/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
 
 @require_http_methods(['GET'])
 def home(request):
     features = [
         {
-            'title': 'Dashboard Intuitivo',
-            'description': 'Panel de control fácil de usar con todas tus métricas importantes.',
-            'icon': 'chart-bar'
+            'icon': 'shield-halved',
+            'title': 'Authentication',
+            'description': 'Email-based signup, login, verification, and password reset. Powered by django-allauth.',
         },
         {
-            'title': 'Autenticación Segura',
-            'description': 'Sistema de autenticación robusto con verificación de email.',
-            'icon': 'shield-check'
+            'icon': 'credit-card',
+            'title': 'Stripe Payments',
+            'description': 'Subscriptions, webhooks, and payment intents. Ready to accept payments on day one.',
         },
         {
-            'title': 'Diseño Responsive',
-            'description': 'Interfaz moderna que funciona perfectamente en todos los dispositivos.',
-            'icon': 'device-mobile'
+            'icon': 'gauge-high',
+            'title': 'Dashboard',
+            'description': 'User profile, settings, notification preferences, and API key management built in.',
         },
         {
-            'title': 'Suscripciones Flexibles',
-            'description': 'Sistema de pagos seguro con Stripe para gestionar suscripciones.',
-            'icon': 'credit-card'
-        }
+            'icon': 'bolt',
+            'title': 'Background Tasks',
+            'description': 'Django 6.0 native async tasks. No Celery, no Redis, no extra infrastructure.',
+        },
+        {
+            'icon': 'lock',
+            'title': 'Security',
+            'description': 'CSP headers, HSTS, secure cookies, and SSL redirect. Production-grade from the start.',
+        },
+        {
+            'icon': 'rocket',
+            'title': 'Deploy Ready',
+            'description': 'PostgreSQL, WhiteNoise, Gunicorn, and Procfile. Push to production in minutes.',
+        },
     ]
-    
-    pricing = {
-        'monthly_price': '9.99',
-        'features': [
-            'Acceso completo al dashboard',
-            'Soporte prioritario',
-            'Características premium',
-            'Actualizaciones ilimitadas',
-            'API access',
-            'Backups diarios'
-        ]
-    }
-    
+
     return render(request, 'landing/home.html', {
         'features': features,
-        'pricing': pricing,
     })
+
 
 @require_http_methods(['GET'])
 def pricing(request):
     return render(request, 'landing/pricing.html')
 
+
 @require_http_methods(['GET'])
 def features(request):
-    return render(request, 'landing/features.html') 
+    return render(request, 'landing/features.html')

@@ -1,5 +1,7 @@
 from django.contrib import admin
+
 from .models import StripeCustomer
+
 
 @admin.register(StripeCustomer)
 class StripeCustomerAdmin(admin.ModelAdmin):
@@ -8,17 +10,17 @@ class StripeCustomerAdmin(admin.ModelAdmin):
     search_fields = ('user__email', 'stripe_customer_id', 'stripe_subscription_id')
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
-        ('Información del Usuario', {
+        ('User Info', {
             'fields': ('user',)
         }),
-        ('Información de Stripe', {
+        ('Stripe Info', {
             'fields': ('stripe_customer_id', 'stripe_subscription_id', 'subscription_status')
         }),
-        ('Fechas', {
+        ('Dates', {
             'fields': ('created_at', 'updated_at'),
             'classes': ('collapse',)
         }),
     )
-    
+
     def has_add_permission(self, request):
-        return False 
+        return False
