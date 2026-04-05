@@ -1,183 +1,186 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Settings | SaaS Boilerplate{% endblock %}
-{% block page_title %}Settings{% endblock %}
+{% block title %}Configuración | MediBook{% endblock %}
+{% block page_title %}Configuración{% endblock %}
 
 {% block dashboard_content %}
 <div>
-    <h2 class="text-xl font-medium text-black">Settings</h2>
-    <p class="mt-1 text-sm text-gray">Notifications, subscription, and developer tools.</p>
+    <h2 class="text-xl font-medium text-black">Configuración</h2>
+    <p class="mt-1 text-sm" style="color: #64748b;">Notificaciones, suscripción y herramientas de desarrollo.</p>
 
     <!-- Notifications -->
     <form action="{% url 'dashboard:settings' %}" method="POST" class="mt-6">
         {% csrf_token %}
-        <div class="bg-white border border-light-gray rounded">
-            <div class="px-6 py-4 border-b border-light-gray">
-                <h3 class="text-sm font-medium text-black">Email notifications</h3>
-                <p class="text-xs text-gray mt-0.5">Choose what you want to be notified about.</p>
+        <div class="bg-white border rounded" style="border-color: #e2e8f0;">
+            <div class="px-6 py-4 border-b" style="border-color: #e2e8f0;">
+                <h3 class="text-sm font-medium text-black">Notificaciones por correo</h3>
+                <p class="text-xs mt-0.5" style="color: #64748b;">Elige sobre qué deseas recibir notificaciones.</p>
             </div>
-            <div class="divide-y divide-light-gray">
-                <label for="comments" class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#fafafa] transition-colors">
+            <div class="divide-y" style="border-color: #e2e8f0;">
+                <label for="comments" class="flex items-center justify-between px-6 py-4 cursor-pointer transition-colors" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'">
                     <div class="flex items-center gap-4">
-                        <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                            <i class="fa-solid fa-comment text-gray text-xs"></i>
+                        <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                            <i class="fa-solid fa-comment text-xs" style="color: #64748b;"></i>
                         </div>
                         <div>
-                            <p class="text-sm text-black">Comments</p>
-                            <p class="text-xs text-gray mt-0.5">Someone comments on your content.</p>
+                            <p class="text-sm text-black">Nuevas citas</p>
+                            <p class="text-xs mt-0.5" style="color: #64748b;">Cuando un paciente reserve una cita.</p>
                         </div>
                     </div>
-                    <input id="comments" name="comments" type="checkbox" class="h-4 w-4 accent-black"
+                    <input id="comments" name="comments" type="checkbox" class="h-4 w-4"
+                           style="accent-color: #0284c7;"
                            {% if notification_settings.comments %}checked{% endif %}>
                 </label>
-                <label for="updates" class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#fafafa] transition-colors">
+                <label for="updates" class="flex items-center justify-between px-6 py-4 cursor-pointer transition-colors" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'">
                     <div class="flex items-center gap-4">
-                        <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                            <i class="fa-solid fa-bell text-gray text-xs"></i>
+                        <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                            <i class="fa-solid fa-bell text-xs" style="color: #64748b;"></i>
                         </div>
                         <div>
-                            <p class="text-sm text-black">Product updates</p>
-                            <p class="text-xs text-gray mt-0.5">New features, improvements, and releases.</p>
+                            <p class="text-sm text-black">Actualizaciones del producto</p>
+                            <p class="text-xs mt-0.5" style="color: #64748b;">Nuevas funciones y mejoras.</p>
                         </div>
                     </div>
-                    <input id="updates" name="updates" type="checkbox" class="h-4 w-4 accent-black"
+                    <input id="updates" name="updates" type="checkbox" class="h-4 w-4"
+                           style="accent-color: #0284c7;"
                            {% if notification_settings.updates %}checked{% endif %}>
                 </label>
-                <label for="marketing" class="flex items-center justify-between px-6 py-4 cursor-pointer hover:bg-[#fafafa] transition-colors">
+                <label for="marketing" class="flex items-center justify-between px-6 py-4 cursor-pointer transition-colors" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'">
                     <div class="flex items-center gap-4">
-                        <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                            <i class="fa-solid fa-bullhorn text-gray text-xs"></i>
+                        <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                            <i class="fa-solid fa-bullhorn text-xs" style="color: #64748b;"></i>
                         </div>
                         <div>
                             <p class="text-sm text-black">Marketing</p>
-                            <p class="text-xs text-gray mt-0.5">Promotions, tips, and special offers.</p>
+                            <p class="text-xs mt-0.5" style="color: #64748b;">Promociones y ofertas especiales.</p>
                         </div>
                     </div>
-                    <input id="marketing" name="marketing" type="checkbox" class="h-4 w-4 accent-black"
+                    <input id="marketing" name="marketing" type="checkbox" class="h-4 w-4"
+                           style="accent-color: #0284c7;"
                            {% if notification_settings.marketing %}checked{% endif %}>
                 </label>
             </div>
-            <div class="px-6 py-4 border-t border-light-gray flex justify-end bg-[#fafafa] rounded-b">
-                <button type="submit" class="text-sm px-5 py-2 bg-black text-white rounded hover:bg-dark-gray transition-colors">Save preferences</button>
+            <div class="px-6 py-4 border-t flex justify-end rounded-b" style="border-color: #e2e8f0; background-color: #fafafa;">
+                <button type="submit" class="text-sm px-5 py-2 text-white rounded transition-colors" style="background-color: #0284c7;" onmouseover="this.style.backgroundColor='#0369a1'" onmouseout="this.style.backgroundColor='#0284c7'">Guardar preferencias</button>
             </div>
         </div>
     </form>
 
     <!-- Subscription -->
-    <div class="mt-6 bg-white border border-light-gray rounded">
-        <div class="px-6 py-4 border-b border-light-gray">
-            <h3 class="text-sm font-medium text-black">Subscription</h3>
-            <p class="text-xs text-gray mt-0.5">Manage your plan and billing.</p>
+    <div class="mt-6 bg-white border rounded" style="border-color: #e2e8f0;">
+        <div class="px-6 py-4 border-b" style="border-color: #e2e8f0;">
+            <h3 class="text-sm font-medium text-black">Suscripción</h3>
+            <p class="text-xs mt-0.5" style="color: #64748b;">Gestiona tu plan y facturación.</p>
         </div>
-        <div class="divide-y divide-light-gray">
+        <div class="divide-y" style="border-color: #e2e8f0;">
             <div class="px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 bg-black rounded flex items-center justify-center">
+                    <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #0284c7;">
                         <i class="fa-solid fa-gem text-white text-xs"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-black">{{ subscription.plan_name|default:"Free" }} plan</p>
-                        <p class="text-xs text-gray mt-0.5">
+                        <p class="text-sm text-black">{{ subscription.plan_name|default:"Básico" }}</p>
+                        <p class="text-xs mt-0.5" style="color: #64748b;">
                             {% if subscription.is_active %}
-                                Active &middot; Renews {{ subscription.end_date|date:"M d, Y" }}
+                                Activo &middot; Se renueva el {{ subscription.end_date|date:"d M, Y" }}
                             {% elif subscription.is_trial %}
-                                Trial &middot; Ends {{ subscription.trial_end_date|date:"M d, Y" }}
+                                Prueba &middot; Termina el {{ subscription.trial_end_date|date:"d M, Y" }}
                             {% else %}
-                                {{ subscription.status|default:"Inactive"|title }}
+                                {{ subscription.status|default:"Inactivo"|title }}
                             {% endif %}
                         </p>
                     </div>
                 </div>
-                <a href="{% url 'dashboard:subscription_plans' %}" class="text-sm px-4 py-1.5 bg-black text-white rounded hover:bg-dark-gray transition-colors">
-                    {% if subscription.is_active %}Manage{% else %}Upgrade{% endif %}
+                <a href="{% url 'dashboard:subscription_plans' %}" class="text-sm px-4 py-1.5 text-white rounded transition-colors" style="background-color: #0284c7;" onmouseover="this.style.backgroundColor='#0369a1'" onmouseout="this.style.backgroundColor='#0284c7'">
+                    {% if subscription.is_active %}Gestionar{% else %}Actualizar{% endif %}
                 </a>
             </div>
             <div class="px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-credit-card text-gray text-xs"></i>
+                    <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-credit-card text-xs" style="color: #64748b;"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-black">Payment method</p>
-                        <p class="text-xs text-gray mt-0.5">No payment method on file.</p>
+                        <p class="text-sm text-black">Método de pago</p>
+                        <p class="text-xs mt-0.5" style="color: #64748b;">No hay método de pago registrado.</p>
                     </div>
                 </div>
-                <button type="button" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Add card</button>
+                <button type="button" class="text-sm px-4 py-1.5 border rounded transition-colors" style="border-color: #e2e8f0; color: #64748b;" onmouseover="this.style.borderColor='#0284c7'; this.style.color='#0284c7'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'">Agregar tarjeta</button>
             </div>
             <div class="px-6 py-4 flex items-center gap-4">
-                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                    <i class="fa-solid fa-file-invoice text-gray text-xs"></i>
+                <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                    <i class="fa-solid fa-file-invoice text-xs" style="color: #64748b;"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-black">Billing history</p>
-                    <p class="text-xs text-gray mt-0.5">No invoices yet.</p>
+                    <p class="text-sm text-black">Historial de facturación</p>
+                    <p class="text-xs mt-0.5" style="color: #64748b;">Sin facturas aún.</p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- API Access -->
-    <div class="mt-6 bg-white border border-light-gray rounded">
-        <div class="px-6 py-4 border-b border-light-gray">
-            <h3 class="text-sm font-medium text-black">API access</h3>
-            <p class="text-xs text-gray mt-0.5">Generate and manage API keys for programmatic access.</p>
+    <div class="mt-6 bg-white border rounded" style="border-color: #e2e8f0;">
+        <div class="px-6 py-4 border-b" style="border-color: #e2e8f0;">
+            <h3 class="text-sm font-medium text-black">Acceso a API</h3>
+            <p class="text-xs mt-0.5" style="color: #64748b;">Genera y gestiona claves API para acceso programático.</p>
         </div>
 
         {% if api.new_key %}
         <!-- Show newly generated key -->
-        <div class="px-6 py-4 bg-[#fafafa] border-b border-light-gray">
+        <div class="px-6 py-4 border-b" style="border-color: #e2e8f0; background-color: #fafafa;">
             <div class="flex items-start gap-3">
-                <div class="w-9 h-9 bg-black rounded flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div class="w-9 h-9 rounded flex items-center justify-center flex-shrink-0 mt-0.5" style="background-color: #0284c7;">
                     <i class="fa-solid fa-key text-white text-xs"></i>
                 </div>
                 <div class="min-w-0 flex-1">
-                    <p class="text-sm font-medium text-black">Your new API key</p>
-                    <p class="text-xs text-gray mt-0.5 mb-2">Copy this key now. It won't be shown again.</p>
-                    <code class="block bg-white border border-light-gray rounded px-3 py-2 text-sm text-black font-mono break-all select-all">{{ api.new_key }}</code>
+                    <p class="text-sm font-medium text-black">Tu nueva clave API</p>
+                    <p class="text-xs mt-0.5 mb-2" style="color: #64748b;">Copia esta clave ahora. No se mostrará de nuevo.</p>
+                    <code class="block bg-white border rounded px-3 py-2 text-sm font-mono break-all select-all" style="border-color: #e2e8f0;">{{ api.new_key }}</code>
                 </div>
             </div>
         </div>
         {% endif %}
 
-        <div class="divide-y divide-light-gray">
+        <div class="divide-y" style="border-color: #e2e8f0;">
             <div class="px-6 py-4 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-key text-gray text-xs"></i>
+                    <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-key text-xs" style="color: #64748b;"></i>
                     </div>
                     <div>
                         {% if api.has_key %}
-                            <p class="text-sm text-black">API key active</p>
-                            <p class="text-xs text-gray mt-0.5">Generated {{ api.key_created_at|date:"M d, Y \a\t g:i A" }}</p>
+                            <p class="text-sm text-black">Clave API activa</p>
+                            <p class="text-xs mt-0.5" style="color: #64748b;">Generada el {{ api.key_created_at|date:"d M, Y \a \l\a\s g:i A" }}</p>
                         {% else %}
-                            <p class="text-sm text-black">No API key</p>
-                            <p class="text-xs text-gray mt-0.5">Generate a key to access the API programmatically.</p>
+                            <p class="text-sm text-black">Sin clave API</p>
+                            <p class="text-xs mt-0.5" style="color: #64748b;">Genera una clave para acceder a la API.</p>
                         {% endif %}
                     </div>
                 </div>
                 <form action="{% url 'dashboard:generate_api_key' %}" method="POST">
                     {% csrf_token %}
-                    <button type="submit" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">
-                        {% if api.has_key %}Regenerate{% else %}Generate key{% endif %}
+                    <button type="submit" class="text-sm px-4 py-1.5 border rounded transition-colors" style="border-color: #e2e8f0; color: #64748b;" onmouseover="this.style.borderColor='#0284c7'; this.style.color='#0284c7'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'">
+                        {% if api.has_key %}Regenerar{% else %}Generar clave{% endif %}
                     </button>
                 </form>
             </div>
             <div class="px-6 py-4 flex items-center gap-4">
-                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                    <i class="fa-solid fa-book text-gray text-xs"></i>
+                <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                    <i class="fa-solid fa-book text-xs" style="color: #64748b;"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-black">API documentation</p>
-                    <p class="text-xs text-gray mt-0.5">Learn how to integrate with our API.</p>
+                    <p class="text-sm text-black">Documentación de API</p>
+                    <p class="text-xs mt-0.5" style="color: #64748b;">Aprende cómo integrar con nuestra API.</p>
                 </div>
             </div>
             <div class="px-6 py-4 flex items-center gap-4">
-                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                    <i class="fa-solid fa-plug text-gray text-xs"></i>
+                <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                    <i class="fa-solid fa-plug text-xs" style="color: #64748b;"></i>
                 </div>
                 <div>
                     <p class="text-sm text-black">Webhooks</p>
-                    <p class="text-xs text-gray mt-0.5">No webhooks configured.</p>
+                    <p class="text-xs mt-0.5" style="color: #64748b;">No hay webhooks configurados.</p>
                 </div>
             </div>
         </div>

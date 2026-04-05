@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Pricing | Django SaaS Boilerplate{% endblock %}
+{% block title %}Precios | MediBook - Reserva de Citas{% endblock %}
 
 {% block content %}
 <!-- Hero -->
-<div class="py-24 lg:py-32 border-b border-light-gray">
+<div class="py-24 lg:py-32 border-b" style="border-color: #e2e8f0; background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);">
     <div class="max-w-4xl mx-auto text-center px-4">
-        <p class="text-xs font-medium uppercase tracking-widest text-gray">Pricing</p>
+        <p class="text-xs font-medium uppercase tracking-widest" style="color: #64748b;">Precios</p>
         <h1 class="mt-4 text-4xl lg:text-5xl font-medium tracking-tight text-black leading-tight">
-            One boilerplate.<br>Plans for every stage.
+            Precios simples y transparentes<br>para clínicas de todos los tamaños
         </h1>
-        <p class="mt-6 text-lg text-gray">
-            Start free. No credit card. Upgrade when you need more.
+        <p class="mt-6 text-lg" style="color: #475569;">
+            Prueba gratuita de 14 días en todos los planes. Sin tarjeta de crédito para comenzar.
         </p>
     </div>
 </div>
@@ -19,72 +19,83 @@
 <!-- Pricing Cards -->
 <div class="py-24">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-px bg-light-gray border border-light-gray">
-            <!-- Free -->
-            <div class="bg-white p-10 flex flex-col">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Starter -->
+            <div class="p-8 rounded-xl border" style="border-color: #e2e8f0;">
                 <div>
-                    <p class="text-xs font-medium uppercase tracking-widest text-gray">Free</p>
-                    <p class="mt-6"><span class="text-5xl font-medium text-black">$0</span><span class="text-gray text-sm ml-1">/mo</span></p>
-                    <p class="mt-3 text-sm text-gray">For side projects and trying things out.</p>
+                    <p class="text-xs font-medium uppercase tracking-widest" style="color: #64748b;">Básico</p>
+                    <p class="mt-4"><span class="text-5xl font-medium text-black">$29</span><span class="text-sm" style="color: #64748b;">/mes</span></p>
+                    <p class="mt-3 text-sm" style="color: #64748b;">Perfecto para clínicas pequeñas que apenas comienzan con las reservas en línea.</p>
                 </div>
-                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3.5 border border-black text-center text-sm font-medium tracking-wider text-black hover:bg-light-gray transition-colors">
-                    Get started
+                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3.5 border text-center text-sm font-medium tracking-wider rounded-lg transition-colors"
+                   style="border-color: #0284c7; color: #0284c7;"
+                   onmouseover="this.style.backgroundColor='#f0f9ff'"
+                   onmouseout="this.style.backgroundColor='transparent'">
+                    Comenzar Prueba Gratuita
                 </a>
-                <ul class="mt-10 space-y-3 text-sm text-gray flex-1">
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Dashboard access</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Email authentication</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>1 project</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Community support</li>
+                <ul class="mt-10 space-y-3 text-sm" style="color: #64748b;">
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>1 ubicación</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>100 citas/mes</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Recordatorios por email</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Panel básico</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Registros de pacientes</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Soporte por email</li>
                 </ul>
             </div>
 
-            <!-- Pro -->
-            <div class="bg-white p-10 flex flex-col relative">
-                <div class="absolute top-0 left-0 right-0 h-1 bg-black"></div>
+            <!-- Professional -->
+            <div class="p-8 rounded-xl border-2 relative" style="border-color: #0284c7; background-color: #f0f9ff;">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-medium rounded-full text-white" style="background-color: #0284c7;">Más Popular</div>
                 <div>
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-medium uppercase tracking-widest text-black">Pro</p>
-                        <span class="text-[10px] font-medium uppercase tracking-widest bg-black text-white px-2.5 py-1">Popular</span>
-                    </div>
-                    <p class="mt-6"><span class="text-5xl font-medium text-black">$9.99</span><span class="text-gray text-sm ml-1">/mo</span></p>
-                    <p class="mt-3 text-sm text-gray">For serious builders and growing teams.</p>
+                    <p class="text-xs font-medium uppercase tracking-widest" style="color: #0284c7;">Profesional</p>
+                    <p class="mt-4"><span class="text-5xl font-medium text-black">$79</span><span class="text-sm" style="color: #64748b;">/mes</span></p>
+                    <p class="mt-3 text-sm" style="color: #64748b;">Para consultorios en crecimiento que necesitan más citas y funcionalidades.</p>
                 </div>
                 {% if user.is_authenticated %}
-                <a href="{% url 'subscriptions:subscription_page' %}" class="mt-8 block w-full py-3.5 bg-black text-center text-sm font-medium tracking-wider text-white hover:bg-dark-gray transition-colors">
-                    Manage subscription
+                <a href="{% url 'subscriptions:subscription_page' %}" class="mt-8 block w-full py-3.5 text-center text-sm font-medium tracking-wider rounded-lg text-white transition-colors"
+                   style="background-color: #0284c7;"
+                   onmouseover="this.style.backgroundColor='#0369a1'"
+                   onmouseout="this.style.backgroundColor='#0284c7'">
+                    Gestionar suscripción
                 </a>
                 {% else %}
-                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3.5 bg-black text-center text-sm font-medium tracking-wider text-white hover:bg-dark-gray transition-colors">
-                    Start 14-day trial
+                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3.5 text-center text-sm font-medium tracking-wider rounded-lg text-white transition-colors"
+                   style="background-color: #0284c7;"
+                   onmouseover="this.style.backgroundColor='#0369a1'"
+                   onmouseout="this.style.backgroundColor='#0284c7'">
+                    Comenzar Prueba Gratuita
                 </a>
                 {% endif %}
-                <ul class="mt-10 space-y-3 text-sm text-gray flex-1">
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Everything in Free</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Priority support</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>API access</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>10 projects</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Analytics dashboard</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Daily backups</li>
+                <ul class="mt-10 space-y-3 text-sm" style="color: #64748b;">
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>3 ubicaciones</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>500 citas/mes</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>SMS + recordatorios por email</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Sincronización con calendario</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Panel de análisis</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Soporte por email prioritario</li>
                 </ul>
             </div>
 
             <!-- Enterprise -->
-            <div class="bg-white p-10 flex flex-col">
+            <div class="p-8 rounded-xl border" style="border-color: #e2e8f0;">
                 <div>
-                    <p class="text-xs font-medium uppercase tracking-widest text-gray">Enterprise</p>
-                    <p class="mt-6"><span class="text-5xl font-medium text-black">$49.99</span><span class="text-gray text-sm ml-1">/mo</span></p>
-                    <p class="mt-3 text-sm text-gray">For teams that need scale and guarantees.</p>
+                    <p class="text-xs font-medium uppercase tracking-widest" style="color: #64748b;">Empresarial</p>
+                    <p class="mt-4"><span class="text-5xl font-medium text-black">$199</span><span class="text-sm" style="color: #64748b;">/mes</span></p>
+                    <p class="mt-3 text-sm" style="color: #64748b;">Para grandes consultorios y grupos médicos con necesidades avanzadas.</p>
                 </div>
-                <a href="#" class="mt-8 block w-full py-3.5 border border-black text-center text-sm font-medium tracking-wider text-black hover:bg-light-gray transition-colors">
-                    Contact us
+                <a href="#" class="mt-8 block w-full py-3.5 border text-center text-sm font-medium tracking-wider rounded-lg transition-colors"
+                   style="border-color: #e2e8f0; color: #475569;"
+                   onmouseover="this.style.borderColor='#0284c7'; this.style.color='#0284c7'"
+                   onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#475569'">
+                    Contactar Ventas
                 </a>
-                <ul class="mt-10 space-y-3 text-sm text-gray flex-1">
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Everything in Pro</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Unlimited users</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Custom integrations</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>SLA guarantee</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>24/7 priority support</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Dedicated account manager</li>
+                <ul class="mt-10 space-y-3 text-sm" style="color: #64748b;">
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Ubicaciones ilimitadas</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Citas ilimitadas</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Acceso a API</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Integraciones personalizadas</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Análisis avanzados</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Soporte telefónico prioritario</li>
                 </ul>
             </div>
         </div>
@@ -92,49 +103,56 @@
 </div>
 
 <!-- FAQ -->
-<div class="py-24 border-t border-light-gray">
+<div class="py-24 border-t" style="border-color: #e2e8f0; background-color: #f8fafc;">
     <div class="max-w-3xl mx-auto px-4">
-        <p class="text-xs font-medium uppercase tracking-widest text-gray text-center">FAQ</p>
+        <p class="text-xs font-medium uppercase tracking-widest text-center" style="color: #64748b;">Preguntas Frecuentes</p>
         <h2 class="mt-4 text-3xl font-medium tracking-tight text-black text-center">
-            Questions? Answers.
+            Preguntas y respuestas
         </h2>
 
-        <dl class="mt-16 divide-y divide-light-gray">
+        <dl class="mt-16 divide-y" style="border-color: #e2e8f0;">
             <div class="py-8">
-                <dt class="text-sm font-medium text-black">Can I switch plans anytime?</dt>
-                <dd class="mt-2 text-sm text-gray leading-relaxed">Yes. Upgrade or downgrade whenever you want. Changes take effect on your next billing cycle.</dd>
+                <dt class="text-sm font-medium text-black">¿Puedo cambiar de plan en cualquier momento?</dt>
+                <dd class="mt-2 text-sm leading-relaxed" style="color: #64748b;">Sí. Actualiza o reduce tu plan cuando quieras. Los cambios surten efecto inmediatamente y prorratearemos tu facturación.</dd>
             </div>
             <div class="py-8">
-                <dt class="text-sm font-medium text-black">Is there a free trial?</dt>
-                <dd class="mt-2 text-sm text-gray leading-relaxed">Yes. All paid plans come with a 14-day free trial. No credit card required to start.</dd>
+                <dt class="text-sm font-medium text-black">¿Hay una prueba gratuita?</dt>
+                <dd class="mt-2 text-sm leading-relaxed" style="color: #64748b;">Sí. Todos los planes incluyen una prueba gratuita de 14 días. No se requiere tarjeta de crédito para comenzar, así que puedes probar todas las funcionalidades sin riesgo.</dd>
             </div>
             <div class="py-8">
-                <dt class="text-sm font-medium text-black">What payment methods do you accept?</dt>
-                <dd class="mt-2 text-sm text-gray leading-relaxed">All major credit and debit cards via Stripe. Enterprise plans can be invoiced.</dd>
+                <dt class="text-sm font-medium text-black">¿Qué métodos de pago aceptan?</dt>
+                <dd class="mt-2 text-sm leading-relaxed" style="color: #64748b;">Todas las tarjetas de crédito y débito principales a través de Stripe. Los planes empresariales también pueden ser facturados mediante transferencia bancaria.</dd>
             </div>
             <div class="py-8">
-                <dt class="text-sm font-medium text-black">Can I cancel anytime?</dt>
-                <dd class="mt-2 text-sm text-gray leading-relaxed">Yes. One click from your dashboard. No contracts, no cancellation fees, no questions asked.</dd>
+                <dt class="text-sm font-medium text-black">¿Qué pasa si excedo mi límite de citas?</dt>
+                <dd class="mt-2 text-sm leading-relaxed" style="color: #64748b;">Te notificaremos cuando alcances el 80% de tu límite. Puedes actualizar tu plan en cualquier momento, y las citas que excedan tu límite tendrán un pequeño cargo por cita.</dd>
             </div>
             <div class="py-8">
-                <dt class="text-sm font-medium text-black">Do you offer refunds?</dt>
-                <dd class="mt-2 text-sm text-gray leading-relaxed">If you're not happy within the first 30 days, reach out and we'll work something out.</dd>
+                <dt class="text-sm font-medium text-black">¿Puedo cancelar en cualquier momento?</dt>
+                <dd class="mt-2 text-sm leading-relaxed" style="color: #64748b;">Sí. Cancela en cualquier momento desde tu panel sin costos de cancelación. Seguirás teniendo acceso hasta el final de tu período de facturación.</dd>
+            </div>
+            <div class="py-8">
+                <dt class="text-sm font-medium text-black">¿Ofrecen reembolsos?</dt>
+                <dd class="mt-2 text-sm leading-relaxed" style="color: #64748b;">Si no estás satisfecho dentro de los primeros 30 días, contáctanos y emitiremos un reembolso completo. Sin preguntas.</dd>
             </div>
         </dl>
     </div>
 </div>
 
 <!-- CTA -->
-<div class="bg-black py-24">
-    <div class="max-w-3xl mx-auto text-center px-4">
+<div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+    <div class="max-w-3xl mx-auto text-center px-4 py-24">
         <h2 class="text-3xl lg:text-4xl font-medium tracking-tight text-white">
-            Ready to get started?
+            ¿Listo para comenzar?
         </h2>
-        <p class="mt-4 text-gray text-lg">
-            Free forever plan available. No credit card needed.
+        <p class="mt-4 text-lg" style="color: rgba(255,255,255,0.85);">
+            Comienza tu prueba gratuita de 14 días hoy. Sin tarjeta de crédito.
         </p>
-        <a href="{% url 'account_signup' %}" class="mt-10 inline-flex px-10 py-4 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider transition-colors">
-            Get started free
+        <a href="{% url 'account_signup' %}" class="mt-10 inline-flex px-10 py-4 text-sm font-medium uppercase tracking-wider rounded-lg transition-colors"
+           style="background-color: white; color: #0284c7;"
+           onmouseover="this.style.backgroundColor='#f0f9ff'"
+           onmouseout="this.style.backgroundColor='white'">
+            Comenzar Prueba Gratuita
         </a>
     </div>
 </div>

@@ -6,52 +6,56 @@ from django.views.decorators.http import require_http_methods
 @require_http_methods(['GET'])
 def robots_txt(request):
     lines = [
-        "User-agent: *",
-        "Allow: /",
-        "",
-        "Sitemap: https://yourdomain.com/sitemap.xml",
+        'User-agent: *',
+        'Allow: /',
+        '',
+        'Sitemap: https://yourdomain.com/sitemap.xml',
     ]
-    return HttpResponse("\n".join(lines), content_type="text/plain")
+    return HttpResponse('\n'.join(lines), content_type='text/plain')
 
 
 @require_http_methods(['GET'])
 def home(request):
     features = [
         {
-            'icon': 'shield-halved',
-            'title': 'Authentication',
-            'description': 'Email-based signup, login, verification, and password reset. Powered by django-allauth.',
+            'icon': 'calendar-check',
+            'title': 'Reserva en Línea',
+            'description': 'Tus pacientes pueden reservar citas 24/7 a través de tu página personalizada. Sin llamadas telefónicas.',
         },
         {
-            'icon': 'credit-card',
-            'title': 'Stripe Payments',
-            'description': 'Subscriptions, webhooks, and payment intents. Ready to accept payments on day one.',
+            'icon': 'bell',
+            'title': 'Recordatorios Inteligentes',
+            'description': 'Los recordatorios automáticos por SMS y email reducen las inasistencias hasta en un 60%.',
         },
         {
-            'icon': 'gauge-high',
-            'title': 'Dashboard',
-            'description': 'User profile, settings, notification preferences, and API key management built in.',
+            'icon': 'users',
+            'title': 'Gestión de Pacientes',
+            'description': 'Mantén un registro de tus pacientes, historial de visitas y preferencias en un solo lugar.',
         },
         {
-            'icon': 'bolt',
-            'title': 'Background Tasks',
-            'description': 'Django 6.0 native async tasks. No Celery, no Redis, no extra infrastructure.',
+            'icon': 'calendar',
+            'title': 'Sincronización con Calendario',
+            'description': 'Sincroniza con Google Calendar y Outlook. Tus citas siempre están actualizadas.',
         },
         {
-            'icon': 'lock',
-            'title': 'Security',
-            'description': 'CSP headers, HSTS, secure cookies, and SSL redirect. Production-grade from the start.',
+            'icon': 'location-dot',
+            'title': 'Multi-Ubicación',
+            'description': 'Gestiona citas en múltiples ubicaciones de clínica desde un solo panel.',
         },
         {
-            'icon': 'rocket',
-            'title': 'Deploy Ready',
-            'description': 'PostgreSQL, WhiteNoise, Gunicorn, and Procfile. Push to production in minutes.',
+            'icon': 'chart-line',
+            'title': 'Panel de Análisis',
+            'description': 'Rastrea tendencias de reservas, tasas de inasistencia y satisfacción de pacientes.',
         },
     ]
 
-    return render(request, 'landing/home.html', {
-        'features': features,
-    })
+    return render(
+        request,
+        'landing/home.html',
+        {
+            'features': features,
+        },
+    )
 
 
 @require_http_methods(['GET'])

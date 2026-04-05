@@ -1,79 +1,75 @@
 {% extends "base.html" %}
 
-{% block title %}Django SaaS Boilerplate | Ship Faster{% endblock %}
+{% block title %}MediBook - Reserva de Citas{% endblock %}
 
 {% block content %}
 <!-- Hero -->
-<div class="relative overflow-hidden">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-40 text-center">
-        <div class="inline-flex items-center gap-2 border border-light-gray px-4 py-1.5 mb-8">
-            <span class="w-1.5 h-1.5 bg-black rounded-full"></span>
-            <span class="text-xs font-medium tracking-wider uppercase text-gray">Django 6.0 &middot; Python 3.12 &middot; Stripe &middot; Tailwind</span>
+<div class="relative overflow-hidden" style="background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-36 text-center">
+        <div class="inline-flex items-center gap-2 border px-4 py-1.5 mb-8" style="border-color: #e2e8f0;">
+            <span class="w-2 h-2 rounded-full" style="background-color: #0284c7;"></span>
+            <span class="text-xs font-medium tracking-wider uppercase" style="color: #64748b;">Más de 500 clínicas confían en nosotros</span>
         </div>
         <h1 class="text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-black leading-[1.05]">
-            The SaaS starter kit<br>you wish you had
+            Reserva de citas simple<br>para clínicas modernas
         </h1>
-        <p class="mt-8 text-xl text-gray max-w-2xl mx-auto leading-relaxed">
-            Auth, payments, dashboard, email, security, and deployment. All wired up.
-            Clone it, customize it, ship it.
+        <p class="mt-8 text-xl max-w-2xl mx-auto leading-relaxed" style="color: #475569;">
+            Agiliza tu agenda, reduce las inasistencias y delighted a tus pacientes. MediBook lo hace fácil.
         </p>
         <div class="mt-12 flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{% url 'account_signup' %}" class="px-10 py-4 text-white bg-black hover:bg-dark-gray text-sm font-medium uppercase tracking-wider transition-colors">
-                Get started free
+            <a href="{% url 'account_signup' %}" class="px-10 py-4 text-white text-sm font-medium uppercase tracking-wider transition-colors rounded-lg"
+               style="background-color: #0284c7;"
+               onmouseover="this.style.backgroundColor='#0369a1'"
+               onmouseout="this.style.backgroundColor='#0284c7'">
+                Comenzar Prueba Gratuita
             </a>
-            <a href="https://github.com/eriktaveras" class="px-10 py-4 border border-light-gray text-gray hover:text-black hover:border-black text-sm font-medium uppercase tracking-wider transition-colors" target="_blank" rel="noopener">
-                <i class="fa-brands fa-github mr-2"></i>View on GitHub
+            <a href="{% url 'landing:features' %}" class="px-10 py-4 border text-sm font-medium uppercase tracking-wider transition-colors rounded-lg"
+               style="border-color: #e2e8f0; color: #475569;"
+               onmouseover="this.style.borderColor='#0284c7'; this.style.color='#0284c7'"
+               onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#475569'">
+                Ver Características
             </a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="border-y" style="border-color: #e2e8f0;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 lg:grid-cols-4">
+            <div class="p-8 lg:p-10 text-center border-b lg:border-b-0 border-r" style="border-color: #e2e8f0;">
+                <p class="text-3xl lg:text-4xl font-medium text-black">500+</p>
+                <p class="mt-2 text-sm" style="color: #64748b;">Clínicas Activas</p>
+            </div>
+            <div class="p-8 lg:p-10 text-center border-b lg:border-b-0 lg:border-r border-l-0" style="border-color: #e2e8f0;">
+                <p class="text-3xl lg:text-4xl font-medium text-black">2M+</p>
+                <p class="mt-2 text-sm" style="color: #64748b;">Citas Reservadas</p>
+            </div>
+            <div class="p-8 lg:p-10 text-center border-t lg:border-t-0 border-r" style="border-color: #e2e8f0;">
+                <p class="text-3xl lg:text-4xl font-medium text-black">45%</p>
+                <p class="mt-2 text-sm" style="color: #64748b;">Menos Inasistencias</p>
+            </div>
+            <div class="p-8 lg:p-10 text-center border-t lg:border-t-0 border-l-0" style="border-color: #e2e8f0;">
+                <p class="text-3xl lg:text-4xl font-medium text-black">4.9</p>
+                <p class="mt-2 text-sm" style="color: #64748b;">Calificación</p>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Features Grid -->
-<div class="border-t border-light-gray">
+<div class="border-b" style="border-color: #e2e8f0;">
     <div class="max-w-7xl mx-auto">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {% for feature in features %}
-            <div class="p-10 lg:p-12 border-b border-light-gray {% if forloop.counter|divisibleby:3 == False %}lg:border-r{% endif %} {% if forloop.counter|divisibleby:2 == False and forloop.counter != forloop.length %}sm:border-r{% endif %}">
-                <div class="w-9 h-9 bg-black flex items-center justify-center">
-                    <i class="fa-solid fa-{{ feature.icon }} text-white text-xs"></i>
+            <div class="p-10 lg:p-12 border-b border-r-0 sm:border-r border-b-0 lg:border-b-0" style="border-color: #e2e8f0;">
+                <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                    <i class="fa-solid fa-{{ feature.icon }}" style="color: #0284c7;"></i>
                 </div>
-                <h3 class="mt-5 text-sm font-medium text-black uppercase tracking-wider">{{ feature.title }}</h3>
-                <p class="mt-3 text-sm text-gray leading-relaxed">{{ feature.description }}</p>
+                <h3 class="mt-5 text-sm font-medium uppercase tracking-wider text-black">{{ feature.title }}</h3>
+                <p class="mt-3 text-sm leading-relaxed" style="color: #64748b;">{{ feature.description }}</p>
             </div>
             {% endfor %}
-        </div>
-    </div>
-</div>
-
-<!-- Tech Stack -->
-<div class="bg-black py-24">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-center text-xs font-medium uppercase tracking-widest text-gray mb-16">Built with</p>
-        <div class="grid grid-cols-3 md:grid-cols-6 gap-y-12">
-            <div class="text-center">
-                <i class="fa-brands fa-python text-white text-2xl"></i>
-                <p class="mt-3 text-xs text-gray font-medium">Django 6.0</p>
-            </div>
-            <div class="text-center">
-                <i class="fa-solid fa-wind text-white text-2xl"></i>
-                <p class="mt-3 text-xs text-gray font-medium">Tailwind</p>
-            </div>
-            <div class="text-center">
-                <i class="fa-brands fa-stripe text-white text-2xl"></i>
-                <p class="mt-3 text-xs text-gray font-medium">Stripe</p>
-            </div>
-            <div class="text-center">
-                <i class="fa-brands fa-js text-white text-2xl"></i>
-                <p class="mt-3 text-xs text-gray font-medium">Alpine.js</p>
-            </div>
-            <div class="text-center">
-                <i class="fa-solid fa-database text-white text-2xl"></i>
-                <p class="mt-3 text-xs text-gray font-medium">PostgreSQL</p>
-            </div>
-            <div class="text-center">
-                <i class="fa-solid fa-bolt text-white text-2xl"></i>
-                <p class="mt-3 text-xs text-gray font-medium">HTMX</p>
-            </div>
         </div>
     </div>
 </div>
@@ -81,109 +77,143 @@
 <!-- How it works -->
 <div class="py-24">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-xs font-medium uppercase tracking-widest text-gray text-center">How it works</p>
+        <p class="text-xs font-medium uppercase tracking-widest text-center" style="color: #64748b;">Cómo funciona</p>
         <h2 class="mt-4 text-3xl lg:text-4xl font-medium tracking-tight text-black text-center">
-            Three steps to launch
+            Comienza en minutos
         </h2>
 
         <div class="mt-20 space-y-16">
             <div class="flex gap-8 items-start">
-                <div class="flex-shrink-0 w-12 h-12 bg-black flex items-center justify-center text-white text-sm font-medium">01</div>
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white text-sm font-medium" style="background-color: #0284c7;">01</div>
                 <div>
-                    <h3 class="text-lg font-medium text-black">Clone and install</h3>
-                    <p class="mt-2 text-gray leading-relaxed">Run <code class="text-black bg-light-gray px-1.5 py-0.5 text-sm">make install</code> and you have a working Django app with auth, payments, and a dashboard.</p>
+                    <h3 class="text-lg font-medium text-black">Crea tu perfil de clínica</h3>
+                    <p class="mt-2 leading-relaxed" style="color: #64748b;">Regístrate y configura tu clínica en minutos. Agrega tus servicios, especialidades y disponibilidad.</p>
                 </div>
             </div>
             <div class="flex gap-8 items-start">
-                <div class="flex-shrink-0 w-12 h-12 bg-black flex items-center justify-center text-white text-sm font-medium">02</div>
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white text-sm font-medium" style="background-color: #0284c7;">02</div>
                 <div>
-                    <h3 class="text-lg font-medium text-black">Customize</h3>
-                    <p class="mt-2 text-gray leading-relaxed">Add your brand, connect your Stripe account, configure your email provider. Everything is controlled via environment variables.</p>
+                    <h3 class="text-lg font-medium text-black">Comparte tu enlace de reserva</h3>
+                    <p class="mt-2 leading-relaxed" style="color: #64748b;">Tus pacientes pueden reservar citas 24/7 a través de tu página personalizada. Sin llamadas telefónicas.</p>
                 </div>
             </div>
             <div class="flex gap-8 items-start">
-                <div class="flex-shrink-0 w-12 h-12 bg-black flex items-center justify-center text-white text-sm font-medium">03</div>
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white text-sm font-medium" style="background-color: #0284c7;">03</div>
                 <div>
-                    <h3 class="text-lg font-medium text-black">Deploy</h3>
-                    <p class="mt-2 text-gray leading-relaxed">Push to Railway, Heroku, or any VPS. Procfile and production settings included. Your SaaS is live.</p>
+                    <h3 class="text-lg font-medium text-black">Gestiona y recuerda</h3>
+                    <p class="mt-2 leading-relaxed" style="color: #64748b;">Los recordatorios automáticos reducen las inasistencias. Sincroniza con tu calendario y gestiona todo desde tu panel.</p>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonial -->
+<div class="py-24 border-y" style="border-color: #e2e8f0; background-color: #f8fafc;">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="w-12 h-12 mx-auto mb-8 rounded-full flex items-center justify-center" style="background-color: #f0f9ff;">
+            <i class="fa-solid fa-quote-left" style="color: #0284c7;"></i>
+        </div>
+        <blockquote class="text-2xl lg:text-3xl font-medium text-black leading-relaxed">
+            "MediBook redujo nuestra tasa de inasistencias en un 60% en el primer mes. A nuestros pacientes les encanta la comodidad de reservar en línea."
+        </blockquote>
+        <div class="mt-8">
+            <p class="text-sm font-medium text-black">Dra. Sarah Mitchell</p>
+            <p class="text-sm" style="color: #64748b;">Medicina Familiar, Austin</p>
         </div>
     </div>
 </div>
 
 <!-- Pricing Preview -->
-<div class="py-24 border-t border-light-gray">
+<div class="py-24">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-xs font-medium uppercase tracking-widest text-gray text-center">Pricing</p>
+        <p class="text-xs font-medium uppercase tracking-widest text-center" style="color: #64748b;">Precios</p>
         <h2 class="mt-4 text-3xl lg:text-4xl font-medium tracking-tight text-black text-center">
-            Start free, scale later
+            Comienza gratis, escala cuando crezcas
         </h2>
-        <p class="mt-4 text-gray text-center max-w-lg mx-auto">No credit card required. Upgrade when your business needs it.</p>
+        <p class="mt-4 text-center max-w-lg mx-auto" style="color: #64748b;">Prueba gratuita de 14 días en todos los planes. Sin tarjeta de crédito.</p>
 
-        <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-px bg-light-gray border border-light-gray">
-            <!-- Free -->
-            <div class="bg-white p-10">
-                <p class="text-xs font-medium uppercase tracking-widest text-gray">Free</p>
-                <p class="mt-5"><span class="text-4xl font-medium text-black">$0</span><span class="text-gray text-sm ml-1">/mo</span></p>
-                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3 border border-black text-center text-sm font-medium tracking-wider text-black hover:bg-light-gray transition-colors">
-                    Get started
+        <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Starter -->
+            <div class="p-8 rounded-xl border" style="border-color: #e2e8f0;">
+                <p class="text-xs font-medium uppercase tracking-widest" style="color: #64748b;">Básico</p>
+                <p class="mt-4"><span class="text-4xl font-medium text-black">$29</span><span class="text-sm" style="color: #64748b;">/mes</span></p>
+                <a href="{% url 'account_signup' %}" class="mt-6 block w-full py-3 border text-center text-sm font-medium tracking-wider rounded-lg transition-colors"
+                   style="border-color: #0284c7; color: #0284c7;"
+                   onmouseover="this.style.backgroundColor='#f0f9ff'"
+                   onmouseout="this.style.backgroundColor='transparent'">
+                    Comenzar Prueba Gratuita
                 </a>
-                <ul class="mt-8 space-y-3 text-sm text-gray">
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Dashboard access</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Email auth</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>1 project</li>
+                <ul class="mt-8 space-y-3 text-sm" style="color: #64748b;">
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>1 ubicación</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>100 citas/mes</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Recordatorios por email</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Panel básico</li>
                 </ul>
             </div>
 
-            <!-- Pro -->
-            <div class="bg-white p-10 relative">
-                <div class="absolute top-0 left-0 right-0 h-0.5 bg-black"></div>
-                <p class="text-xs font-medium uppercase tracking-widest text-black">Pro</p>
-                <p class="mt-5"><span class="text-4xl font-medium text-black">$9.99</span><span class="text-gray text-sm ml-1">/mo</span></p>
-                <a href="{% url 'account_signup' %}" class="mt-8 block w-full py-3 bg-black text-center text-sm font-medium tracking-wider text-white hover:bg-dark-gray transition-colors">
-                    Start 14-day trial
+            <!-- Professional -->
+            <div class="p-8 rounded-xl border-2 relative" style="border-color: #0284c7; background-color: #f0f9ff;">
+                <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 text-xs font-medium rounded-full text-white" style="background-color: #0284c7;">Más Popular</div>
+                <p class="text-xs font-medium uppercase tracking-widest" style="color: #0284c7;">Profesional</p>
+                <p class="mt-4"><span class="text-4xl font-medium text-black">$79</span><span class="text-sm" style="color: #64748b;">/mes</span></p>
+                <a href="{% url 'account_signup' %}" class="mt-6 block w-full py-3 text-center text-sm font-medium tracking-wider rounded-lg text-white transition-colors"
+                   style="background-color: #0284c7;"
+                   onmouseover="this.style.backgroundColor='#0369a1'"
+                   onmouseout="this.style.backgroundColor='#0284c7'">
+                    Comenzar Prueba Gratuita
                 </a>
-                <ul class="mt-8 space-y-3 text-sm text-gray">
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Everything in Free</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Priority support</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>API access</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Analytics</li>
+                <ul class="mt-8 space-y-3 text-sm" style="color: #64748b;">
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>3 ubicaciones</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>500 citas/mes</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>SMS + email recordatorios</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Sincronización con calendario</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Panel de análisis</li>
                 </ul>
             </div>
 
             <!-- Enterprise -->
-            <div class="bg-white p-10">
-                <p class="text-xs font-medium uppercase tracking-widest text-gray">Enterprise</p>
-                <p class="mt-5"><span class="text-4xl font-medium text-black">Custom</span></p>
-                <a href="#" class="mt-8 block w-full py-3 border border-black text-center text-sm font-medium tracking-wider text-black hover:bg-light-gray transition-colors">
-                    Contact us
+            <div class="p-8 rounded-xl border" style="border-color: #e2e8f0;">
+                <p class="text-xs font-medium uppercase tracking-widest" style="color: #64748b;">Empresarial</p>
+                <p class="mt-4"><span class="text-4xl font-medium text-black">$199</span><span class="text-sm" style="color: #64748b;">/mes</span></p>
+                <a href="#" class="mt-6 block w-full py-3 border text-center text-sm font-medium tracking-wider rounded-lg transition-colors"
+                   style="border-color: #e2e8f0; color: #475569;"
+                   onmouseover="this.style.borderColor='#0284c7'; this.style.color='#0284c7'"
+                   onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#475569'">
+                    Contactar Ventas
                 </a>
-                <ul class="mt-8 space-y-3 text-sm text-gray">
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Everything in Pro</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Unlimited users</li>
-                    <li class="flex items-center"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>SLA guarantee</li>
+                <ul class="mt-8 space-y-3 text-sm" style="color: #64748b;">
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Ubicaciones ilimitadas</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Citas ilimitadas</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Acceso a API</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Integraciones personalizadas</li>
+                    <li class="flex items-center"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Soporte prioritario</li>
                 </ul>
             </div>
         </div>
 
-        <p class="mt-8 text-center">
-            <a href="{% url 'landing:pricing' %}" class="text-sm text-gray hover:text-black underline underline-offset-4">Compare all plans in detail</a>
+        <p class="mt-12 text-center">
+            <a href="{% url 'landing:pricing' %}" class="text-sm transition-colors" style="color: #0284c7;"
+               onmouseover="this.style.textDecoration='underline'"
+               onmouseout="this.style.textDecoration='none'">Comparar todos los planes en detalle</a>
         </p>
     </div>
 </div>
 
 <!-- CTA -->
-<div class="bg-black py-24">
-    <div class="max-w-3xl mx-auto text-center px-4">
+<div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+    <div class="max-w-3xl mx-auto text-center px-4 py-24">
         <h2 class="text-3xl lg:text-4xl font-medium tracking-tight text-white">
-            Stop building plumbing.<br>Start building product.
+            ¿Listo para agilizar tus citas?
         </h2>
-        <p class="mt-6 text-gray text-lg">
-            Join developers who shipped their SaaS faster with this boilerplate.
+        <p class="mt-6 text-lg" style="color: rgba(255,255,255,0.85);">
+            Únete a más de 500 clínicas que ya usan MediBook. Comienza tu prueba gratuita hoy.
         </p>
-        <a href="{% url 'account_signup' %}" class="mt-10 inline-flex px-10 py-4 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider transition-colors">
-            Get started free
+        <a href="{% url 'account_signup' %}" class="mt-10 inline-flex px-10 py-4 text-sm font-medium uppercase tracking-wider rounded-lg transition-colors"
+           style="background-color: white; color: #0284c7;"
+           onmouseover="this.style.backgroundColor='#f0f9ff'"
+           onmouseout="this.style.backgroundColor='white'">
+            Comenzar Prueba Gratuita
         </a>
     </div>
 </div>

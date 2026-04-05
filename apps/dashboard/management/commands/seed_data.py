@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand
 
 from apps.dashboard.models import SubscriptionPlan
@@ -7,9 +9,16 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = 'Seed the database with initial data (admin user + subscription plans)'
+    help = 'Seed the database with initial data (admin user + subscription plans + site config)'
 
     def handle(self, *args, **options):
+        # Configure site domain
+        site = Site.objects.get_or_create(id=settings.SITE_ID)[0]
+        site.domain = settings.SITE_DOMAIN
+        site.name = 'MediBook'
+        site.save()
+        self.stdout.write(self.style.SUCCESS(f'Site configured: {site.domain}'))
+
         # Create admin user
         user, created = User.objects.get_or_create(
             email='admin@example.com',
@@ -25,33 +34,39 @@ class Command(BaseCommand):
         # Create subscription plans
         plans = [
             {
-                'name': 'Free',
-                'slug': 'free',
-                'description': 'Get started with the basics',
-                'price': 0,
+                'name': 'Básico',
+                'slug': 'starter',
+                'description': 'Perfecto para clínicas pequeñas que apenas comienzan',
+                'price': 29,
                 'interval': 'monthly',
-                'features': ['Basic access', 'Community support', '1 project'],
+                'features': ['1 ubicación', '100 citas/mes', 'Recordatorios por email', 'Panel básico'],
             },
             {
-                'name': 'Pro',
-                'slug': 'pro',
-                'description': 'For growing teams and businesses',
-                'price': 9.99,
-                'interval': 'monthly',
-                'features': ['Everything in Free', 'Priority support', 'API access', '10 projects', 'Analytics'],
-            },
-            {
-                'name': 'Enterprise',
-                'slug': 'enterprise',
-                'description': 'For large-scale operations',
-                'price': 49.99,
+                'name': 'Profesional',
+                'slug': 'professional',
+                'description': 'Para consultorios en crecimiento que necesitan más',
+                'price': 79,
                 'interval': 'monthly',
                 'features': [
-                    'Everything in Pro',
-                    'Dedicated support',
-                    'Custom integrations',
-                    'Unlimited projects',
-                    'SLA guarantee',
+                    '3 ubicaciones',
+                    '500 citas/mes',
+                    'SMS + recordatorios por email',
+                    'Sincronización con calendario',
+                    'Análisis',
+                ],
+            },
+            {
+                'name': 'Empresarial',
+                'slug': 'enterprise',
+                'description': 'Para grandes consultorios y grupos médicos',
+                'price': 199,
+                'interval': 'monthly',
+                'features': [
+                    'Ubicaciones ilimitadas',
+                    'Citas ilimitadas',
+                    'Acceso a API',
+                    'Integraciones personalizadas',
+                    'Soporte prioritario',
                 ],
             },
         ]

@@ -5,7 +5,7 @@ install:
 	./venv/bin/pip install -r requirements.txt
 
 run:
-	python manage.py runserver
+	python manage.py runserver 5000
 
 migrate:
 	python manage.py makemigrations

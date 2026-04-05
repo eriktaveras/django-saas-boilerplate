@@ -1,23 +1,23 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Profile | SaaS Boilerplate{% endblock %}
-{% block page_title %}Profile{% endblock %}
+{% block title %}Perfil | MediBook{% endblock %}
+{% block page_title %}Perfil{% endblock %}
 
 {% block dashboard_content %}
 <div>
-    <h2 class="text-xl font-medium text-black">Profile</h2>
-    <p class="mt-1 text-sm text-gray">Manage your account details and security.</p>
+    <h2 class="text-xl font-medium text-black">Perfil</h2>
+    <p class="mt-1 text-sm" style="color: #64748b;">Gestiona los detalles y seguridad de tu cuenta.</p>
 
     <!-- Avatar + Name header -->
-    <div class="mt-6 bg-white border border-light-gray rounded">
+    <div class="mt-6 bg-white border rounded" style="border-color: #e2e8f0;">
         <div class="p-6 flex items-center gap-5">
-            <div class="w-16 h-16 bg-black rounded-full flex items-center justify-center text-white text-xl font-medium flex-shrink-0">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-medium flex-shrink-0" style="background-color: #0284c7;">
                 {{ user.email|first|upper }}
             </div>
             <div>
                 <p class="text-lg font-medium text-black">{{ user.get_full_name|default:user.email }}</p>
-                <p class="text-sm text-gray mt-0.5">{{ user.email }}</p>
-                <p class="text-xs text-gray mt-1">Member since {{ user.date_joined|date:"F Y" }}</p>
+                <p class="text-sm mt-0.5" style="color: #64748b;">{{ user.email }}</p>
+                <p class="text-xs mt-1" style="color: #64748b;">Miembro desde {{ user.date_joined|date:"F Y" }}</p>
             </div>
         </div>
     </div>
@@ -25,100 +25,100 @@
     <!-- Personal info form -->
     <form action="{% url 'dashboard:profile' %}" method="POST" class="mt-4">
         {% csrf_token %}
-        <div class="bg-white border border-light-gray rounded">
-            <div class="px-6 py-4 border-b border-light-gray">
-                <h3 class="text-sm font-medium text-black">Personal information</h3>
-                <p class="text-xs text-gray mt-0.5">Update your name and contact details.</p>
+        <div class="bg-white border rounded" style="border-color: #e2e8f0;">
+            <div class="px-6 py-4 border-b" style="border-color: #e2e8f0;">
+                <h3 class="text-sm font-medium text-black">Información personal</h3>
+                <p class="text-xs mt-0.5" style="color: #64748b;">Actualiza tu nombre y datos de contacto.</p>
             </div>
             <div class="p-6 space-y-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                        <label for="first_name" class="block text-xs text-gray uppercase tracking-wider mb-1.5">First name</label>
+                        <label for="first_name" class="block text-xs uppercase tracking-wider mb-1.5" style="color: #64748b;">Nombre</label>
                         <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" autocomplete="given-name"
-                               class="w-full border border-light-gray rounded px-3 py-2.5 text-sm focus:border-black focus:outline-none transition-colors">
+                               class="w-full border rounded px-3 py-2.5 text-sm focus:outline-none transition-colors" style="border-color: #e2e8f0;" onfocus="this.style.borderColor='#0284c7'" onblur="this.style.borderColor='#e2e8f0'">
                     </div>
                     <div>
-                        <label for="last_name" class="block text-xs text-gray uppercase tracking-wider mb-1.5">Last name</label>
+                        <label for="last_name" class="block text-xs uppercase tracking-wider mb-1.5" style="color: #64748b;">Apellido</label>
                         <input type="text" name="last_name" id="last_name" value="{{ user.last_name }}" autocomplete="family-name"
-                               class="w-full border border-light-gray rounded px-3 py-2.5 text-sm focus:border-black focus:outline-none transition-colors">
+                               class="w-full border rounded px-3 py-2.5 text-sm focus:outline-none transition-colors" style="border-color: #e2e8f0;" onfocus="this.style.borderColor='#0284c7'" onblur="this.style.borderColor='#e2e8f0'">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray uppercase tracking-wider mb-1.5">Email address</label>
+                    <label class="block text-xs uppercase tracking-wider mb-1.5" style="color: #64748b;">Correo electrónico</label>
                     <div class="flex items-center gap-3">
-                        <div class="flex-1 bg-[#fafafa] border border-light-gray rounded px-3 py-2.5 text-sm text-gray">{{ user.email }}</div>
-                        <a href="{% url 'account_email' %}" class="text-xs text-gray hover:text-black transition-colors whitespace-nowrap">Change email</a>
+                        <div class="flex-1 border rounded px-3 py-2.5 text-sm" style="border-color: #e2e8f0; background-color: #fafafa; color: #64748b;">{{ user.email }}</div>
+                        <a href="{% url 'account_email' %}" class="text-xs transition-colors whitespace-nowrap" style="color: #0284c7;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Cambiar correo</a>
                     </div>
                 </div>
             </div>
-            <div class="px-6 py-4 border-t border-light-gray flex justify-end bg-[#fafafa] rounded-b">
-                <button type="submit" class="text-sm px-5 py-2 bg-black text-white rounded hover:bg-dark-gray transition-colors">Save changes</button>
+            <div class="px-6 py-4 border-t flex justify-end rounded-b" style="border-color: #e2e8f0; background-color: #fafafa;">
+                <button type="submit" class="text-sm px-5 py-2 text-white rounded transition-colors" style="background-color: #0284c7;" onmouseover="this.style.backgroundColor='#0369a1'" onmouseout="this.style.backgroundColor='#0284c7'">Guardar cambios</button>
             </div>
         </div>
     </form>
 
     <!-- Security -->
-    <div class="mt-4 bg-white border border-light-gray rounded">
-        <div class="px-6 py-4 border-b border-light-gray">
-            <h3 class="text-sm font-medium text-black">Security</h3>
-            <p class="text-xs text-gray mt-0.5">Manage your password and account access.</p>
+    <div class="mt-4 bg-white border rounded" style="border-color: #e2e8f0;">
+        <div class="px-6 py-4 border-b" style="border-color: #e2e8f0;">
+            <h3 class="text-sm font-medium text-black">Seguridad</h3>
+            <p class="text-xs mt-0.5" style="color: #64748b;">Gestiona tu contraseña y acceso a la cuenta.</p>
         </div>
-        <div class="divide-y divide-light-gray">
+        <div class="divide-y" style="border-color: #e2e8f0;">
             <div class="p-6 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-lock text-gray text-xs"></i>
+                    <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-lock text-xs" style="color: #64748b;"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-black">Password</p>
-                        <p class="text-xs text-gray mt-0.5">Last changed: Unknown</p>
+                        <p class="text-sm text-black">Contraseña</p>
+                        <p class="text-xs mt-0.5" style="color: #64748b;">Último cambio: Desconocido</p>
                     </div>
                 </div>
-                <a href="{% url 'account_change_password' %}" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Change</a>
+                <a href="{% url 'account_change_password' %}" class="text-sm px-4 py-1.5 border rounded transition-colors" style="border-color: #e2e8f0; color: #64748b;" onmouseover="this.style.borderColor='#0284c7'; this.style.color='#0284c7'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'">Cambiar</a>
             </div>
             <div class="p-6 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-envelope text-gray text-xs"></i>
+                    <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-envelope text-xs" style="color: #64748b;"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-black">Email verification</p>
-                        <p class="text-xs text-gray mt-0.5">Your email is verified.</p>
+                        <p class="text-sm text-black">Verificación de correo</p>
+                        <p class="text-xs mt-0.5" style="color: #64748b;">Tu correo está verificado.</p>
                     </div>
                 </div>
-                <span class="text-xs text-gray bg-[#fafafa] px-3 py-1 rounded">Verified</span>
+                <span class="text-xs px-3 py-1 rounded" style="background-color: #ecfdf5; color: #059669;">Verificado</span>
             </div>
             <div class="p-6 flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-clock-rotate-left text-gray text-xs"></i>
+                    <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-clock-rotate-left text-xs" style="color: #64748b;"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-black">Active sessions</p>
-                        <p class="text-xs text-gray mt-0.5">You are currently signed in.</p>
+                        <p class="text-sm text-black">Sesiones activas</p>
+                        <p class="text-xs mt-0.5" style="color: #64748b;">Actualmente has iniciado sesión.</p>
                     </div>
                 </div>
-                <a href="{% url 'account_logout' %}" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Sign out</a>
+                <a href="{% url 'account_logout' %}" class="text-sm px-4 py-1.5 border rounded transition-colors" style="border-color: #e2e8f0; color: #64748b;" onmouseover="this.style.borderColor='#dc2626'; this.style.color='#dc2626'" onmouseout="this.style.borderColor='#e2e8f0'; this.style.color='#64748b'">Cerrar sesión</a>
             </div>
         </div>
     </div>
 
     <!-- Danger zone -->
-    <div class="mt-4 bg-white border border-light-gray rounded">
-        <div class="px-6 py-4 border-b border-light-gray">
-            <h3 class="text-sm font-medium text-black">Danger zone</h3>
+    <div class="mt-4 bg-white border rounded" style="border-color: #e2e8f0;">
+        <div class="px-6 py-4 border-b" style="border-color: #e2e8f0;">
+            <h3 class="text-sm font-medium" style="color: #dc2626;">Zona de peligro</h3>
         </div>
         <div class="p-6 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <div class="w-9 h-9 bg-[#fafafa] rounded flex items-center justify-center">
-                    <i class="fa-solid fa-trash text-gray text-xs"></i>
+                <div class="w-9 h-9 rounded flex items-center justify-center" style="background-color: #fef2f2;">
+                    <i class="fa-solid fa-trash text-xs" style="color: #dc2626;"></i>
                 </div>
                 <div>
-                    <p class="text-sm text-black">Delete account</p>
-                    <p class="text-xs text-gray mt-0.5">Permanently remove your account, data, and subscriptions.</p>
+                    <p class="text-sm text-black">Eliminar cuenta</p>
+                    <p class="text-xs mt-0.5" style="color: #64748b;">Elimina permanentemente tu cuenta, datos y suscripciones.</p>
                 </div>
             </div>
-            <a href="mailto:support@example.com?subject=Delete%20my%20account" class="text-sm px-4 py-1.5 border border-light-gray rounded text-gray hover:text-black hover:border-black transition-colors">Request</a>
+            <a href="mailto:soporte@medibook.com?subject=Eliminar%20mi%20cuenta" class="text-sm px-4 py-1.5 border rounded transition-colors" style="border-color: #fecaca; color: #dc2626;" onmouseover="this.style.backgroundColor='#fef2f2'" onmouseout="this.style.backgroundColor='transparent'">Solicitar</a>
         </div>
     </div>
 </div>

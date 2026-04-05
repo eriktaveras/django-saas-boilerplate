@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
     # Third party apps
     'allauth',
     'allauth.account',
@@ -55,7 +54,6 @@ INSTALLED_APPS = [
     'django_htmx',
     'crispy_forms',
     'crispy_tailwind',
-
     # Local apps
     'apps.accounts',
     'apps.landing',
@@ -170,6 +168,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
+SITE_DOMAIN = os.getenv('SITE_DOMAIN', 'localhost:8000')
+
 # Email configuration
 EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
@@ -192,20 +192,20 @@ STRIPE_PRICE_ID = os.getenv('STRIPE_PRICE_ID', '')
 # Content Security Policy (Django 6.0)
 # https://docs.djangoproject.com/en/6.0/ref/middleware/#content-security-policy
 SECURE_CSP = {
-    "default-src": [CSP.SELF],
-    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com"],
-    "style-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
-    "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
-    "img-src": [CSP.SELF, "https:", "data:"],
-    "connect-src": [CSP.SELF, "https://api.stripe.com"],
-    "frame-src": [CSP.SELF, "https://js.stripe.com"],
+    'default-src': [CSP.SELF],
+    'script-src': [CSP.SELF, CSP.NONCE, 'https://cdn.tailwindcss.com', 'https://cdn.jsdelivr.net', 'https://unpkg.com'],
+    'style-src': [CSP.SELF, CSP.UNSAFE_INLINE, 'https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
+    'font-src': [CSP.SELF, 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
+    'img-src': [CSP.SELF, 'https:', 'data:'],
+    'connect-src': [CSP.SELF, 'https://api.stripe.com'],
+    'frame-src': [CSP.SELF, 'https://js.stripe.com'],
 }
 
 # Background Tasks (Django 6.0)
 # https://docs.djangoproject.com/en/6.0/topics/tasks/
 TASKS = {
-    "default": {
-        "BACKEND": "django.tasks.backends.immediate.ImmediateBackend",
+    'default': {
+        'BACKEND': 'django.tasks.backends.immediate.ImmediateBackend',
     }
 }
 

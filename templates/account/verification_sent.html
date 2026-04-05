@@ -1,39 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}Verify Your Email - Django SaaS{% endblock %}
+{% block title %}Verifica tu Email - MediBook{% endblock %}
 
 {% block content %}
-<div class="min-h-[60vh] flex items-center justify-center py-16 px-8">
+<div class="min-h-[70vh] flex items-center justify-center py-16 px-8" style="background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);">
   <div class="w-full max-w-md space-y-8">
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-medium tracking-tighter text-black">
-        CHECK YOUR EMAIL
-      </h2>
-      <p class="mt-2 text-center text-sm text-gray">
-        We've sent a verification link to your email address
-      </p>
+    <div class="text-center">
+        <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4" style="background-color: #0284c7;">
+            <i class="fa-solid fa-envelope text-white text-xl"></i>
+        </div>
+        <h2 class="mt-2 text-center text-3xl font-medium tracking-tighter text-black">
+            Revisa tu correo electrónico
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray">
+            Hemos enviado un enlace de verificación a tu dirección de correo electrónico
+        </p>
     </div>
 
-    <div class="mt-8 space-y-6">
-      <div class="border border-light-gray p-8">
-        <div class="flex">
-          <i class="fa-solid fa-paper-plane text-black self-start mt-1"></i>
-          <div class="ml-3">
-            <h3 class="text-sm font-medium uppercase tracking-widest text-black">
-              Verification email sent
-            </h3>
-            <div class="mt-2 text-sm text-gray">
-              <p>
-                Please click the link in the email to verify your account. If you don't see it, check your spam folder.
-              </p>
-            </div>
+    <div class="mt-8 space-y-6 bg-white p-8 rounded-xl shadow-sm">
+      <div class="flex items-start p-4 rounded-lg" style="background-color: #f0f9ff;">
+        <i class="fa-solid fa-paper-plane self-start mt-1" style="color: #0284c7;"></i>
+        <div class="ml-3">
+          <h3 class="text-sm font-medium uppercase tracking-widest" style="color: #0f172a;">
+            Email de verificación enviado
+          </h3>
+          <div class="mt-2 text-sm" style="color: #64748b;">
+            <p>
+              Por favor, haz clic en el enlace del correo para verificar tu cuenta. Si no lo ves, revisa tu carpeta de spam.
+            </p>
           </div>
         </div>
       </div>
 
       <div class="text-sm text-center mt-6">
-        <a href="{% url 'account_login' %}" class="inline-block py-3 px-6 bg-black text-white hover:bg-dark-gray transition-all duration-300 text-sm font-medium uppercase tracking-wider">
-          BACK TO SIGN IN
+        <a href="{% url 'account_login' %}" class="inline-block py-3 px-6 text-white transition-all duration-300 text-sm font-medium rounded-lg"
+           style="background-color: #0284c7;"
+           onmouseover="this.style.backgroundColor='#0369a1'"
+           onmouseout="this.style.backgroundColor='#0284c7'">
+          Volver a Iniciar Sesión
         </a>
       </div>
     </div>

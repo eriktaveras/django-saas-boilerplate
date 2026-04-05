@@ -1,99 +1,99 @@
 {% extends "dashboard/base.html" %}
 
-{% block title %}Overview | SaaS Boilerplate{% endblock %}
-{% block page_title %}Overview{% endblock %}
+{% block title %}Resumen | MediBook{% endblock %}
+{% block page_title %}Resumen{% endblock %}
 
 {% block dashboard_content %}
 <!-- Welcome -->
 <div class="mb-8">
-    <h2 class="text-xl font-medium text-black">Welcome back{% if user.first_name %}, {{ user.first_name }}{% endif %}</h2>
-    <p class="mt-1 text-sm text-gray">Here's what's happening with your account.</p>
+    <h2 class="text-xl font-medium text-black">Bienvenido{% if user.first_name %}, {{ user.first_name }}{% endif %}</h2>
+    <p class="mt-1 text-sm" style="color: #64748b;">Aquí está lo que está pasando con tu cuenta.</p>
 </div>
 
 <!-- Stats -->
 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <div class="bg-white border border-light-gray rounded p-5">
+    <div class="bg-white border rounded p-5" style="border-color: #e2e8f0;">
         <div class="flex items-center justify-between">
-            <p class="text-xs text-gray uppercase tracking-wider">Users</p>
-            <div class="w-8 h-8 bg-[#fafafa] rounded flex items-center justify-center">
-                <i class="fa-solid fa-users text-gray text-xs"></i>
-            </div>
-        </div>
-        <p class="mt-3 text-3xl font-medium text-black">1</p>
-        <p class="mt-1 text-xs text-gray">Total registered</p>
-    </div>
-    <div class="bg-white border border-light-gray rounded p-5">
-        <div class="flex items-center justify-between">
-            <p class="text-xs text-gray uppercase tracking-wider">Projects</p>
-            <div class="w-8 h-8 bg-[#fafafa] rounded flex items-center justify-center">
-                <i class="fa-solid fa-folder text-gray text-xs"></i>
+            <p class="text-xs uppercase tracking-wider" style="color: #64748b;">Citas</p>
+            <div class="w-8 h-8 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                <i class="fa-solid fa-calendar text-xs" style="color: #64748b;"></i>
             </div>
         </div>
         <p class="mt-3 text-3xl font-medium text-black">0</p>
-        <p class="mt-1 text-xs text-gray">Active projects</p>
+        <p class="mt-1 text-xs" style="color: #64748b;">Total de citas este mes</p>
     </div>
-    <div class="bg-white border border-light-gray rounded p-5">
+    <div class="bg-white border rounded p-5" style="border-color: #e2e8f0;">
         <div class="flex items-center justify-between">
-            <p class="text-xs text-gray uppercase tracking-wider">Plan</p>
-            <div class="w-8 h-8 bg-[#fafafa] rounded flex items-center justify-center">
-                <i class="fa-solid fa-gem text-gray text-xs"></i>
+            <p class="text-xs uppercase tracking-wider" style="color: #64748b;">Pacientes</p>
+            <div class="w-8 h-8 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                <i class="fa-solid fa-users text-xs" style="color: #64748b;"></i>
             </div>
         </div>
-        <p class="mt-3 text-3xl font-medium text-black">Free</p>
-        <a href="{% url 'dashboard:subscription_plans' %}" class="mt-1 text-xs text-gray hover:text-black transition-colors">Upgrade plan &rarr;</a>
+        <p class="mt-3 text-3xl font-medium text-black">0</p>
+        <p class="mt-1 text-xs" style="color: #64748b;">Pacientes registrados</p>
+    </div>
+    <div class="bg-white border rounded p-5" style="border-color: #e2e8f0;">
+        <div class="flex items-center justify-between">
+            <p class="text-xs uppercase tracking-wider" style="color: #64748b;">Plan</p>
+            <div class="w-8 h-8 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                <i class="fa-solid fa-gem text-xs" style="color: #64748b;"></i>
+            </div>
+        </div>
+        <p class="mt-3 text-3xl font-medium text-black">{{ current_plan.name|default:"Básico" }}</p>
+        <a href="{% url 'dashboard:subscription_plans' %}" class="mt-1 text-xs transition-colors" style="color: #0284c7;">Actualizar plan &rarr;</a>
     </div>
 </div>
 
 <!-- Two columns -->
 <div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-4">
     <!-- Activity -->
-    <div class="lg:col-span-2 bg-white border border-light-gray rounded">
-        <div class="px-5 py-4 border-b border-light-gray">
-            <h3 class="text-sm font-medium text-black">Recent activity</h3>
+    <div class="lg:col-span-2 bg-white border rounded" style="border-color: #e2e8f0;">
+        <div class="px-5 py-4 border-b" style="border-color: #e2e8f0;">
+            <h3 class="text-sm font-medium text-black">Actividad reciente</h3>
         </div>
-        <div class="divide-y divide-light-gray">
+        <div class="divide-y" style="border-color: #e2e8f0;">
             <div class="flex items-center justify-between px-5 py-3">
                 <div class="flex items-center gap-3">
-                    <div class="w-7 h-7 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-user-plus text-gray text-xs"></i>
+                    <div class="w-7 h-7 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-user-plus text-xs" style="color: #64748b;"></i>
                     </div>
-                    <p class="text-sm text-gray">Account created</p>
+                    <p class="text-sm" style="color: #64748b;">Cuenta creada</p>
                 </div>
-                <time class="text-xs text-gray">{{ user.date_joined|date:"M d, Y" }}</time>
+                <time class="text-xs" style="color: #64748b;">{{ user.date_joined|date:"d M, Y" }}</time>
             </div>
             <div class="flex items-center justify-between px-5 py-3">
                 <div class="flex items-center gap-3">
-                    <div class="w-7 h-7 bg-[#fafafa] rounded flex items-center justify-center">
-                        <i class="fa-solid fa-envelope-circle-check text-gray text-xs"></i>
+                    <div class="w-7 h-7 rounded flex items-center justify-center" style="background-color: #fafafa;">
+                        <i class="fa-solid fa-envelope-circle-check text-xs" style="color: #64748b;"></i>
                     </div>
-                    <p class="text-sm text-gray">Email verified</p>
+                    <p class="text-sm" style="color: #64748b;">Email verificado</p>
                 </div>
-                <time class="text-xs text-gray">{{ user.date_joined|date:"M d, Y" }}</time>
+                <time class="text-xs" style="color: #64748b;">{{ user.date_joined|date:"d M, Y" }}</time>
             </div>
         </div>
     </div>
 
     <!-- Quick actions -->
-    <div class="bg-white border border-light-gray rounded">
-        <div class="px-5 py-4 border-b border-light-gray">
-            <h3 class="text-sm font-medium text-black">Quick actions</h3>
+    <div class="bg-white border rounded" style="border-color: #e2e8f0;">
+        <div class="px-5 py-4 border-b" style="border-color: #e2e8f0;">
+            <h3 class="text-sm font-medium text-black">Acciones rápidas</h3>
         </div>
         <div class="p-4 space-y-2">
-            <a href="{% url 'dashboard:profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-[#fafafa] transition-colors group">
-                <i class="fa-solid fa-user-pen text-gray text-xs w-4 text-center"></i>
-                <span class="text-sm text-gray group-hover:text-black">Edit profile</span>
+            <a href="{% url 'dashboard:profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded transition-colors group" style="color: #64748b;" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'">
+                <i class="fa-solid fa-user-pen text-xs w-4 text-center"></i>
+                <span class="text-sm group-hover:text-black">Editar perfil</span>
             </a>
-            <a href="{% url 'dashboard:settings' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-[#fafafa] transition-colors group">
-                <i class="fa-solid fa-gear text-gray text-xs w-4 text-center"></i>
-                <span class="text-sm text-gray group-hover:text-black">Settings</span>
+            <a href="{% url 'dashboard:settings' %}" class="flex items-center gap-3 px-3 py-2.5 rounded transition-colors group" style="color: #64748b;" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'">
+                <i class="fa-solid fa-gear text-xs w-4 text-center"></i>
+                <span class="text-sm group-hover:text-black">Configuración</span>
             </a>
-            <a href="{% url 'dashboard:subscription_plans' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-[#fafafa] transition-colors group">
-                <i class="fa-solid fa-arrow-up-right-from-square text-gray text-xs w-4 text-center"></i>
-                <span class="text-sm text-gray group-hover:text-black">Upgrade plan</span>
+            <a href="{% url 'dashboard:subscription_plans' %}" class="flex items-center gap-3 px-3 py-2.5 rounded transition-colors group" style="color: #64748b;" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'">
+                <i class="fa-solid fa-arrow-up-right-from-square text-xs w-4 text-center"></i>
+                <span class="text-sm group-hover:text-black">Actualizar plan</span>
             </a>
-            <a href="{% url 'dashboard:generate_api_key' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-[#fafafa] transition-colors group" onclick="event.preventDefault(); document.getElementById('api-key-form').submit();">
-                <i class="fa-solid fa-key text-gray text-xs w-4 text-center"></i>
-                <span class="text-sm text-gray group-hover:text-black">Generate API key</span>
+            <a href="{% url 'dashboard:generate_api_key' %}" class="flex items-center gap-3 px-3 py-2.5 rounded transition-colors group" style="color: #64748b;" onmouseover="this.style.backgroundColor='#fafafa'" onmouseout="this.style.backgroundColor='transparent'" onclick="event.preventDefault(); document.getElementById('api-key-form').submit();">
+                <i class="fa-solid fa-key text-xs w-4 text-center"></i>
+                <span class="text-sm group-hover:text-black">Generar clave API</span>
             </a>
             <form id="api-key-form" action="{% url 'dashboard:generate_api_key' %}" method="POST" class="hidden">{% csrf_token %}</form>
         </div>

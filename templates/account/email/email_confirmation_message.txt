@@ -1,0 +1,11 @@
+{% load i18n %}{% load account %}{% user_display user as user_display %}{% load allauth_ui %}
+
+{% blocktrans with user_email=email %}Estás a punto de confirmar tu dirección de correo para MediBook.
+
+Haz clic en el enlace de abajo para confirmar:
+
+{{ activate_url }}{% endblocktrans %}
+
+{% blocktrans with user_email=email %}Este enlace de confirmación expirará en {{ days_to_expire }} días.{% endblocktrans %}
+
+Si no creaste una cuenta en MediBook, puedes ignorar este correo.

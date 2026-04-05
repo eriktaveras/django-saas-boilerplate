@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Dashboard | SaaS Boilerplate{% endblock %}</title>
+    <title>{% block title %}Panel | MediBook{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
 
     <script nonce="{{ csp_nonce }}" src="https://cdn.tailwindcss.com"></script>
     <script nonce="{{ csp_nonce }}">
@@ -15,17 +17,20 @@
                         'dark-gray': '#292929',
                         gray: '#4a4a4a',
                         'light-gray': '#e0e0e0',
-                        white: '#ffffff'
+                        white: '#ffffff',
+                        primary: '#0284c7',
+                        'primary-dark': '#0369a1',
+                        'primary-light': '#f0f9ff',
                     },
                     fontFamily: {
-                        sans: ['Space Grotesk', 'sans-serif'],
+                        sans: ['Open Sans', 'sans-serif'],
                     },
                 }
             }
         }
     </script>
 
-    <link nonce="{{ csp_nonce }}" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap">
+    <link nonce="{{ csp_nonce }}" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap">
     <link nonce="{{ csp_nonce }}" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script nonce="{{ csp_nonce }}" defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script nonce="{{ csp_nonce }}" src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -44,48 +49,48 @@
         <a href="#_" class="fixed inset-0 bg-black/40 cursor-pointer"></a>
         <!-- Panel -->
         <aside class="fixed inset-y-0 left-0 w-64 bg-white flex flex-col shadow-xl">
-            <div class="h-14 flex items-center justify-between px-5 border-b border-light-gray">
+            <div class="h-14 flex items-center justify-between px-5 border-b" style="border-color: #e2e8f0;">
                 <a href="{% url 'landing:home' %}" class="flex items-center gap-2">
-                    <div class="w-6 h-6 bg-black flex items-center justify-center">
-                        <span class="text-white text-[10px] font-bold">S</span>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: #0284c7;">
+                        <i class="fa-solid fa-calendar-check text-white text-sm"></i>
                     </div>
-                    <span class="text-sm font-medium">SaaS Boilerplate</span>
+                    <span class="text-sm font-medium" style="color: #0f172a;">MediBook</span>
                 </a>
                 <a href="#_" class="text-gray hover:text-black p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </a>
             </div>
             <nav class="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
-                <a href="{% url 'dashboard:home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'home' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %}">
-                    <i class="fa-solid fa-house text-xs w-4 text-center"></i> Overview
+                <a href="{% url 'dashboard:home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'home' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %}" style="{% if request.resolver_match.url_name == 'home' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-house text-xs w-4 text-center"></i> Resumen
                 </a>
-                <a href="{% url 'dashboard:profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'profile' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %}">
-                    <i class="fa-solid fa-user text-xs w-4 text-center"></i> Profile
+                <a href="{% url 'dashboard:profile' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'profile' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %}" style="{% if request.resolver_match.url_name == 'profile' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-user text-xs w-4 text-center"></i> Perfil
                 </a>
-                <a href="{% url 'dashboard:settings' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'settings' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %}">
-                    <i class="fa-solid fa-gear text-xs w-4 text-center"></i> Settings
+                <a href="{% url 'dashboard:settings' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'settings' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %}" style="{% if request.resolver_match.url_name == 'settings' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-gear text-xs w-4 text-center"></i> Configuración
                 </a>
-                <a href="{% url 'dashboard:subscription_plans' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'subscription_plans' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %}">
-                    <i class="fa-solid fa-credit-card text-xs w-4 text-center"></i> Plans
+                <a href="{% url 'dashboard:subscription_plans' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm {% if request.resolver_match.url_name == 'subscription_plans' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %}" style="{% if request.resolver_match.url_name == 'subscription_plans' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-credit-card text-xs w-4 text-center"></i> Planes
                 </a>
-                <div class="pt-4 mt-4 border-t border-light-gray">
-                    <a href="{% url 'landing:home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-gray hover:text-black hover:bg-light-gray/50">
-                        <i class="fa-solid fa-arrow-left text-xs w-4 text-center"></i> Back to site
+                <div class="pt-4 mt-4 border-t" style="border-color: #e2e8f0;">
+                    <a href="{% url 'landing:home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-gray hover:text-black hover:bg-gray-50">
+                        <i class="fa-solid fa-arrow-left text-xs w-4 text-center"></i> Volver al sitio
                     </a>
                 </div>
             </nav>
-            <div class="p-3 border-t border-light-gray">
+            <div class="p-3 border-t" style="border-color: #e2e8f0;">
                 <div class="flex items-center gap-3 px-3 py-2">
-                    <div class="w-7 h-7 bg-black flex-shrink-0 flex items-center justify-center text-white text-xs font-medium rounded">
+                    <div class="w-7 h-7 flex-shrink-0 flex items-center justify-center text-white text-xs font-medium rounded" style="background-color: #0284c7;">
                         {{ user.email|first|upper }}
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-sm text-black truncate">{{ user.get_full_name|default:user.email }}</p>
-                        <p class="text-xs text-gray truncate">{{ user.email }}</p>
+                        <p class="text-sm truncate" style="color: #0f172a;">{{ user.get_full_name|default:user.email }}</p>
+                        <p class="text-xs truncate" style="color: #64748b;">{{ user.email }}</p>
                     </div>
                 </div>
-                <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm text-gray hover:text-black hover:bg-light-gray/50 mt-1">
-                    <i class="fa-solid fa-right-from-bracket text-xs w-4 text-center"></i> Log out
+                <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm mt-1" style="color: #64748b;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='#64748b'">
+                    <i class="fa-solid fa-right-from-bracket text-xs w-4 text-center"></i> Cerrar sesión
                 </a>
             </div>
         </aside>
@@ -93,46 +98,46 @@
 
     <div class="min-h-screen lg:flex">
         <!-- Sidebar - Desktop -->
-        <aside class="hidden lg:flex lg:flex-col lg:w-56 lg:fixed lg:inset-y-0 bg-white border-r border-light-gray z-30">
-            <div class="h-14 flex items-center px-5 border-b border-light-gray">
+        <aside class="hidden lg:flex lg:flex-col lg:w-56 lg:fixed lg:inset-y-0 bg-white border-r z-30" style="border-color: #e2e8f0;">
+            <div class="h-14 flex items-center px-5 border-b" style="border-color: #e2e8f0;">
                 <a href="{% url 'landing:home' %}" class="flex items-center gap-2">
-                    <div class="w-6 h-6 bg-black flex items-center justify-center">
-                        <span class="text-white text-[10px] font-bold">S</span>
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: #0284c7;">
+                        <i class="fa-solid fa-calendar-check text-white text-sm"></i>
                     </div>
-                    <span class="text-sm font-medium">SaaS Boilerplate</span>
+                    <span class="text-sm font-medium" style="color: #0f172a;">MediBook</span>
                 </a>
             </div>
             <nav class="flex-1 py-4 px-3 space-y-0.5 overflow-y-auto">
-                <a href="{% url 'dashboard:home' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'home' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %} transition-colors">
-                    <i class="fa-solid fa-house text-xs w-4 text-center"></i> Overview
+                <a href="{% url 'dashboard:home' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'home' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %} transition-colors" style="{% if request.resolver_match.url_name == 'home' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-house text-xs w-4 text-center"></i> Resumen
                 </a>
-                <a href="{% url 'dashboard:profile' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'profile' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %} transition-colors">
-                    <i class="fa-solid fa-user text-xs w-4 text-center"></i> Profile
+                <a href="{% url 'dashboard:profile' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'profile' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %} transition-colors" style="{% if request.resolver_match.url_name == 'profile' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-user text-xs w-4 text-center"></i> Perfil
                 </a>
-                <a href="{% url 'dashboard:settings' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'settings' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %} transition-colors">
-                    <i class="fa-solid fa-gear text-xs w-4 text-center"></i> Settings
+                <a href="{% url 'dashboard:settings' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'settings' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %} transition-colors" style="{% if request.resolver_match.url_name == 'settings' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-gear text-xs w-4 text-center"></i> Configuración
                 </a>
-                <a href="{% url 'dashboard:subscription_plans' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'subscription_plans' %}bg-black text-white{% else %}text-gray hover:text-black hover:bg-light-gray/50{% endif %} transition-colors">
-                    <i class="fa-solid fa-credit-card text-xs w-4 text-center"></i> Plans
+                <a href="{% url 'dashboard:subscription_plans' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm {% if request.resolver_match.url_name == 'subscription_plans' %}text-white{% else %}text-gray hover:text-black hover:bg-gray-50{% endif %} transition-colors" style="{% if request.resolver_match.url_name == 'subscription_plans' %}background-color: #0284c7;{% endif %}">
+                    <i class="fa-solid fa-credit-card text-xs w-4 text-center"></i> Planes
                 </a>
-                <div class="pt-4 mt-4 border-t border-light-gray">
-                    <a href="{% url 'landing:home' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm text-gray hover:text-black hover:bg-light-gray/50 transition-colors">
-                        <i class="fa-solid fa-arrow-left text-xs w-4 text-center"></i> Back to site
+                <div class="pt-4 mt-4 border-t" style="border-color: #e2e8f0;">
+                    <a href="{% url 'landing:home' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm text-gray hover:text-black hover:bg-gray-50 transition-colors">
+                        <i class="fa-solid fa-arrow-left text-xs w-4 text-center"></i> Volver al sitio
                     </a>
                 </div>
             </nav>
-            <div class="p-3 border-t border-light-gray">
+            <div class="p-3 border-t" style="border-color: #e2e8f0;">
                 <div class="flex items-center gap-3 px-3 py-2">
-                    <div class="w-7 h-7 bg-black flex-shrink-0 flex items-center justify-center text-white text-xs font-medium rounded">
+                    <div class="w-7 h-7 flex-shrink-0 flex items-center justify-center text-white text-xs font-medium rounded" style="background-color: #0284c7;">
                         {{ user.email|first|upper }}
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-sm text-black truncate">{{ user.get_full_name|default:user.email }}</p>
-                        <p class="text-xs text-gray truncate">{{ user.email }}</p>
+                        <p class="text-sm truncate" style="color: #0f172a;">{{ user.get_full_name|default:user.email }}</p>
+                        <p class="text-xs truncate" style="color: #64748b;">{{ user.email }}</p>
                     </div>
                 </div>
-                <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm text-gray hover:text-black hover:bg-light-gray/50 transition-colors mt-1">
-                    <i class="fa-solid fa-right-from-bracket text-xs w-4 text-center"></i> Log out
+                <a href="{% url 'account_logout' %}" class="flex items-center gap-3 px-3 py-2 rounded text-sm mt-1 transition-colors" style="color: #64748b;" onmouseover="this.style.color='#dc2626'" onmouseout="this.style.color='#64748b'">
+                    <i class="fa-solid fa-right-from-bracket text-xs w-4 text-center"></i> Cerrar sesión
                 </a>
             </div>
         </aside>
@@ -140,15 +145,15 @@
         <!-- Main content area -->
         <div class="flex-1 lg:pl-56 flex flex-col min-h-screen">
             <!-- Top bar -->
-            <header class="h-14 bg-white border-b border-light-gray flex items-center px-4 sm:px-6 lg:px-8 sticky top-0 z-10">
-                <a href="#mobile-nav" class="lg:hidden mr-4 text-gray hover:text-black">
+            <header class="h-14 bg-white border-b flex items-center px-4 sm:px-6 lg:px-8 sticky top-0 z-10" style="border-color: #e2e8f0;">
+                <a href="#mobile-nav" class="lg:hidden mr-4" style="color: #64748b;" onmouseover="this.style.color='#0284c7'" onmouseout="this.style.color='#64748b'">
                     <i class="fa-solid fa-bars text-lg"></i>
                 </a>
                 <div class="flex-1 flex items-center justify-between">
-                    <h1 class="text-sm font-medium text-black">{% block page_title %}Dashboard{% endblock %}</h1>
+                    <h1 class="text-sm font-medium" style="color: #0f172a;">{% block page_title %}Dashboard{% endblock %}</h1>
                     <div class="flex items-center gap-3">
-                        <span class="hidden sm:block text-xs text-gray">{{ user.email }}</span>
-                        <div class="w-7 h-7 bg-black flex items-center justify-center text-white text-xs font-medium rounded">
+                        <span class="hidden sm:block text-xs" style="color: #64748b;">{{ user.email }}</span>
+                        <div class="w-7 h-7 flex items-center justify-center text-white text-xs font-medium rounded" style="background-color: #0284c7;">
                             {{ user.email|first|upper }}
                         </div>
                     </div>

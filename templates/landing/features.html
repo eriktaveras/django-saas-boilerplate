@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Features | Django SaaS Boilerplate{% endblock %}
+{% block title %}Características | MediBook - Reserva de Citas{% endblock %}
 
 {% block content %}
 <!-- Hero -->
-<div class="py-24 lg:py-32 border-b border-light-gray">
+<div class="py-24 lg:py-32 border-b" style="border-color: #e2e8f0; background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);">
     <div class="max-w-4xl mx-auto text-center px-4">
-        <p class="text-xs font-medium uppercase tracking-widest text-gray">Features</p>
+        <p class="text-xs font-medium uppercase tracking-widest" style="color: #64748b;">Características</p>
         <h1 class="mt-4 text-4xl lg:text-5xl font-medium tracking-tight text-black leading-tight">
-            Everything you need.<br>Nothing you don't.
+            Todo lo que necesitas para gestionar<br>citas eficientemente
         </h1>
-        <p class="mt-6 text-lg text-gray max-w-2xl mx-auto leading-relaxed">
-            No half-built features, no "coming soon" placeholders. Every feature listed here works out of the box.
+        <p class="mt-6 text-lg max-w-2xl mx-auto leading-relaxed" style="color: #475569;">
+            MediBook proporciona todas las herramientas que las clínicas modernas necesitan para agilizar la agenda, reducir inasistencias y mejorar la satisfacción de los pacientes.
         </p>
     </div>
 </div>
@@ -25,113 +25,113 @@
 
             <div>
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-black flex items-center justify-center">
-                        <i class="fa-solid fa-shield-halved text-white text-xs"></i>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                        <i class="fa-solid fa-calendar-check" style="color: #0284c7;"></i>
                     </div>
-                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Authentication</h3>
+                    <h3 class="text-base font-medium uppercase tracking-wider text-black">Portal de Reserva en Línea</h3>
                 </div>
-                <p class="mt-4 text-sm text-gray leading-relaxed">
-                    Custom user model with email-only login. No usernames. Powered by django-allauth with all flows built and styled.
+                <p class="mt-4 text-sm leading-relaxed" style="color: #64748b;">
+                    Brinda a tus pacientes la comodidad de reservar citas 24/7 a través de una página de reservas personalizada. Sin más llamadas o correos electrónicos来回.
                 </p>
                 <ul class="mt-6 space-y-2.5">
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Custom user model (email as username)</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Signup with email verification</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Password reset and change</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Login code (passwordless)</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>20+ styled auth templates</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Disponibilidad de citas 24/7</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Horarios personalizables</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Selección de servicios con duración</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Recopilación de información del paciente</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Confirmación instantánea por email</li>
                 </ul>
             </div>
 
             <div>
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-black flex items-center justify-center">
-                        <i class="fa-solid fa-credit-card text-white text-xs"></i>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                        <i class="fa-solid fa-bell" style="color: #0284c7;"></i>
                     </div>
-                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Stripe Payments</h3>
+                    <h3 class="text-base font-medium uppercase tracking-wider text-black">Recordatorios Inteligentes</h3>
                 </div>
-                <p class="mt-4 text-sm text-gray leading-relaxed">
-                    Subscription billing with Stripe's Payment Methods API. Customer creation, webhooks, and status tracking handled.
+                <p class="mt-4 text-sm leading-relaxed" style="color: #64748b;">
+                    Reduce las inasistencias hasta en un 60% con SMS y recordatorios por email automáticos. Personaliza el tiempo, mensajes y secuencias de recordatorios.
                 </p>
                 <ul class="mt-6 space-y-2.5">
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Payment Methods API integration</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Webhook event handling</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Subscription plans (admin-managed)</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>14-day free trial support</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Status tracking (active, cancelled, trial)</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Notificaciones SMS y email</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Tiempo de recordatorio configurable</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Plantillas de mensajes personalizadas</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Enlaces para reagendar con un clic</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Manejo de confirmaciones y cancelaciones</li>
                 </ul>
             </div>
 
             <div>
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-black flex items-center justify-center">
-                        <i class="fa-solid fa-gauge-high text-white text-xs"></i>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                        <i class="fa-solid fa-users" style="color: #0284c7;"></i>
                     </div>
-                    <h3 class="text-base font-medium text-black uppercase tracking-wider">User Dashboard</h3>
+                    <h3 class="text-base font-medium uppercase tracking-wider text-black">Gestión de Pacientes</h3>
                 </div>
-                <p class="mt-4 text-sm text-gray leading-relaxed">
-                    Sidebar layout with profile, settings, and subscription management. Responsive for mobile and desktop.
+                <p class="mt-4 text-sm leading-relaxed" style="color: #64748b;">
+                    Mantén toda la información de los pacientes organizada y accesible. Registra el historial de visitas, preferencias y comunicación en un solo lugar.
                 </p>
                 <ul class="mt-6 space-y-2.5">
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Profile editing (name, email)</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Notification preferences</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>API key generation</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Subscription status and plan switching</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Mobile-responsive sidebar</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Perfiles y datos de contacto</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Seguimiento del historial de citas</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Notas y resúmenes de visitas</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Almacenamiento de preferencias</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Búsqueda y filtrado rápido</li>
                 </ul>
             </div>
 
             <div>
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-black flex items-center justify-center">
-                        <i class="fa-solid fa-bolt text-white text-xs"></i>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                        <i class="fa-solid fa-calendar" style="color: #0284c7;"></i>
                     </div>
-                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Django 6.0 Native</h3>
+                    <h3 class="text-base font-medium uppercase tracking-wider text-black">Sincronización con Calendario</h3>
                 </div>
-                <p class="mt-4 text-sm text-gray leading-relaxed">
-                    Uses the latest Django features. No legacy patterns, no deprecated APIs.
+                <p class="mt-4 text-sm leading-relaxed" style="color: #64748b;">
+                    Mantén tus citas sincronizadas con Google Calendar y Outlook. Tu agenda en MediBook siempre coincidirá con tu calendario personal.
                 </p>
                 <ul class="mt-6 space-y-2.5">
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Background tasks via @task decorator</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Content Security Policy middleware</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Template partials for reusable UI</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>CSP nonces on all scripts and styles</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Sincronización bidireccional con Google Calendar</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Integración con Outlook Calendar</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Creación automática de eventos</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Detección de conflictos</li>
                 </ul>
             </div>
 
             <div>
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-black flex items-center justify-center">
-                        <i class="fa-solid fa-palette text-white text-xs"></i>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                        <i class="fa-solid fa-location-dot" style="color: #0284c7;"></i>
                     </div>
-                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Frontend Stack</h3>
+                    <h3 class="text-base font-medium uppercase tracking-wider text-black">Soporte Multi-Ubicación</h3>
                 </div>
-                <p class="mt-4 text-sm text-gray leading-relaxed">
-                    No build step required. Tailwind via CDN, Alpine.js for interactivity, HTMX for dynamic pages.
+                <p class="mt-4 text-sm leading-relaxed" style="color: #64748b;">
+                    Gestiona citas en múltiples ubicaciones desde un solo panel. Ideal para consultorios en crecimiento y grupos médicos.
                 </p>
                 <ul class="mt-6 space-y-2.5">
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Tailwind CSS (CDN, zero build)</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Alpine.js for UI behavior</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>HTMX for partial page updates</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Space Grotesk typography</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Ubicaciones ilimitadas</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Disponibilidad específica por ubicación</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Registros de pacientes entre ubicaciones</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Reportes consolidados</li>
                 </ul>
             </div>
 
             <div>
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 bg-black flex items-center justify-center">
-                        <i class="fa-solid fa-rocket text-white text-xs"></i>
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background-color: #f0f9ff;">
+                        <i class="fa-solid fa-chart-line" style="color: #0284c7;"></i>
                     </div>
-                    <h3 class="text-base font-medium text-black uppercase tracking-wider">Production Ready</h3>
+                    <h3 class="text-base font-medium uppercase tracking-wider text-black">Panel de Análisis</h3>
                 </div>
-                <p class="mt-4 text-sm text-gray leading-relaxed">
-                    Security headers, database flexibility, static files, and deploy configs included.
+                <p class="mt-4 text-sm leading-relaxed" style="color: #64748b;">
+                    Obtén información sobre el rendimiento de tu clínica con análisis integrados. Rastrea tendencias de reservas, tasas de inasistencia y satisfacción.
                 </p>
                 <ul class="mt-6 space-y-2.5">
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>HSTS, SSL redirect, secure cookies</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>PostgreSQL via DATABASE_URL</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>WhiteNoise for static files</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Gunicorn + Procfile</li>
-                    <li class="flex items-center text-sm text-gray"><i class="fa-solid fa-check text-black mr-3 text-[10px]"></i>Ruff linting and formatting</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Tendencias de volumen de reservas</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Seguimiento de tasa de inasistencias</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Análisis de horas pico</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Proyección de ingresos</li>
+                    <li class="flex items-center text-sm" style="color: #64748b;"><i class="fa-solid fa-check mr-3 text-xs" style="color: #059669;"></i>Exportación a CSV</li>
                 </ul>
             </div>
 
@@ -140,20 +140,26 @@
 </div>
 
 <!-- CTA -->
-<div class="bg-black py-24">
-    <div class="max-w-3xl mx-auto text-center px-4">
+<div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);">
+    <div class="max-w-3xl mx-auto text-center px-4 py-24">
         <h2 class="text-3xl lg:text-4xl font-medium tracking-tight text-white">
-            Ready to build?
+            ¿Listo para agilizar tu clínica?
         </h2>
-        <p class="mt-4 text-gray text-lg">
-            Clone the repo. Run <code class="text-light-gray">make install</code>. Start shipping.
+        <p class="mt-4 text-lg" style="color: rgba(255,255,255,0.85);">
+            Comienza tu prueba gratuita de 14 días. Sin tarjeta de crédito requerida.
         </p>
         <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{% url 'account_signup' %}" class="px-10 py-4 bg-white text-black hover:bg-light-gray text-sm font-medium uppercase tracking-wider transition-colors">
-                Get started free
+            <a href="{% url 'account_signup' %}" class="px-10 py-4 text-sm font-medium uppercase tracking-wider rounded-lg transition-colors"
+               style="background-color: white; color: #0284c7;"
+               onmouseover="this.style.backgroundColor='#f0f9ff'"
+               onmouseout="this.style.backgroundColor='white'">
+                Comenzar Prueba Gratuita
             </a>
-            <a href="{% url 'landing:pricing' %}" class="px-10 py-4 border border-white text-white hover:bg-dark-gray text-sm font-medium uppercase tracking-wider transition-colors">
-                See pricing
+            <a href="{% url 'landing:pricing' %}" class="px-10 py-4 border text-sm font-medium uppercase tracking-wider rounded-lg transition-colors"
+               style="border-color: rgba(255,255,255,0.5); color: white;"
+               onmouseover="this.style.borderColor='white'"
+               onmouseout="this.style.borderColor='rgba(255,255,255,0.5)'">
+                Ver Precios
             </a>
         </div>
     </div>

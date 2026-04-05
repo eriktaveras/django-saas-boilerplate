@@ -1,0 +1,13 @@
+{% load i18n %}{% load account %}{% user_display user as user_display %}{% load allauth_ui %}
+
+{% blocktrans with user_email=email %}Bienvenido a MediBook!
+
+Ya casi estás listo. Haz clic en el enlace de abajo para confirmar tu dirección de correo:
+
+{{ activate_url }}{% endblocktrans %}
+
+{% blocktrans with user_email=email %}Este enlace de confirmación expirará en {{ days_to_expire }} días.{% endblocktrans %}
+
+Si tienes alguna pregunta, estamos aquí para ayudarte.
+
+El Equipo de MediBook
