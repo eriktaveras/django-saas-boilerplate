@@ -236,4 +236,6 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-[![Star History Chart](https://api.star-history.com/svg?repos=eriktaveras/django-saas-boilerplate&type=Date)](https://www.star-history.com/#eriktaveras/django-saas-boilerplate&Date)
+## Star History
+
+[![Star History Chart](https://api.star-history.com/chart?repos=eriktaveras/django-saas-boilerplate&type=date&legend=top-left)](https://www.star-history.com/?repos=eriktaveras%2Fdjango-saas-boilerplate&type=date&legend=top-left)
