@@ -40,7 +40,8 @@ class UserSettings(models.Model):
     notify_marketing = models.BooleanField(default=False)
 
     # API settings
-    api_key = models.CharField(max_length=64, blank=True, default='')
+    api_key_hash = models.CharField(max_length=64, blank=True, default='')
+    api_key_prefix = models.CharField(max_length=12, blank=True, default='')
     api_key_created_at = models.DateTimeField(null=True, blank=True)
 
     # Subscription settings

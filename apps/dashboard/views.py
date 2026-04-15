@@ -1,3 +1,4 @@
+import hashlib
 import secrets
 
 from django.contrib import messages
@@ -66,7 +67,8 @@ def settings(request):
             'trial_end_date': user_settings.trial_end_date,
         },
         'api': {
-            'has_key': bool(user_settings.api_key),
+            'has_key': bool(user_settings.api_key_hash),
+            'key_prefix': user_settings.api_key_prefix,
             'key_created_at': user_settings.api_key_created_at,
             'new_key': new_api_key,
         },
@@ -79,7 +81,8 @@ def generate_api_key(request):
     user_settings, created = UserSettings.objects.get_or_create(user=request.user)
 
     api_key = secrets.token_urlsafe(32)
-    user_settings.api_key = api_key
+    user_settings.api_key_hash = hashlib.sha256(api_key.encode()).hexdigest()
+    user_settings.api_key_prefix = api_key[:8]
     user_settings.api_key_created_at = timezone.now()
     user_settings.save()
 

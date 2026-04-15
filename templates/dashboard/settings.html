@@ -147,7 +147,7 @@
                     </div>
                     <div>
                         {% if api.has_key %}
-                            <p class="text-sm text-black">API key active</p>
+                            <p class="text-sm text-black">API key active <span class="font-mono text-gray ml-1">{{ api.key_prefix }}…</span></p>
                             <p class="text-xs text-gray mt-0.5">Generated {{ api.key_created_at|date:"M d, Y \a\t g:i A" }}</p>
                         {% else %}
                             <p class="text-sm text-black">No API key</p>
