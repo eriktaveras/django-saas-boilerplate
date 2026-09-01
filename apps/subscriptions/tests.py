@@ -2,6 +2,7 @@ import json
 from unittest.mock import patch
 
 import stripe
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -137,3 +138,47 @@ class CurrentPeriodEndTest(TestCase):
         self.assertIsNone(_current_period_end(None))
         sub = stripe.Subscription.construct_from({'id': 'sub_1', 'status': 'active'}, 'k')
         self.assertIsNone(_current_period_end(sub))
+
+
+class SettingsHardeningTest(TestCase):
+    """This repository is public, so a committed default is a published value.
+
+    These pin the failure direction: a deployment that forgets a variable must
+    stop, not quietly run with something everyone can read.
+    """
+
+    def test_no_hardcoded_secret_key_fallback(self):
+        import pathlib
+        import re
+
+        settings_src = (pathlib.Path(__file__).resolve().parents[2] / "core" / "settings.py").read_text()
+        assignment = re.search(r"^SECRET_KEY = .*$", settings_src, re.M).group(0)
+
+        # A fallback here ships a key that anyone can read off GitHub and use to
+        # forge session cookies on every deployment that forgot the variable.
+        self.assertNotIn("django-insecure-default", assignment)
+        self.assertEqual(assignment, "SECRET_KEY = os.getenv('SECRET_KEY')")
+
+    def test_debug_fails_closed(self):
+        import pathlib
+        import re
+
+        settings_src = (pathlib.Path(__file__).resolve().parents[2] / "core" / "settings.py").read_text()
+        assignment = re.search(r"^DEBUG = os\.getenv.*$", settings_src, re.M).group(0)
+
+        self.assertIn("'DEBUG', 'False'", assignment)
+
+    def test_the_proxy_header_is_set(self):
+        # Without it, SECURE_SSL_REDIRECT loops forever behind a PaaS edge and
+        # HSTS is never emitted.
+        self.assertEqual(
+            settings.SECURE_PROXY_SSL_HEADER, ("HTTP_X_FORWARDED_PROTO", "https")
+        )
+
+    def test_email_does_not_default_to_console_in_production(self):
+        import pathlib
+
+        settings_src = (pathlib.Path(__file__).resolve().parents[2] / "core" / "settings.py").read_text()
+
+        # Verification links printed to a production log reach nobody.
+        self.assertIn("if DEBUG", settings_src.split("EMAIL_BACKEND = os.getenv(")[1][:200])
