@@ -8,7 +8,7 @@
   <div class="border border-light-gray p-8 mb-16">
     <h2 class="text-lg font-medium text-black uppercase tracking-wide mb-8">SUBSCRIPTION STATUS</h2>
     <p class="mb-4 text-gray">Status: <span class="font-medium text-black">{{ subscription.status }}</span></p>
-    <p class="mb-8 text-gray">Next billing date: {{ subscription.current_period_end|date:"F j, Y" }}</p>
+    <p class="mb-8 text-gray">Next billing date: {{ current_period_end|date:"F j, Y"|default:"--" }}</p>
     
     {% if subscription.status == 'active' %}
     <button id="cancelSubscription" class="px-8 py-3 border border-black text-sm font-medium uppercase tracking-wider text-black hover:bg-light-gray">
@@ -82,10 +82,27 @@
       });
       
       const data = await response.json();
-      const {error: confirmError} = await stripe.confirmCardPayment(data.client_secret);
-      
+      const errorElement = document.getElementById('card-errors');
+
+      if (data.error) {
+        errorElement.textContent = data.error;
+        return;
+      }
+
+      // A trial or a full-discount coupon leaves nothing to pay, so there is
+      // no client secret to confirm against.
+      if (!data.requires_confirmation) {
+        window.location.reload();
+        return;
+      }
+
+      const {error: confirmError} = await stripe.confirmPayment({
+        clientSecret: data.client_secret,
+        confirmParams: {return_url: window.location.href},
+        redirect: 'if_required',
+      });
+
       if (confirmError) {
-        const errorElement = document.getElementById('card-errors');
         errorElement.textContent = confirmError.message;
       } else {
         window.location.reload();

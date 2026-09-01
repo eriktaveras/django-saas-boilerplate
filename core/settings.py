@@ -28,12 +28,42 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-me')
+# SECURITY WARNING: keep the secret key used in production secret!
+# There is no hardcoded fallback on purpose. This repository is public, so any
+# default committed here is a published key: whoever deploys without setting
+# the variable would be running with a key that anyone can read, and with it
+# forge session cookies and password-reset tokens.
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+# Defaults to False so a missing or misspelled variable fails closed.
+# Development opts in explicitly through .env (see .env.example).
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+if not SECRET_KEY:
+    if DEBUG:
+        # Development only, and only because DEBUG was explicitly turned on.
+        SECRET_KEY = 'django-insecure-dev-only-key-do-not-use-in-production'
+    else:
+        from django.core.exceptions import ImproperlyConfigured
+
+        raise ImproperlyConfigured(
+            'SECRET_KEY environment variable is required when DEBUG is off.'
+        )
+
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+    if host.strip()
+]
+
+# Documented in .env.example but never read, so setting it did nothing and
+# cross-origin POSTs failed behind a domain that was supposedly trusted.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:8000').split(',')
+    if origin.strip()
+]
 
 
 # Application definition
@@ -108,6 +138,10 @@ DATABASES = {
     'default': dj_database_url.config(
         default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
         conn_max_age=600,
+        # Without this, a connection the database closed on its own (idle
+        # timeout, restart, failover) is handed to the next request and raises
+        # InterfaceError instead of being reopened.
+        conn_health_checks=True,
     )
 }
 
@@ -171,7 +205,15 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
 # Email configuration
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+# The console backend prints emails instead of sending them, which in
+# production means verification links and password resets land in the log
+# stream and no user ever receives them. Only a sane default while DEBUG is on.
+EMAIL_BACKEND = os.getenv(
+    'EMAIL_BACKEND',
+    'django.core.mail.backends.console.EmailBackend'
+    if DEBUG
+    else 'django.core.mail.backends.smtp.EmailBackend',
+)
 EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
@@ -188,17 +230,26 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 STRIPE_PRICE_ID = os.getenv('STRIPE_PRICE_ID', '')
+# Pin the Stripe API version instead of inheriting whatever the installed SDK
+# defaults to. Stripe reshapes objects between versions -- `invoice.payment_intent`
+# no longer exists, the client secret moved to `invoice.confirmation_secret` --
+# so leaving this unset means a routine `pip install -U stripe` can change the
+# response shape and break checkout in production without a code change.
+STRIPE_API_VERSION = os.getenv('STRIPE_API_VERSION', '2026-08-26.dahlia')
 
 # Content Security Policy (Django 6.0)
 # https://docs.djangoproject.com/en/6.0/ref/middleware/#content-security-policy
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com"],
+    # js.stripe.com is required for the card element. A nonce never applies to
+    # an inline onclick handler, so anything interactive has to be Alpine or a
+    # real form, never an inline attribute.
+    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://js.stripe.com"],
     "style-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
     "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
     "img-src": [CSP.SELF, "https:", "data:"],
     "connect-src": [CSP.SELF, "https://api.stripe.com"],
-    "frame-src": [CSP.SELF, "https://js.stripe.com"],
+    "frame-src": [CSP.SELF, "https://js.stripe.com", "https://hooks.stripe.com"],
 }
 
 # Background Tasks (Django 6.0)
@@ -210,6 +261,13 @@ TASKS = {
 }
 
 # Production security settings
+# Railway, Heroku and Fly terminate TLS at their edge and forward plain HTTP,
+# marking the original scheme in X-Forwarded-Proto. Without this,
+# request.is_secure() is always False, so SECURE_SSL_REDIRECT below redirects
+# to https forever and the HSTS header is never sent. Safe only because those
+# platforms do not let a client reach the app directly.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -217,4 +275,5 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
