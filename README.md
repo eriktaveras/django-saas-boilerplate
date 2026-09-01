@@ -12,23 +12,54 @@ The open-source Django starter kit for building SaaS applications. Auth, payment
 
 ---
 
-## What's included
+## What this is
+
+A small, finished SaaS starter. Sign up, log in, land on a dashboard, pay with a
+card, and there is a public site in front of it. That is the whole scope, and it
+is deliberate: it is what you need on a Saturday morning to stop configuring and
+start building the thing you actually wanted to build.
+
+Everything below works out of the box.
 
 - **Custom user model** — email-only login, no username
-- **Authentication** — signup, login, email verification, password reset (django-allauth)
-- **Stripe subscriptions** — Payment Methods API, webhooks, subscription status tracking
-- **User dashboard** — sidebar nav, profile, settings, notification preferences, API keys
+- **Authentication** — signup, login, email verification, password reset (django-allauth), 21 styled templates
+- **Stripe subscriptions** — Payment Methods API, pinned API version, signed webhook, subscription status on the user
+- **User dashboard** — sidebar nav, profile, notification settings, API key generation (hashed, shown once)
 - **Subscription plans** — admin-managed plans with trial support
-- **Background tasks** — Django 6.0 native `@task()` decorator, no Celery needed
-- **Content Security Policy** — Django 6.0 built-in CSP middleware with nonces
-- **Template partials** — Django 6.0 `{% partialdef %}` for reusable components
+- **Landing pages** — home, features, pricing, `robots.txt`
+- **Background tasks** — Django 6.0 native `@task()`, no Celery
+- **Content Security Policy** — Django 6.0 CSP middleware with nonces
 - **Security headers** — HSTS, SSL redirect, secure cookies (auto-enabled in production)
 - **PostgreSQL support** — `DATABASE_URL` with SQLite fallback
 - **Static files** — WhiteNoise, no nginx needed
 - **Deployment** — Gunicorn + Procfile, ready for Railway/Heroku/VPS
 - **Linting** — Ruff with Django-specific rules
-- **16 tests** — landing pages, auth, dashboard, models
+- **29 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
 - **Seed data** — one command to populate demo data
+
+## What it does not do
+
+Worth knowing before you build on it, so you can decide what to add yourself:
+
+- **No teams or multi-tenancy.** One user, one account. There is no concept of
+  an organisation, a member, or a role.
+- **No plan gating.** `SubscriptionPlan.features` is a JSON list for the pricing
+  page — marketing copy, not entitlements. Nothing in the code stops a free user
+  from using a paid feature, and there are no usage counters or quotas.
+- **Two places track a subscription.** `StripeCustomer` mirrors Stripe;
+  `UserSettings` holds the plan and trial the dashboard reads. Nothing
+  reconciles them, so the dashboard's manual plan/trial actions do not touch
+  Stripe. Wiring them together is left to you.
+- **Minimal billing lifecycle.** The webhook handles subscription
+  created/updated/deleted. No failed-payment recovery, no customer portal, no
+  invoice history.
+- **No REST API.** The dashboard mints and hashes an API key, but nothing
+  authenticates with it yet — it is a starting point, not an API.
+- **Tailwind and Alpine come from a CDN.** No build step, which is why setup is
+  one command. Before production you will want a real Tailwind build.
+- **No Docker, no CI.** `make run` and a Procfile.
+
+MIT licensed. Fork it, rename it, ship it, sell it — no attribution required.
 
 ## Tech stack
 
@@ -65,7 +96,7 @@ Visit **http://localhost:8000** — admin login: `admin@example.com` / `admin123
 | `make install` | Create virtualenv and install dependencies |
 | `make run` | Start development server |
 | `make migrate` | Run makemigrations + migrate |
-| `make test` | Run 16 tests |
+| `make test` | Run 29 tests |
 | `make seed` | Populate demo data (admin + plans) |
 | `make lint` | Lint with ruff |
 | `make format` | Format with ruff |
@@ -94,13 +125,14 @@ django-saas-boilerplate/
 │   │   └── management/commands/seed_data.py
 │   ├── subscriptions/        # Stripe integration
 │   │   ├── models.py         # StripeCustomer
-│   │   └── views.py          # checkout, webhooks
+│   │   ├── views.py          # checkout, webhooks
+│   │   └── tests.py          # 10 tests
 │   └── landing/              # Public pages
 │       ├── views.py          # home, features, pricing, robots.txt
 │       └── tests.py          # 4 tests
 ├── templates/
 │   ├── base.html             # Public layout (nav + footer)
-│   ├── account/              # 20 allauth templates (styled)
+│   ├── account/              # 21 allauth templates (styled)
 │   ├── dashboard/            # Dashboard layout + pages
 │   ├── landing/              # Home, features, pricing
 │   └── subscriptions/        # Stripe checkout
@@ -141,7 +173,7 @@ STRIPE_PRICE_ID=price_...
 
 ## Django 6.0 features used
 
-This boilerplate uses three major features introduced in Django 6.0:
+This boilerplate uses two features introduced in Django 6.0:
 
 **Background Tasks** — Send emails asynchronously without Celery:
 ```python
@@ -164,17 +196,6 @@ SECURE_CSP = {
 ```
 ```html
 <script nonce="{{ csp_nonce }}" src="..."></script>
-```
-
-**Template Partials** — Reusable template components without separate files:
-```html
-{% partialdef stat_card inline %}
-<div class="card">{{ card_title }}: {{ card_value }}</div>
-{% endpartialdef %}
-
-{% with card_title="Users" card_value="42" %}
-    {% partial stat_card %}
-{% endwith %}
 ```
 
 ## Deployment
@@ -203,20 +224,28 @@ python manage.py collectstatic
 gunicorn core.wsgi --bind 0.0.0.0:8000
 ```
 
-## Premium version
+## If you need the other half
 
-Looking for more? **[DjangoBlaze](https://www.djangoblaze.com)** is the premium version with:
+Some of what is missing above is a weekend of work. Some of it is not — plan
+gating, dunning and GDPR flows are the parts that quietly eat a month.
 
-- Teams & multi-tenancy (roles, invitations, team-scoped data)
-- AI chat with OpenAI streaming
-- Blog with markdown, SEO, and sitemaps
-- Google OAuth
-- Onboarding wizard
-- Admin metrics dashboard (MRR, signups chart)
-- 20 slash commands for Claude Code
-- 15 AI-friendly documentation guides
-- 30 ready-to-use prompts
-- 48 passing tests
+[**DjangoBlaze**](https://djangoblaze.com) is the paid version of this
+boilerplate, and it is where that work already lives:
+
+- Teams and multi-tenancy
+- Per-plan feature gating with usage limits
+- REST API with hashed keys
+- AI chat
+- Blog with SEO
+- Two-factor authentication
+- Dunning (failed-payment recovery)
+- GDPR account deletion and data export
+- Docker, CI
+- 24 AI skills for working on the codebase
+
+8 apps, 203 tests. $99 one time, unlimited projects, one year of updates.
+
+No pressure either way — this repo is MIT and stays that way.
 
 ## Contributing
 

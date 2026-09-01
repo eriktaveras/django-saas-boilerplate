@@ -7,6 +7,6 @@ crispy-tailwind
 python-dotenv
 whitenoise
 gunicorn
-stripe
+stripe>=15.0,<16.0
 dj-database-url
 ruff

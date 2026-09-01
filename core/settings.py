@@ -188,6 +188,12 @@ STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 STRIPE_PRICE_ID = os.getenv('STRIPE_PRICE_ID', '')
+# Pin the Stripe API version instead of inheriting whatever the installed SDK
+# defaults to. Stripe reshapes objects between versions -- `invoice.payment_intent`
+# no longer exists, the client secret moved to `invoice.confirmation_secret` --
+# so leaving this unset means a routine `pip install -U stripe` can change the
+# response shape and break checkout in production without a code change.
+STRIPE_API_VERSION = os.getenv('STRIPE_API_VERSION', '2026-08-26.dahlia')
 
 # Content Security Policy (Django 6.0)
 # https://docs.djangoproject.com/en/6.0/ref/middleware/#content-security-policy
