@@ -159,7 +159,7 @@
             <main class="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
                 {% if messages %}
                     {% for message in messages %}
-                        <div class="border border-light-gray bg-white p-3 flex mb-4 rounded" role="alert">
+                        <div x-data="{ show: true }" x-show="show" class="border border-light-gray bg-white p-3 flex mb-4 rounded" role="alert">
                             <div class="mr-3">
                                 {% if message.tags == 'error' %}
                                     <i class="fa-solid fa-circle-exclamation text-black text-sm"></i>
@@ -170,7 +170,7 @@
                                 {% endif %}
                             </div>
                             <p class="text-sm flex-1">{{ message }}</p>
-                            <button class="ml-3 text-gray hover:text-black" onclick="this.parentElement.remove()">
+                            <button class="ml-3 text-gray hover:text-black" @click="show = false">
                                 <i class="fa-solid fa-xmark text-xs"></i>
                             </button>
                         </div>

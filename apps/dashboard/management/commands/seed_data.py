@@ -1,5 +1,9 @@
+import os
+import secrets
+
+from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
 from apps.dashboard.models import SubscriptionPlan
 
@@ -7,18 +11,42 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = 'Seed the database with initial data (admin user + subscription plans)'
+    help = 'Seed the database with initial data. Development only.'
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--admin-email',
+            default=os.getenv('SEED_ADMIN_EMAIL', 'admin@example.com'),
+            help='Email for the seeded superuser.',
+        )
 
     def handle(self, *args, **options):
+        # This creates a superuser. The command is documented in the README, so
+        # it is easy to point at the wrong database; in a public repository any
+        # fixed credential here is a published one, scannable across every
+        # deployment that ran it.
+        if not settings.DEBUG and os.getenv('ALLOW_SEED') != '1':
+            raise CommandError(
+                'seed_data creates a superuser and will not run with DEBUG=False. '
+                'Set ALLOW_SEED=1 to override if you are certain this is not a '
+                'production database.'
+            )
+
+        admin_email = options['admin_email']
+
         # Create admin user
         user, created = User.objects.get_or_create(
-            email='admin@example.com',
+            email=admin_email,
             defaults={'is_staff': True, 'is_superuser': True, 'first_name': 'Admin'},
         )
         if created:
-            user.set_password('admin123')
+            # Generated, never a literal: a password committed to a public repo
+            # is a password everyone already has.
+            password = os.getenv('SEED_ADMIN_PASSWORD') or secrets.token_urlsafe(16)
+            user.set_password(password)
             user.save()
-            self.stdout.write(self.style.SUCCESS('Admin user created (admin@example.com / admin123)'))
+            self.stdout.write(self.style.SUCCESS(f'Admin user created: {admin_email}'))
+            self.stdout.write(self.style.WARNING(f'Password (shown once): {password}'))
         else:
             self.stdout.write('Admin user already exists')
 

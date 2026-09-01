@@ -57,6 +57,14 @@ ALLOWED_HOSTS = [
     if host.strip()
 ]
 
+# Documented in .env.example but never read, so setting it did nothing and
+# cross-origin POSTs failed behind a domain that was supposedly trusted.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', 'http://localhost:8000').split(',')
+    if origin.strip()
+]
+
 
 # Application definition
 
@@ -233,12 +241,15 @@ STRIPE_API_VERSION = os.getenv('STRIPE_API_VERSION', '2026-08-26.dahlia')
 # https://docs.djangoproject.com/en/6.0/ref/middleware/#content-security-policy
 SECURE_CSP = {
     "default-src": [CSP.SELF],
-    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://unpkg.com"],
+    # js.stripe.com is required for the card element. A nonce never applies to
+    # an inline onclick handler, so anything interactive has to be Alpine or a
+    # real form, never an inline attribute.
+    "script-src": [CSP.SELF, CSP.NONCE, "https://cdn.tailwindcss.com", "https://cdn.jsdelivr.net", "https://js.stripe.com"],
     "style-src": [CSP.SELF, CSP.UNSAFE_INLINE, "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
     "font-src": [CSP.SELF, "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
     "img-src": [CSP.SELF, "https:", "data:"],
     "connect-src": [CSP.SELF, "https://api.stripe.com"],
-    "frame-src": [CSP.SELF, "https://js.stripe.com"],
+    "frame-src": [CSP.SELF, "https://js.stripe.com", "https://hooks.stripe.com"],
 }
 
 # Background Tasks (Django 6.0)

@@ -112,7 +112,7 @@
     {% if messages %}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
             {% for message in messages %}
-                <div class="border border-light-gray p-4 flex mb-3" role="alert">
+                <div x-data="{ show: true }" x-show="show" class="border border-light-gray p-4 flex mb-3" role="alert">
                     <div class="mr-3">
                         {% if message.tags == 'error' %}
                             <i class="fa-solid fa-circle-exclamation text-black"></i>
@@ -128,7 +128,7 @@
                         <p class="text-sm">{{ message }}</p>
                     </div>
                     <button class="ml-auto pl-3 text-gray hover:text-black"
-                        onclick="this.parentElement.remove()">
+                        @click="show = false">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>

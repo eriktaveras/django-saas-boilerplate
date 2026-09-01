@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -19,6 +20,40 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
 
 logger = logging.getLogger(__name__)
+
+# Stripe's own subscription statuses, mapped onto the four this project gates
+# on. Anything not listed leaves the user without access.
+STATUS_MAP = {
+    'active': 'active',
+    'trialing': 'trial',
+    'past_due': 'active',      # keep serving while Stripe retries the charge
+    'canceled': 'cancelled',
+    'unpaid': 'inactive',
+    'incomplete': 'inactive',
+    'incomplete_expired': 'inactive',
+    'paused': 'inactive',
+}
+
+
+def _sync_access(user, stripe_status, period_end=None):
+    """Mirror a Stripe status onto the record the app actually gates on.
+
+    Two subscription records exist side by side: StripeCustomer, written by this
+    app, and UserSettings, read by every permission check in the dashboard.
+    Nothing connected them, so a customer could pay, have Stripe report the
+    subscription as active, and still be denied access to everything they had
+    just bought. This is that connection.
+    """
+    from apps.dashboard.models import UserSettings
+
+    settings_row, _ = UserSettings.objects.get_or_create(user=user)
+    settings_row.subscription_status = STATUS_MAP.get(stripe_status, 'inactive')
+    if period_end is not None:
+        settings_row.subscription_end_date = period_end
+    if settings_row.subscription_status == 'active' and not settings_row.subscription_start_date:
+        settings_row.subscription_start_date = timezone.now()
+    settings_row.save()
+    return settings_row
 
 @login_required
 def subscription_page(request):
@@ -120,6 +155,10 @@ def create_subscription(request):
     stripe_customer.subscription_status = subscription.status
     stripe_customer.save()
 
+    # Without this the buyer is charged and still locked out: every gate in the
+    # dashboard reads UserSettings, not this row.
+    _sync_access(request.user, subscription.status, _current_period_end(subscription))
+
     # Attribute access, not .get(): a Stripe resource object is not a dict.
     # If the expand above ever stops resolving, latest_invoice comes back as a
     # bare id string and these fall through to None instead of raising.
@@ -168,5 +207,6 @@ def stripe_webhook(request):
 
         stripe_customer.subscription_status = subscription['status']
         stripe_customer.save()
+        _sync_access(stripe_customer.user, subscription['status'])
 
     return HttpResponse(status=200)

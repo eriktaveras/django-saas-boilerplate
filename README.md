@@ -34,7 +34,7 @@ Everything below works out of the box.
 - **Static files** — WhiteNoise, no nginx needed
 - **Deployment** — Gunicorn + Procfile, ready for Railway/Heroku/VPS
 - **Linting** — Ruff with Django-specific rules
-- **29 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
+- **46 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
 - **Seed data** — one command to populate demo data
 
 ## What it does not do
@@ -87,7 +87,7 @@ python manage.py seed_data
 make run
 ```
 
-Visit **http://localhost:8000** — admin login: `admin@example.com` / `admin123`
+Visit **http://localhost:8000**. `seed_data` prints the generated admin password once — copy it from the terminal. Set `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` to choose your own.
 
 ## Commands
 
@@ -96,7 +96,7 @@ Visit **http://localhost:8000** — admin login: `admin@example.com` / `admin123
 | `make install` | Create virtualenv and install dependencies |
 | `make run` | Start development server |
 | `make migrate` | Run makemigrations + migrate |
-| `make test` | Run 29 tests |
+| `make test` | Run 46 tests |
 | `make seed` | Populate demo data (admin + plans) |
 | `make lint` | Lint with ruff |
 | `make format` | Format with ruff |
@@ -212,7 +212,6 @@ heroku config:set SECRET_KEY=your-secret-key
 heroku config:set DEBUG=False
 git push heroku main
 heroku run python manage.py migrate
-heroku run python manage.py seed_data
 ```
 
 ### VPS

@@ -91,11 +91,16 @@
                 <i class="fa-solid fa-arrow-up-right-from-square text-gray text-xs w-4 text-center"></i>
                 <span class="text-sm text-gray group-hover:text-black">Upgrade plan</span>
             </a>
-            <a href="{% url 'dashboard:generate_api_key' %}" class="flex items-center gap-3 px-3 py-2.5 rounded hover:bg-[#fafafa] transition-colors group" onclick="event.preventDefault(); document.getElementById('api-key-form').submit();">
-                <i class="fa-solid fa-key text-gray text-xs w-4 text-center"></i>
-                <span class="text-sm text-gray group-hover:text-black">Generate API key</span>
-            </a>
-            <form id="api-key-form" action="{% url 'dashboard:generate_api_key' %}" method="POST" class="hidden">{% csrf_token %}</form>
+            {# A real form, not a link with an inline onclick: the CSP uses a
+               nonce and no unsafe-inline, and a nonce never applies to an
+               inline handler, so the old link just did a GET and got a 405. #}
+            <form action="{% url 'dashboard:generate_api_key' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="w-full flex items-center gap-3 px-3 py-2.5 rounded hover:bg-[#fafafa] transition-colors group text-left">
+                    <i class="fa-solid fa-key text-gray text-xs w-4 text-center"></i>
+                    <span class="text-sm text-gray group-hover:text-black">Generate API key</span>
+                </button>
+            </form>
         </div>
     </div>
 </div>

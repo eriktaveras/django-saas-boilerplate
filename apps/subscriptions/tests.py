@@ -182,3 +182,181 @@ class SettingsHardeningTest(TestCase):
 
         # Verification links printed to a production log reach nobody.
         self.assertIn("if DEBUG", settings_src.split("EMAIL_BACKEND = os.getenv(")[1][:200])
+
+
+class PaidPlanCannotBeSelfGrantedTest(TestCase):
+    """subscribe_to_plan activates a plan with no payment step, so a POST to it
+    used to hand any signed-in user a paid tier for free. In a boilerplate whose
+    whole point is billing, that is the most expensive bug it can have."""
+
+    def setUp(self):
+        from apps.dashboard.models import SubscriptionPlan, UserSettings
+
+        self.user = User.objects.create_user(email="freeloader@example.com", password="testpass123")
+        UserSettings.objects.get_or_create(user=self.user)
+        self.client.force_login(self.user)
+        self.paid = SubscriptionPlan.objects.create(
+            name="Enterprise", slug="enterprise", price=49.99, interval="monthly", is_active=True
+        )
+        self.free = SubscriptionPlan.objects.create(
+            name="Free", slug="free", price=0, interval="monthly", is_active=True
+        )
+
+    def _subscribe(self, slug):
+        return self.client.post(f"/dashboard/subscription/plans/{slug}/subscribe/")
+
+    def _settings(self):
+        from apps.dashboard.models import UserSettings
+
+        return UserSettings.objects.get(user=self.user)
+
+    def test_a_paid_plan_cannot_be_granted_without_paying(self):
+        self._subscribe("enterprise")
+
+        settings_row = self._settings()
+        self.assertNotEqual(settings_row.subscription_status, "active")
+        self.assertIsNone(settings_row.subscription_plan)
+
+    def test_a_free_plan_still_activates(self):
+        self._subscribe("free")
+
+        settings_row = self._settings()
+        self.assertEqual(settings_row.subscription_status, "active")
+        self.assertEqual(settings_row.subscription_plan, self.free)
+
+    def test_the_free_trial_cannot_be_restarted_once_used(self):
+        from django.utils import timezone
+
+        # An expired trial leaves trial_end_date behind but makes both the
+        # active checks False, which is how it used to become repeatable.
+        row = self._settings()
+        row.trial_end_date = timezone.now() - timezone.timedelta(days=1)
+        row.save()
+
+        self.client.post("/dashboard/subscription/trial/")
+
+        row.refresh_from_db()
+        self.assertLess(row.trial_end_date, timezone.now())
+
+
+class SeedDataGuardTest(TestCase):
+    """The README documents this command, including in its deployment section,
+    so it must not be able to fire against a production database."""
+
+    def test_it_refuses_to_run_with_debug_off(self):
+        from io import StringIO
+
+        from django.core.management import call_command
+        from django.core.management.base import CommandError
+
+        with override_settings(DEBUG=False):
+            with self.assertRaises(CommandError):
+                call_command("seed_data", stdout=StringIO())
+
+    def test_no_password_literal_survives_in_the_command(self):
+        import pathlib
+
+        src = (
+            pathlib.Path(__file__).resolve().parents[2]
+            / "apps" / "dashboard" / "management" / "commands" / "seed_data.py"
+        ).read_text()
+
+        self.assertNotIn("admin123", src)
+
+
+class PaidAccessIsGrantedTest(TestCase):
+    """Two subscription records live side by side: StripeCustomer, written by
+    the payment flow, and UserSettings, read by every permission check. Nothing
+    connected them, so a customer could pay, have Stripe report the
+    subscription active, and still be locked out of what they just bought."""
+
+    def setUp(self):
+        from apps.dashboard.models import UserSettings
+
+        self.user = User.objects.create_user(email="payer@example.com", password="testpass123")
+        UserSettings.objects.get_or_create(user=self.user)
+
+    def _settings(self):
+        from apps.dashboard.models import UserSettings
+
+        return UserSettings.objects.get(user=self.user)
+
+    def test_an_active_stripe_status_grants_access(self):
+        from .views import _sync_access
+
+        _sync_access(self.user, "active")
+
+        self.assertTrue(self._settings().is_subscription_active)
+
+    def test_a_trialing_status_grants_trial_access(self):
+        from .views import _sync_access
+
+        _sync_access(self.user, "trialing")
+
+        self.assertTrue(self._settings().is_trial_active)
+
+    def test_past_due_keeps_access_while_stripe_retries(self):
+        from .views import _sync_access
+
+        _sync_access(self.user, "past_due")
+
+        self.assertTrue(self._settings().is_subscription_active)
+
+    def test_an_incomplete_payment_grants_nothing(self):
+        from .views import _sync_access
+
+        _sync_access(self.user, "incomplete")
+
+        self.assertFalse(self._settings().is_subscription_active)
+
+    def test_a_cancelled_subscription_revokes_access(self):
+        from .views import _sync_access
+
+        _sync_access(self.user, "active")
+        _sync_access(self.user, "canceled")
+
+        self.assertFalse(self._settings().is_subscription_active)
+
+    def test_an_unknown_status_denies_rather_than_grants(self):
+        from .views import _sync_access
+
+        _sync_access(self.user, "something_stripe_added_last_week")
+
+        self.assertFalse(self._settings().is_subscription_active)
+
+
+class CancelReachesStripeTest(TestCase):
+    """Cancelling used to flip a local flag and nothing else, so Stripe kept
+    charging the card every month for a subscription the customer believed they
+    had cancelled."""
+
+    def setUp(self):
+        from apps.dashboard.models import UserSettings
+
+        self.user = User.objects.create_user(email="quitter@example.com", password="testpass123")
+        UserSettings.objects.get_or_create(user=self.user)
+        StripeCustomer.objects.create(
+            user=self.user, stripe_customer_id="cus_1", stripe_subscription_id="sub_1"
+        )
+        self.client.force_login(self.user)
+
+    @patch("apps.dashboard.views.stripe")
+    def test_it_cancels_at_stripe(self, mock_stripe):
+        mock_stripe.StripeError = Exception
+
+        self.client.post("/dashboard/subscription/cancel/")
+
+        mock_stripe.Subscription.modify.assert_called_once_with(
+            "sub_1", cancel_at_period_end=True
+        )
+
+    @patch("apps.dashboard.views.stripe")
+    def test_a_stripe_failure_does_not_pretend_it_cancelled(self, mock_stripe):
+        # Telling someone their subscription is cancelled when it is not is how
+        # a chargeback starts.
+        mock_stripe.StripeError = Exception
+        mock_stripe.Subscription.modify.side_effect = Exception("network")
+
+        response = self.client.post("/dashboard/subscription/cancel/", follow=True)
+
+        self.assertContains(response, "was not")
