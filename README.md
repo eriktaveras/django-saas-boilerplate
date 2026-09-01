@@ -3,7 +3,7 @@
 The open-source Django starter kit for building SaaS applications. Auth, payments, dashboard, and deployment — all wired up.
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Django-6.0-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django"/>
+  <img src="https://img.shields.io/badge/Django-6.0%2B-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django"/>
   <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
   <img src="https://img.shields.io/badge/Tailwind_CSS-CDN-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
   <img src="https://img.shields.io/badge/Stripe-Payments-6772E5?style=for-the-badge&logo=stripe&logoColor=white" alt="Stripe"/>
@@ -46,10 +46,11 @@ Worth knowing before you build on it, so you can decide what to add yourself:
 - **No plan gating.** `SubscriptionPlan.features` is a JSON list for the pricing
   page — marketing copy, not entitlements. Nothing in the code stops a free user
   from using a paid feature, and there are no usage counters or quotas.
-- **Two places track a subscription.** `StripeCustomer` mirrors Stripe;
-  `UserSettings` holds the plan and trial the dashboard reads. Nothing
-  reconciles them, so the dashboard's manual plan/trial actions do not touch
-  Stripe. Wiring them together is left to you.
+- **Two places still track a subscription.** `StripeCustomer` mirrors Stripe;
+  `UserSettings` holds what the dashboard gates on. Paying now grants access and
+  cancelling cancels at Stripe, so the money and the access agree — but they are
+  still two records kept in step by one function, not one model. Anything past
+  that (per-plan entitlements, seats, usage counters) starts from scratch.
 - **Minimal billing lifecycle.** The webhook handles subscription
   created/updated/deleted. No failed-payment recovery, no customer portal, no
   invoice history.
@@ -65,7 +66,7 @@ MIT licensed. Fork it, rename it, ship it, sell it — no attribution required.
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Django 6.0, Python 3.12 |
+| Backend | Django 6.0+, Python 3.12 |
 | Auth | django-allauth (email-only) |
 | Payments | Stripe (Payment Methods API) |
 | Frontend | Tailwind CSS (CDN), Alpine.js, HTMX |
@@ -77,15 +78,25 @@ MIT licensed. Fork it, rename it, ship it, sell it — no attribution required.
 
 ## Quick start
 
+Requires **Python 3.12+**. On Debian or Ubuntu you also need the venv package,
+or `make install` fails with `ensurepip is not available`:
+
+```bash
+sudo apt install python3.12-venv
+```
+
 ```bash
 git clone https://github.com/eriktaveras/django-saas-boilerplate.git
 cd django-saas-boilerplate
 make install
 cp .env.example .env
 make migrate
-python manage.py seed_data
+make seed
 make run
 ```
+
+Every `make` target runs through the virtualenv that `make install` creates, so
+there is nothing to activate.
 
 Visit **http://localhost:8000**. `seed_data` prints the generated admin password once — copy it from the terminal. Set `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` to choose your own.
 
@@ -171,7 +182,7 @@ STRIPE_PRICE_ID=price_...
 # EMAIL_HOST_PASSWORD=your-app-password
 ```
 
-## Django 6.0 features used
+## Django 6.0+ features used
 
 This boilerplate uses two features introduced in Django 6.0:
 
@@ -219,9 +230,15 @@ heroku run python manage.py migrate
 ```bash
 pip install -r requirements.txt
 python manage.py migrate
-python manage.py collectstatic
-gunicorn core.wsgi --bind 0.0.0.0:8000
+python manage.py collectstatic --noinput
+gunicorn core.wsgi --bind 127.0.0.1:8000
 ```
+
+Bind to localhost and put nginx or Caddy in front, terminating TLS. The app
+trusts the `X-Forwarded-Proto` header to decide whether a request arrived over
+HTTPS, which is what platforms like Railway and Heroku set. Exposing gunicorn
+directly on `0.0.0.0` lets a client send that header itself and walk straight
+past `SECURE_SSL_REDIRECT`.
 
 ## If you need the other half
 

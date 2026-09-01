@@ -1,12 +1,21 @@
-Django
-django-allauth
-django-tailwind
-django-htmx
-django-crispy-forms
-crispy-tailwind
-python-dotenv
-whitenoise
-gunicorn
+# Pinned to ranges this codebase is actually tested against. An unpinned list
+# is how the Stripe checkout in this repo broke: the code targeted one API
+# contract and pip installed another, months later, on someone else's machine.
+Django>=6.0,<6.2
+django-allauth>=65.0,<66.0
+django-htmx>=1.29,<2.0
+python-dotenv>=1.0,<2.0
+whitenoise>=6.0,<7.0
+gunicorn>=23.0,<27.0
+dj-database-url>=2.0,<4.0
 stripe>=15.0,<16.0
-dj-database-url
-ruff
+
+# Installed but not wired up: Tailwind is loaded from the CDN in base.html and
+# no form uses crispy. Kept so an existing checkout does not break on upgrade;
+# safe to drop if you are not going to use them.
+django-tailwind>=4.0,<5.0
+django-crispy-forms>=2.0,<3.0
+crispy-tailwind>=1.0,<2.0
+
+# Dev
+ruff>=0.14,<1.0
