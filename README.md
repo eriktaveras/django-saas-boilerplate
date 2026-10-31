@@ -34,7 +34,7 @@ Everything below works out of the box.
 - **Static files** — WhiteNoise, no nginx needed
 - **Deployment** — Gunicorn + Procfile, ready for Railway/Heroku/VPS
 - **Linting** — Ruff with Django-specific rules
-- **64 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
+- **67 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
 - **Seed data** — one command to populate demo data
 
 ## What it does not do
@@ -107,7 +107,7 @@ Visit **http://localhost:8000**. `seed_data` prints the generated admin password
 | `make install` | Create virtualenv and install dependencies |
 | `make run` | Start development server |
 | `make migrate` | Run makemigrations + migrate |
-| `make test` | Run 64 tests |
+| `make test` | Run 67 tests |
 | `make seed` | Populate demo data (admin + plans) |
 | `make lint` | Lint with ruff |
 | `make format` | Format with ruff |
@@ -137,7 +137,7 @@ django-saas-boilerplate/
 │   ├── subscriptions/        # Stripe integration
 │   │   ├── models.py         # StripeCustomer
 │   │   ├── views.py          # checkout, webhooks
-│   │   └── tests.py          # 33 tests
+│   │   └── tests.py          # 36 tests
 │   └── landing/              # Public pages
 │       ├── views.py          # home, features, pricing, robots.txt
 │       └── tests.py          # 4 tests
