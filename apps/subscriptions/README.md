@@ -1,107 +1,115 @@
-# Stripe Subscription System
+# Stripe subscriptions
 
-A robust and flexible subscription system built with Django and Stripe, designed to handle recurring payments and subscription management for your SaaS application.
+Checkout uses Stripe's Payment Methods API, Stripe SDK 15.x and the API version
+configured in `core/settings.py`. This module supports a single configured
+recurring price; dashboard plans are not automatically mapped to Stripe prices.
 
-## 🌟 Features
+## Setup
 
-- 💳 Secure payment processing with Stripe
-- 🔄 Recurring subscription management
-- 📊 Subscription status tracking
-- 🔔 Webhook integration for real-time updates
-- 🎨 Responsive UI with Tailwind CSS
-- 🔒 Secure authentication integration
-- 📱 Mobile-friendly design
+Install the root `requirements.txt` with Python 3.12+ and configure `.env`:
 
-## 🚀 Quick Start
-
-### 1. Stripe Account Setup
-
-1. Create a [Stripe](https://stripe.com) account if you don't have one
-2. Navigate to the Stripe Dashboard -> Developers -> API keys
-3. Copy your Publishable and Secret keys
-
-### 2. Product Configuration
-
-1. Go to Stripe Dashboard -> Products
-2. Create a new product
-3. Add a recurring price (e.g., $9.99/month)
-4. Copy the Price ID
-
-### 3. Webhook Setup
-
-1. Go to Stripe Dashboard -> Developers -> Webhooks
-2. Add endpoint: `https://your-domain.com/subscriptions/webhook/`
-3. Select event: `customer.subscription.updated`
-4. Copy the Webhook Signing Secret
-
-### 4. Environment Configuration
-
-Add the following to your `.env` file:
 ```env
+DEBUG=True
 STRIPE_PUBLIC_KEY=pk_test_...
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRICE_ID=price_...
 ```
 
-## 📁 Module Structure
+Use a recurring Stripe price. Configure your signed webhook endpoint at
+`https://your-domain.com/subscriptions/webhook/` for exactly these supported events:
 
+- `customer.subscription.created`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+
+Production also requires `SECRET_KEY` with debug disabled and working SMTP
+settings for email delivery. See the [root README](../../README.md) for setup.
+
+## Checkout and access
+
+Authenticated users visit `/subscriptions/`. The browser creates a PaymentMethod
+with Stripe.js and POSTs JSON containing `payment_method_id` to
+`/subscriptions/create/`. The server strips surrounding whitespace and rejects
+invalid JSON, non-object bodies, missing or blank payment methods, and a missing
+configured price with HTTP 400 before calling Stripe.
+
+Checkout reuses an existing Stripe customer, attaches the PaymentMethod, sets it
+as the invoice default, and creates a subscription using `default_incomplete`.
+An idempotency key includes the user, configured price, and payment method.
+The response includes `subscription_id`, `client_secret`,
+`requires_confirmation`, and `status`. The secret comes from
+`latest_invoice.confirmation_secret`; trials or zero-cost invoices can return
+no secret. Card declines return 402; other Stripe errors return 502.
+
+`StripeCustomer` stores customer/subscription identifiers and Stripe status.
+`_sync_access` in `views.py` mirrors status and available period/trial dates into
+`apps.dashboard.models.UserSettings`, creating the row when needed:
+
+| Stripe status | Local status |
+| --- | --- |
+| `active`, `past_due` | `active` |
+| `trialing` | `trial` |
+| `canceled` | `cancelled` |
+| `unpaid`, `incomplete`, `incomplete_expired`, `paused`, unknown | `inactive` |
+
+Dashboard access also checks local expiry dates. The period end comes from the
+first subscription item's `current_period_end`. Missing dates leave stored dates
+unchanged, preserving the marker that a trial has already been used.
+
+## Webhook behavior
+
+The endpoint accepts POST only and verifies the raw body with the Stripe
+signature and `STRIPE_WEBHOOK_SECRET`. Invalid payloads/signatures return 400;
+a missing signing secret returns 500. The webhook is CSRF-exempt; checkout uses
+normal Django CSRF protection and requires login.
+
+Updates and deletions synchronize only a matching stored subscription ID.
+A `created` event can link a customer with an empty subscription ID only if its
+items include `STRIPE_PRICE_ID`. Once linked, `created` events are acknowledged
+without changing status or dates, so a delayed initial snapshot cannot overwrite
+checkout, updates or cancellation. Unknown subscriptions, irrelevant prices and
+unsupported event types are acknowledged with 200 without changing access.
+
+There are no `invoice.payment_succeeded` or `invoice.payment_failed` handlers,
+failed-payment recovery, customer portal, or invoice history. General ordering
+protection for delayed `updated`/`deleted` events is not implemented.
+
+## Dashboard actions and email tasks
+
+Direct free-plan subscription and trial actions create missing `UserSettings`;
+users do not have to visit settings first. Paid dashboard plans redirect to
+Stripe checkout. The local trial lasts 14 days, rejects active subscriptions or
+trials, and cannot be repeated once `trial_end_date` is set.
+
+Paid cancellation calls Stripe with `cancel_at_period_end=True` and retains
+local access until expiry or subsequent webhook synchronization. Stripe errors
+leave the subscription unchanged. Without a linked Stripe subscription, local
+active subscriptions are cancelled immediately.
+
+Free-plan activation, local cancellation and trial-start emails use the `@task`
+functions in `apps/dashboard/tasks.py`. Stripe checkout does not send a confirmation
+email. `ImmediateBackend` runs `.enqueue()` immediately
+in the calling process. No asynchronous worker or durable queue is configured.
+
+## Files and validation
+
+- `models.py`: `StripeCustomer`.
+- `views.py`: `subscription_page`, `create_subscription`, `stripe_webhook`, and synchronization helpers.
+- `urls.py`: namespaced subscription routes.
+- `../../templates/subscriptions/subscription.html`: checkout UI.
+- `../dashboard/models.py`: `SubscriptionPlan` and `UserSettings`.
+- `../dashboard/views.py`: free plans, trials and cancellation.
+
+Run from the repository root:
+
+```bash
+DEBUG=True venv/bin/python manage.py test
+DEBUG=True venv/bin/python manage.py check
+DEBUG=True venv/bin/python manage.py makemigrations --check --dry-run
+venv/bin/ruff check .
 ```
-subscriptions/
-├── models.py          # Subscription and customer models
-├── views.py          # Subscription views and logic
-├── urls.py           # URL routing
-├── webhooks.py       # Stripe webhook handlers
-└── templates/        # Subscription templates
-    └── subscription.html
-```
 
-## 🔧 Customization
-
-### Subscription Plans
-- Modify subscription plans in the Stripe Dashboard
-- Update `STRIPE_PRICE_ID` in your `.env` file
-- Customize plan features in `models.py`
-
-### UI Customization
-- Edit `templates/subscriptions/subscription.html` for UI changes
-- Modify styles in your Tailwind CSS configuration
-- Add custom JavaScript for enhanced interactivity
-
-### Business Logic
-- Extend `views.py` for custom subscription logic
-- Modify webhook handlers in `webhooks.py`
-- Add custom validation in `models.py`
-
-## 🔒 Security Features
-
-- Environment variable protection for sensitive keys
-- Webhook signature verification
-- CSRF protection on all forms
-- Login-required views
-- Secure payment processing
-- PCI compliance through Stripe
-
-## 📚 API Reference
-
-### Models
-- `Subscription`: Tracks subscription status and details
-- `Customer`: Stores customer information and Stripe IDs
-
-### Views
-- `subscription_view`: Main subscription page
-- `webhook`: Handles Stripe webhook events
-- `cancel_subscription`: Manages subscription cancellation
-
-### Webhooks
-- `handle_subscription_updated`: Processes subscription updates
-- `handle_payment_succeeded`: Handles successful payments
-- `handle_payment_failed`: Manages failed payments
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guide](../../CONTRIBUTING.md) for details.
-
-## 📝 License
-
-This module is part of the Django SaaS Boilerplate and is licensed under the MIT License. 
+See [root README: Local validation](../../README.md#local-validation) for the test count and breakdown.
+Stripe calls are mocked; tests do not require live Stripe access. Validation is
+local, with no CI workflows configured.

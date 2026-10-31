@@ -138,7 +138,7 @@ def subscribe_to_plan(request, plan_slug):
     a charge actually happens.
     """
     plan = get_object_or_404(SubscriptionPlan, slug=plan_slug, is_active=True)
-    user_settings = UserSettings.objects.get(user=request.user)
+    user_settings, _ = UserSettings.objects.get_or_create(user=request.user)
 
     if plan.price and plan.price > 0:
         messages.error(
@@ -226,7 +226,7 @@ def cancel_subscription(request):
 @login_required
 @require_http_methods(['POST'])
 def start_trial(request):
-    user_settings = UserSettings.objects.get(user=request.user)
+    user_settings, _ = UserSettings.objects.get_or_create(user=request.user)
 
     if user_settings.is_subscription_active or user_settings.is_trial_active:
         messages.warning(request, 'You already have an active subscription or trial.')
