@@ -87,8 +87,9 @@ local access until expiry or subsequent webhook synchronization. Stripe errors
 leave the subscription unchanged. Without a linked Stripe subscription, local
 active subscriptions are cancelled immediately.
 
-Confirmation, local cancellation and trial-start emails use the `@task` functions
-in `apps/dashboard/tasks.py`. `ImmediateBackend` runs `.enqueue()` immediately
+Free-plan activation, local cancellation and trial-start emails use the `@task`
+functions in `apps/dashboard/tasks.py`. Stripe checkout does not send a confirmation
+email. `ImmediateBackend` runs `.enqueue()` immediately
 in the calling process. No asynchronous worker or durable queue is configured.
 
 ## Files and validation
@@ -109,6 +110,6 @@ DEBUG=True venv/bin/python manage.py makemigrations --check --dry-run
 venv/bin/ruff check .
 ```
 
-The suite defines 67 tests: subscriptions 36, dashboard 21, accounts 6, landing 4.
+See [root README: Local validation](../../README.md#local-validation) for the test count and breakdown.
 Stripe calls are mocked; tests do not require live Stripe access. Validation is
 local, with no CI workflows configured.

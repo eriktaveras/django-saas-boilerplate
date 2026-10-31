@@ -39,7 +39,7 @@ static/         → CSS, JS, images
 
 ### Django 6.0 Features
 - **CSP:** Configured via `SECURE_CSP` in settings, nonces available as `{{ csp_nonce }}` in templates
-- **Background Tasks:** Use `@task` decorator, enqueue with `.enqueue()` — see `apps/dashboard/tasks.py`. The configured ImmediateBackend runs tasks immediately in the calling process; no worker or durable queue is configured
+- **Tasks:** Use `@task` decorator, enqueue with `.enqueue()` — see `apps/dashboard/tasks.py`. The configured ImmediateBackend runs tasks immediately in the calling process; no worker or durable queue is configured
 
 ### Templates
 - Design system: monochromatic (black/white/gray), Space Grotesk font, uppercase tracking
@@ -85,7 +85,7 @@ DEBUG=True venv/bin/python manage.py makemigrations --check --dry-run
 venv/bin/ruff check .
 ```
 
-There are 67 test methods: accounts 6, dashboard 21, landing 4, subscriptions 36.
+See [README: Local validation](README.md#local-validation) for the test count and breakdown.
 Stripe tests mock network calls. Validation is local; no CI workflows are configured.
 Without `DEBUG=True`, `SECRET_KEY` is required. Email defaults to console in debug and SMTP otherwise.
 PostgreSQL needs an additional driver such as psycopg; requirements do not install one.
