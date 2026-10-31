@@ -100,6 +100,7 @@ def _current_period_end(subscription):
 
 
 def _trial_end(subscription):
+    """Return the trial expiry, leaving the used-trial marker intact when absent."""
     timestamp = subscription.get('trial_end')
     return datetime.fromtimestamp(timestamp, tz=dt_timezone.utc) if timestamp is not None else None
 
@@ -118,6 +119,7 @@ def create_subscription(request):
     payment_method_id = data.get('payment_method_id')
     if not isinstance(payment_method_id, str) or not payment_method_id.strip():
         return JsonResponse({'error': 'Payment method is required'}, status=400)
+    payment_method_id = payment_method_id.strip()
 
     if not settings.STRIPE_PRICE_ID:
         return JsonResponse({'error': 'No Stripe price configured'}, status=400)
@@ -218,7 +220,16 @@ def stripe_webhook(request):
         stripe_customer = StripeCustomer.objects.filter(
             stripe_subscription_id=subscription['id']
         ).first()
+        if stripe_customer is not None and event['type'] == 'customer.subscription.created':
+            # Created is an initial snapshot (often incomplete). A delayed retry
+            # must never overwrite checkout or updated/deleted state and dates.
+            return HttpResponse(status=200)
         if stripe_customer is None and event['type'] == 'customer.subscription.created':
+            items = (subscription.get('items') or {}).get('data') or []
+            if not settings.STRIPE_PRICE_ID or not any(
+                (item.get('price') or {}).get('id') == settings.STRIPE_PRICE_ID for item in items
+            ):
+                return HttpResponse(status=200)
             stripe_customer = StripeCustomer.objects.filter(
                 stripe_customer_id=subscription.get('customer'), stripe_subscription_id=''
             ).first()

@@ -31,7 +31,7 @@ A robust and flexible subscription system built with Django and Stripe, designed
 
 1. Go to Stripe Dashboard -> Developers -> Webhooks
 2. Add endpoint: `https://your-domain.com/subscriptions/webhook/`
-3. Select event: `customer.subscription.updated`
+3. Select events: `customer.subscription.created`, `customer.subscription.updated`, and `customer.subscription.deleted`
 4. Copy the Webhook Signing Secret
 
 ### 4. Environment Configuration
