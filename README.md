@@ -27,7 +27,7 @@ Everything below works out of the box.
 - **User dashboard** — sidebar nav, profile, notification settings, API key generation (hashed, shown once)
 - **Subscription plans** — admin-managed plans with trial support
 - **Landing pages** — home, features, pricing, `robots.txt`
-- **Background tasks** — Django 6.0 native `@task()`, no Celery
+- **Tasks** — Django 6.0 native `@task()`, executed immediately with the configured backend
 - **Content Security Policy** — Django 6.0 CSP middleware with nonces
 - **Security headers** — HSTS, SSL redirect, secure cookies (auto-enabled in production)
 - **PostgreSQL support** — `DATABASE_URL` with SQLite fallback
@@ -66,14 +66,14 @@ MIT licensed. Fork it, rename it, ship it, sell it — no attribution required.
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Django 6.0+, Python 3.12 |
+| Backend | Django >=6.0,<6.2, Python 3.12+ |
 | Auth | django-allauth (email-only) |
-| Payments | Stripe (Payment Methods API) |
+| Payments | Stripe SDK 15.x (Payment Methods API) |
 | Frontend | Tailwind CSS (CDN), Alpine.js, HTMX |
 | Database | SQLite (dev) / PostgreSQL (prod) |
 | Static files | WhiteNoise |
 | Server | Gunicorn |
-| Tasks | Django 6.0 native `@task()` |
+| Tasks | Django 6.0 native `@task()`, ImmediateBackend |
 | Linting | Ruff |
 
 ## Quick start
@@ -113,6 +113,33 @@ Visit **http://localhost:8000**. `seed_data` prints the generated admin password
 | `make format` | Format with ruff |
 | `make superuser` | Create admin user |
 | `make clean` | Remove __pycache__ files |
+
+## Local validation
+
+Install dependencies into `venv` using `make install`, or with uv:
+
+```bash
+uv venv venv --python 3.12
+uv pip install --python venv/bin/python -r requirements.txt
+```
+
+Run the project checks locally (there is no CI):
+
+```bash
+DEBUG=True venv/bin/python manage.py test
+DEBUG=True venv/bin/python manage.py check
+DEBUG=True venv/bin/python manage.py makemigrations --check --dry-run
+venv/bin/ruff check .
+```
+
+The suite defines 67 tests: accounts 6, dashboard 21, landing 4, and
+subscriptions 36. Stripe calls are mocked; tests need no live Stripe credentials.
+`DEBUG=True` permits the development secret key; with debug off, `SECRET_KEY`
+is required. Copying `.env.example` to `.env` also sets up development defaults.
+PostgreSQL deployments additionally need a compatible PostgreSQL driver
+(e.g. psycopg), which is not included in `requirements.txt`.
+
+See [subscription behavior and webhook setup](apps/subscriptions/README.md).
 
 ## Project structure
 
@@ -174,7 +201,7 @@ STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 STRIPE_PRICE_ID=price_...
 
-# Email (default: console backend)
+# Email (console in DEBUG; SMTP otherwise)
 # EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
 # EMAIL_HOST=smtp.gmail.com
 # EMAIL_PORT=587
@@ -186,16 +213,20 @@ STRIPE_PRICE_ID=price_...
 
 This boilerplate uses two features introduced in Django 6.0:
 
-**Background Tasks** — Send emails asynchronously without Celery:
+**Tasks** — Email tasks use Django’s native task API. The configured
+`django.tasks.backends.immediate.ImmediateBackend` executes `.enqueue()`
+synchronously in the calling process, including during requests. There is no
+worker or durable queue; asynchronous execution requires another backend and
+its worker infrastructure. The actual email tasks live in `apps/dashboard/tasks.py`:
 ```python
 from django.tasks import task
 
 @task
-def send_welcome_email(user_email):
-    send_mail("Welcome!", "...", None, [user_email])
+def send_subscription_confirmation_email(user_email, plan_name):
+    send_mail("Subscription Confirmed", plan_name, None, [user_email])
 
 # In your view:
-send_welcome_email.enqueue(user_email=user.email)
+send_subscription_confirmation_email.enqueue(user_email=user.email, plan_name=plan.name)
 ```
 
 **Content Security Policy** — Built-in CSP middleware with nonce support:
