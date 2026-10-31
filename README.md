@@ -34,7 +34,7 @@ Everything below works out of the box.
 - **Static files** — WhiteNoise, no nginx needed
 - **Deployment** — Gunicorn + Procfile, ready for Railway/Heroku/VPS
 - **Linting** — Ruff with Django-specific rules
-- **46 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
+- **52 tests** — landing pages, auth, dashboard, models, Stripe checkout and webhook
 - **Seed data** — one command to populate demo data
 
 ## What it does not do
@@ -107,7 +107,7 @@ Visit **http://localhost:8000**. `seed_data` prints the generated admin password
 | `make install` | Create virtualenv and install dependencies |
 | `make run` | Start development server |
 | `make migrate` | Run makemigrations + migrate |
-| `make test` | Run 46 tests |
+| `make test` | Run 52 tests |
 | `make seed` | Populate demo data (admin + plans) |
 | `make lint` | Lint with ruff |
 | `make format` | Format with ruff |

@@ -35,7 +35,7 @@ STATUS_MAP = {
 }
 
 
-def _sync_access(user, stripe_status, period_end=None):
+def _sync_access(user, stripe_status, period_end=None, trial_end=None):
     """Mirror a Stripe status onto the record the app actually gates on.
 
     Two subscription records exist side by side: StripeCustomer, written by this
@@ -50,10 +50,13 @@ def _sync_access(user, stripe_status, period_end=None):
     settings_row.subscription_status = STATUS_MAP.get(stripe_status, 'inactive')
     if period_end is not None:
         settings_row.subscription_end_date = period_end
+    if trial_end is not None:
+        settings_row.trial_end_date = trial_end
     if settings_row.subscription_status == 'active' and not settings_row.subscription_start_date:
         settings_row.subscription_start_date = timezone.now()
     settings_row.save()
     return settings_row
+
 
 @login_required
 def subscription_page(request):
@@ -86,24 +89,34 @@ def _current_period_end(subscription):
     if subscription is None:
         return None
 
-    items = getattr(subscription, 'items', None)
-    data = getattr(items, 'data', None) or []
-    timestamp = getattr(data[0], 'current_period_end', None) if data else None
+    # StripeObject exposes dict methods too: subscription.items is a method.
+    items = subscription.get('items') or {}
+    data = items.get('data') or []
+    timestamp = data[0].get('current_period_end') if data else None
     if timestamp is None:
         return None
 
     return datetime.fromtimestamp(timestamp, tz=dt_timezone.utc)
+
+
+def _trial_end(subscription):
+    timestamp = subscription.get('trial_end')
+    return datetime.fromtimestamp(timestamp, tz=dt_timezone.utc) if timestamp is not None else None
+
 
 @login_required
 @require_POST
 def create_subscription(request):
     try:
         data = json.loads(request.body)
-    except json.JSONDecodeError:
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+
+    if not isinstance(data, dict):
         return JsonResponse({'error': 'Invalid request'}, status=400)
 
     payment_method_id = data.get('payment_method_id')
-    if not payment_method_id:
+    if not isinstance(payment_method_id, str) or not payment_method_id.strip():
         return JsonResponse({'error': 'Payment method is required'}, status=400)
 
     if not settings.STRIPE_PRICE_ID:
@@ -157,9 +170,11 @@ def create_subscription(request):
 
     # Without this the buyer is charged and still locked out: every gate in the
     # dashboard reads UserSettings, not this row.
-    _sync_access(request.user, subscription.status, _current_period_end(subscription))
+    _sync_access(
+        request.user, subscription.status, _current_period_end(subscription), _trial_end(subscription)
+    )
 
-    # Attribute access, not .get(): a Stripe resource object is not a dict.
+    # Attribute access tolerates an unexpanded invoice ID.
     # If the expand above ever stops resolving, latest_invoice comes back as a
     # bare id string and these fall through to None instead of raising.
     invoice = getattr(subscription, 'latest_invoice', None)
@@ -173,6 +188,7 @@ def create_subscription(request):
         'requires_confirmation': bool(client_secret),
         'status': subscription.status,
     })
+
 
 @csrf_exempt
 @require_POST
@@ -195,18 +211,27 @@ def stripe_webhook(request):
     except stripe.SignatureVerificationError:
         return HttpResponse(status=400)
 
-    if event['type'] in ('customer.subscription.updated', 'customer.subscription.deleted'):
+    if event['type'] in (
+        'customer.subscription.created', 'customer.subscription.updated', 'customer.subscription.deleted'
+    ):
         subscription = event['data']['object']
         stripe_customer = StripeCustomer.objects.filter(
             stripe_subscription_id=subscription['id']
         ).first()
+        if stripe_customer is None and event['type'] == 'customer.subscription.created':
+            stripe_customer = StripeCustomer.objects.filter(
+                stripe_customer_id=subscription.get('customer'), stripe_subscription_id=''
+            ).first()
         if stripe_customer is None:
             # Unknown subscription. Acknowledge it, or Stripe retries forever.
             logger.warning('Webhook: no StripeCustomer for subscription %s', subscription['id'])
             return HttpResponse(status=200)
 
+        stripe_customer.stripe_subscription_id = subscription['id']
         stripe_customer.subscription_status = subscription['status']
         stripe_customer.save()
-        _sync_access(stripe_customer.user, subscription['status'])
+        _sync_access(
+            stripe_customer.user, subscription['status'], _current_period_end(subscription), _trial_end(subscription)
+        )
 
     return HttpResponse(status=200)

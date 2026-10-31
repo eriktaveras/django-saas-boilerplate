@@ -360,3 +360,115 @@ class CancelReachesStripeTest(TestCase):
         response = self.client.post("/dashboard/subscription/cancel/", follow=True)
 
         self.assertContains(response, "was not")
+
+
+@override_settings(STRIPE_PRICE_ID='price_123', STRIPE_WEBHOOK_SECRET='whsec_x')
+class StripeSynchronizationTest(TestCase):
+    def setUp(self):
+        from apps.dashboard.models import UserSettings
+
+        self.user = User.objects.create_user(email='sync@example.com', password='pw12345678')
+        self.client.force_login(self.user)
+        self.customer = StripeCustomer.objects.create(
+            user=self.user, stripe_customer_id='cus_sync', stripe_subscription_id='sub_sync'
+        )
+        self.row, _ = UserSettings.objects.get_or_create(user=self.user)
+
+    @patch('apps.subscriptions.views.stripe.Customer.create')
+    @patch('apps.subscriptions.views.stripe.PaymentMethod.attach')
+    def test_invalid_checkout_payloads_do_not_reach_stripe(self, attach, create):
+        payloads = ['null', '[]', 'true', '1', '"pm_1"', '{', '{}']
+        payloads += [json.dumps({'payment_method_id': value}) for value in (
+            None, False, 123, [], {}, '', '   ',
+        )]
+        for payload in payloads:
+            with self.subTest(payload=payload):
+                response = self.client.post(
+                    reverse('subscriptions:create_subscription'), data=payload, content_type='application/json'
+                )
+                self.assertEqual(response.status_code, 400)
+                self.assertIn('error', response.json())
+        create.assert_not_called()
+        attach.assert_not_called()
+
+    def _subscription(self, status='active', period_end=1893456000, trial_end=None):
+        return {
+            'object': 'subscription', 'id': 'sub_sync', 'customer': 'cus_sync', 'status': status,
+            'trial_end': trial_end,
+            'items': {'object': 'list', 'data': [
+                {'object': 'subscription_item', 'id': 'si_sync', 'current_period_end': period_end},
+            ]},
+        }
+
+    def _date(self, timestamp):
+        from datetime import datetime, timezone
+
+        return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+
+    def _webhook(self, construct, event_type, subscription):
+        construct.return_value = stripe.Event.construct_from({
+            'id': 'evt_sync', 'object': 'event', 'type': event_type, 'data': {'object': subscription},
+        }, 'k')
+        response = self.client.post(
+            reverse('subscriptions:stripe_webhook'), data='{}', content_type='application/json',
+            HTTP_STRIPE_SIGNATURE='sig',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.row.refresh_from_db()
+        self.customer.refresh_from_db()
+
+    @patch('apps.subscriptions.views.stripe.Webhook.construct_event')
+    def test_webhook_renews_access_from_subscription_items(self, construct):
+        self.row.subscription_end_date = self._date(1704067200)
+        self.row.save()
+        self._webhook(construct, 'customer.subscription.updated', self._subscription())
+        self.assertEqual(self.row.subscription_end_date, self._date(1893456000))
+        self.assertTrue(self.row.is_subscription_active)
+        self.assertEqual(self.customer.subscription_status, 'active')
+
+    @patch('apps.subscriptions.views.stripe.Webhook.construct_event')
+    def test_created_webhook_links_customer_and_syncs_trial(self, construct):
+        self.customer.stripe_subscription_id = ''
+        self.customer.save()
+        self._webhook(
+            construct, 'customer.subscription.created', self._subscription('trialing', trial_end=1893369600)
+        )
+        self.assertEqual(self.customer.stripe_subscription_id, 'sub_sync')
+        self.assertEqual(self.row.subscription_status, 'trial')
+        self.assertEqual(self.row.trial_end_date, self._date(1893369600))
+        self.assertTrue(self.row.is_trial_active)
+
+    @patch('apps.subscriptions.views.stripe.Webhook.construct_event')
+    def test_trial_update_refreshes_trial_expiry(self, construct):
+        self.row.trial_end_date = self._date(1704067200)
+        self.row.save()
+        self._webhook(
+            construct, 'customer.subscription.updated', self._subscription('trialing', trial_end=1893369600)
+        )
+        self.assertEqual(self.row.trial_end_date, self._date(1893369600))
+        self.assertTrue(self.row.is_trial_active)
+
+    @patch('apps.subscriptions.views.stripe.Webhook.construct_event')
+    def test_deleted_webhook_revokes_access(self, construct):
+        self._webhook(construct, 'customer.subscription.deleted', self._subscription('canceled'))
+        self.assertEqual(self.customer.subscription_status, 'canceled')
+        self.assertFalse(self.row.is_subscription_active)
+
+    @patch('apps.subscriptions.views.stripe.Subscription.create')
+    @patch('apps.subscriptions.views.stripe.Customer.modify')
+    @patch('apps.subscriptions.views.stripe.PaymentMethod.attach')
+    def test_checkout_syncs_trial_and_period_without_confirmation(self, attach, modify, create):
+        create.return_value = stripe.Subscription.construct_from(
+            self._subscription('trialing', trial_end=1893369600), 'k'
+        )
+        response = self.client.post(
+            reverse('subscriptions:create_subscription'), data=json.dumps({'payment_method_id': 'pm_1'}),
+            content_type='application/json',
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {
+            'subscription_id': 'sub_sync', 'client_secret': None, 'requires_confirmation': False, 'status': 'trialing',
+        })
+        self.row.refresh_from_db()
+        self.assertEqual(self.row.subscription_end_date, self._date(1893456000))
+        self.assertEqual(self.row.trial_end_date, self._date(1893369600))
